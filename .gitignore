@@ -1,26 +1,19 @@
-# Ignorar arquivos ZIP de backups (geral e específicos)
-backups/
-*.zip
-
-# Ignorar executável do Electron
-node_modules/electron/dist/electron.exe
-
-# Ignorar todos os arquivos executáveis e instaladores
-*.exe
-
-# Ignorar node_modules inteiro (opcional, mas recomendável para projetos JS/Electron)
+# Ignora dependências e builds
 node_modules/
+dist/
 
-# Ignorar arquivos temporários e de sistema
-.DS_Store
-Thumbs.db
+# Ignora arquivos de log e cache do sistema
 *.log
-*.tmp
+.DS_Store
+.env
 
-# Ignorar arquivos do sistema operacional e IDEs
+# Ignora configurações locais de IDE
 .vscode/
-.idea/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
+
+# Ignora arquivos compactados
+*.zip
+*.rar
+
+# Ignora backups pesados e arquivos grandes
+backups/
+*.exe
