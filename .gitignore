@@ -17,3 +17,7 @@ dist/
 # Ignora backups pesados e arquivos grandes
 backups/
 *.exe
+backups/
+node_modules/
+*.zip
+*.exe
