@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kadir11 - Carregar Pet</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        .load-pet-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .pet-list {
+            width: 100%;
+            overflow-y: scroll;
+            padding: 0px 7px;
+            height: -webkit-fill-available;
+        }
+
+        .pet-item {
+            display: flex;
+            align-items: center;
+            background-color: #2a323e;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 7px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            position: relative;
+        }
+
+        .pet-item:hover {
+            background-color: #3a4452;
+        }
+
+        .pet-image-container {
+            position: relative;
+            width: 128px;
+            height: 128px;
+            margin-right: 20px;
+        }
+
+        .pet-image-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #808080, #A9A9A9); /* Padrão para Comum */
+            border-radius: 7px;
+            z-index: 1;
+        }
+
+        .pet-image-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('Assets/Rarity/texture.png');
+            background-size: cover;
+            opacity: 0.5;
+            border-radius: 7px;
+            z-index: 2;
+        }
+
+        .pet-item img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #ffffff;
+            border-radius: 7px;
+            z-index: 3;
+        }
+
+        .pet-info {
+            flex: 1;
+            color: #ffffff;
+            font-family: 'PixelOperator', sans-serif;
+            font-size: 16px;
+        }
+
+        .pet-info p {
+            margin: 5px 0;
+        }
+
+        .delete-button {
+            background-color: #ff4444;
+            border: none;
+            border-radius: 5px;
+            padding: 5px;
+            color: #ffffff;
+            font-family: 'PixelOperator', sans-serif;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-button:hover {
+            background-color: #cc0000;
+        }
+
+        .delete-button img {
+            width: 20px;
+            height: 20px;
+            filter: brightness(0) invert(1);
+            border: none;
+        }
+
+        .delete-button:hover img {
+            /* Filtro para mudar a cor do SVG no hover (opcional) */
+            filter: brightness(0) invert(1) hue-rotate(180deg);
+        }
+
+        /* Estilo do scrollbar */
+        .pet-list::-webkit-scrollbar {
+            width: 8px;
+            background-color: #101218;
+        }
+
+        .pet-list::-webkit-scrollbar-thumb {
+            background-color: #4a5666;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .pet-list::-webkit-scrollbar-thumb:hover {
+            background-color: #5a6676;
+        }
+
+        .pet-list::-webkit-scrollbar-track {
+            background-color: #101218;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window">
+        <div class="load-pet-container">
+            <h2>Selecione um Pet</h2>
+            <div class="pet-list" id="pet-list"></div>
+            <button class="button" id="back-button">Voltar</button>
+        </div>
+    </div>
+
+    <script>
+        // Função para formatar a data
+        function formatDate(isoString) {
+            const date = new Date(isoString);
+            return date.toLocaleString('pt-BR', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+            });
+        }
+
+        // Função para formatar a raridade
+        function formatRarity(rarity) {
+            if (!rarity) return 'Desconhecida';
+            // Separar palavras camelCase (ex.: "MuitoRaro" -> "Muito Raro")
+            return rarity
+                .replace(/([A-Z])/g, ' $1') // Adiciona espaço antes de maiúsculas
+                .trim() // Remove espaços extras no início
+                .replace(/\b\w/g, c => c.toUpperCase()); // Capitaliza a primeira letra de cada palavra
+        }
+
+        // Objeto de gradientes baseado na raridade (copiado do status.js)
+        const rarityGradients = {
+            'Comum': 'linear-gradient(135deg, #808080, #A9A9A9)',
+            'Incomum': 'linear-gradient(135deg, #D3D3D3, #E0E0E0)',
+            'Raro': 'linear-gradient(135deg, #32CD32, #228B22)',
+            'MuitoRaro': 'linear-gradient(135deg, #4682B4, #1E90FF)',
+            'Epico': 'linear-gradient(135deg, #800080, #DA70D6)',
+            'Lendario': 'linear-gradient(135deg, #FFD700, #FFA500)'
+        };
+
+        // Função para recarregar a lista de pets
+        function reloadPetList() {
+            const petList = document.getElementById('pet-list');
+            petList.innerHTML = ''; // Limpar a lista atual
+            window.electronAPI.listPets().then(pets => {
+                pets.forEach(pet => {
+                    const petItem = document.createElement('div');
+                    petItem.className = 'pet-item';
+                    petItem.setAttribute('data-element', pet.element);
+                    petItem.innerHTML = `
+                        <div class="pet-image-container">
+                            <div class="pet-image-background"></div>
+                            <div class="pet-image-texture"></div>
+                            <img src="${pet.image ? `assets/mons/${pet.image}` : 'assets/mons/eggsy.png'}" alt="${pet.name}" />
+                        </div>
+                        <div class="pet-info">
+                            <p><strong>Nome:</strong> ${pet.name}</p>
+                            <p><strong>Nível:</strong> ${pet.level}</p>
+                            <p><strong>Raridade:</strong> ${formatRarity(pet.rarity)}</p>
+                            <p><strong>Último Acesso:</strong> ${pet.lastAccessed ? formatDate(pet.lastAccessed) : 'Nunca'}</p>
+                        </div>
+                        <button class="delete-button" data-pet-id="${pet.petId}">
+                            <img src="assets/icons/trash-can.svg" alt="Delete Icon" />
+                        </button>
+                    `;
+                    petItem.addEventListener('click', () => {
+                        window.electronAPI.selectPet(pet.petId);
+                    });
+                    petList.appendChild(petItem);
+
+                    // Aplicar o gradiente com base na raridade
+                    const petImageBackground = petItem.querySelector('.pet-image-background');
+                    petImageBackground.style.background = rarityGradients[pet.rarity] || rarityGradients['Comum'];
+
+                    // Adicionar evento ao botão de exclusão
+                    const deleteButton = petItem.querySelector('.delete-button');
+                    deleteButton.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (confirm(`Tem certeza que deseja excluir o pet "${pet.name}"? Essa ação não pode be desfeita.`)) {
+                            window.electronAPI.deletePet(pet.petId).then(() => {
+                                reloadPetList();
+                            });
+                        }
+                    });
+                });
+            });
+        }
+
+        // Carregar a lista de pets ao iniciar
+        reloadPetList();
+
+        // Voltar para a janela inicial
+        document.getElementById('back-button').addEventListener('click', () => {
+            window.electronAPI.send('close-load-pet-window');
+        });
+    </script>
+</body>
+
+</html>

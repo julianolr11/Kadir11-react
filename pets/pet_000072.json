@@ -1,0 +1,26 @@
+{
+  "petId": "000072",
+  "name": "dada",
+  "element": "ar",
+  "attributes": {
+    "attack": 2,
+    "defense": 2,
+    "speed": 2,
+    "magic": 4,
+    "life": 20
+  },
+  "specie": "Draconídeo",
+  "rarity": "Comum",
+  "level": 1,
+  "experience": 0,
+  "createdAt": "2025-03-23T22:33:38.202Z",
+  "lastAccessed": "2025-03-23T22:45:14.421Z",
+  "fileName": "pet_000072.json",
+  "hunger": 100,
+  "happiness": 100,
+  "energy": 100,
+  "currentHealth": 20,
+  "maxHealth": 20,
+  "moves": [],
+  "image": "draconideo/draconideo.png"
+}

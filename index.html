@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kadir11 - Pet Tray (Teste)</title>
+    <style>
+        @font-face {
+            font-family: 'PixelOperator';
+            src: url('assets/fonts/PixelOperator.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .tray-container {
+            width: 256px;
+            height: 256px;
+            position: absolute;
+          
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            pointer-events: auto;
+            justify-content: end;
+        }
+
+        .pet-image-container {
+            position: relative;
+            width: 256px;
+            height: 256px;
+        }
+
+        .pet-image-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #808080, #A9A9A9);
+            border-radius: 7px;
+            z-index: 1;
+        }
+
+        .pet-image-texture {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('Assets/Rarity/texture.png');
+            background-size: cover;
+            opacity: 1;
+            border-radius: 7px;
+            z-index: 2;
+        }
+
+        .pet-image-container img {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 7px;
+            z-index: 3;
+        }
+
+        .pet-info {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            z-index: 4;
+        }
+
+        .pet-name {
+            color: #ffffff;
+            font-family: 'PixelOperator', sans-serif;
+            font-size: 15px;
+            padding: 2px 5px;
+            border-radius: 3px;
+            margin-bottom: 3px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+        }
+
+        .health-bar,
+        .energy-bar {
+            width: 50px;
+            height: 6px;
+            background-color: #444;
+            border: 1px solid #fff;
+            border-radius: 3px;
+            margin-bottom: 3px;
+            position: relative;
+        }
+
+        .health-bar .bar,
+        .energy-bar .bar {
+            height: 100%;
+            border-radius: 3px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .health-bar .bar {
+            background-color: #ff0000;
+        }
+
+        .energy-bar .bar {
+            background-color: #00b7eb;
+        }
+
+        .pet-level {
+            color: #ffffff;
+            font-family: 'PixelOperator', sans-serif;
+            font-size: 14px;
+            padding: 1px 4px;
+            border-radius: 3px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 1);
+            font-weight: bold;
+        }
+
+        .toggle-container {
+            position: absolute;
+            top: 87px;
+            right: 6px;
+            z-index: 5;
+        }
+
+        .toggle-switch {
+            position: absolute;
+            width: 30px;
+            height: 15px;
+            background-color: transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            top: -45px;
+            right: 0px;
+            z-index: 4;
+            border: 2px solid white;
+        }
+
+        .toggle-switch::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 1px;
+            width: 10px;
+            height: 10px;
+            background-color: #fff;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .toggle-switch.active {
+            background-color: #2a323e;
+        }
+
+        .toggle-switch.active::before {
+            transform: translateX(20px);
+        }
+
+        .hamburger-menu {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 5;
+            cursor: pointer;
+        }
+
+        .hamburger-icon {
+            width: 20px !important;
+            height: 20px !important;
+            background: #2a323e;
+            padding: 3px;
+            margin-top: 3px;
+            margin-right: 3px;
+            border: 2px solid white;
+        }
+
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 3px;
+            right: 33px;
+            background-color: #2a323e;
+            border-radius: 5px;
+            padding: 5px;
+            z-index: 10;
+            width: max-content;
+        }
+
+        .menu-dropdown.active {
+            display: block;
+        }
+
+        .menu-item {
+            color: #ffffff;
+            font-family: 'PixelOperator', sans-serif;
+            font-size: 15px;
+            padding: 5px;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background-color: #3a4452;
+        }
+
+        /* Estilos para as imagens de alerta */
+        .warning-image {
+            position: absolute !important;
+            top: 70px !important;
+            right: 12px !important;
+            width: 20px !important;
+            height: 20px !important;
+            z-index: 6 !important;
+            display: none;
+            animation: blink 2s infinite !important;
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Remover regras fixas de right */
+        #hunger-warning,
+        #happiness-warning {
+            right: 6px;
+            /* Mantém o alinhamento à direita */
+        }
+
+        /* Espaçamento vertical (será ajustado pelo JS) */
+        .warning-image+.warning-image {
+            top: 95px !important;
+            /* 20px de diferença inicial */
+        }
+
+        /* Estilo do alerta de batalha no meio da tela */
+        #battle-alert {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 20;
+            font-family: 'PixelOperator', sans-serif;
+            font-size: 14px;
+            text-align: center;
+            max-width: 200px;
+            line-height: 1.2;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="tray-container">
+        <div class="toggle-container">
+            <div class="toggle-switch"></div>
+        </div>
+        <div class="pet-image-container">
+            <div class="pet-image-background"></div>
+            <div class="pet-image-texture"></div>
+            <img id="pet-image" src="assets/mons/eggsy.png" alt="Pet Image" />
+            <div class="pet-info">
+                <div class="pet-name">Eggsy</div>
+                <div class="health-bar">
+                    <div class="bar" id="health-fill"></div>
+                </div>
+                <div class="energy-bar">
+                    <div class="bar" id="energy-fill"></div>
+                </div>
+                <div class="pet-level" id="level-display">Lvl 5</div>
+            </div>
+            <div class="hamburger-menu">
+                <img class="hamburger-icon" src="assets/icons/Hamburger_icon.svg.png" alt="Menu" />
+                <div class="menu-dropdown">
+                    <div class="menu-item" data-action="open-status">Status</div>
+                    <div class="menu-item" data-action="train-pet">Treinar</div>
+                    <div class="menu-item" data-action="care-pet">Cuidar</div>
+                    <div class="menu-item" data-action="battle-pet">Batalhar</div>
+                    <div class="menu-item" data-action="load-pet">Mudar de Pet</div>
+                    <div class="menu-item" data-action="itens-pet">Itens</div>
+                    <div class="menu-item" data-action="store-pet">Loja</div>
+                    <div class="menu-item" data-action="exit">Sair</div>
+                </div>
+            </div>
+            <!-- Imagens de alerta -->
+            <img id="hunger-warning" class="warning-image" src="assets/shop/meat1.png" alt="Fome baixa">
+            <img id="happiness-warning" class="warning-image" src="assets/shop/sad.png" alt="Felicidade baixa">
+            <!-- Alerta de batalha -->
+            <div id="battle-alert"></div>
+        </div>
+    </div>
+
+    <script>
+        // Verificar se electronAPI está disponível
+        if (!window.electronAPI) {
+            console.error('Erro: window.electronAPI não está disponível. Verifique o preload.js');
+        }
+
+        // Estado inicial
+        let petData = {
+            image: 'eggsy.png',
+            name: 'Eggsy',
+            rarity: 'Raro',
+            element: 'fire',
+            currentHealth: 80,
+            maxHealth: 100,
+            energy: 60,
+            level: 5,
+            hunger: 20, // Abaixo de 30 para forçar o alerta
+            happiness: 25 // Abaixo de 30 para forçar o alerta
+        };
+
+        // Definir os elementos no escopo global
+        const petImageBackground = document.querySelector('.pet-image-background');
+        const texture = document.querySelector('.pet-image-texture');
+        const petInfo = document.querySelector('.pet-info');
+        const healthFill = document.getElementById('health-fill');
+        const energyFill = document.getElementById('energy-fill');
+        const levelDisplay = document.getElementById('level-display');
+        const hungerWarning = document.getElementById('hunger-warning');
+        const happinessWarning = document.getElementById('happiness-warning');
+        const battleAlert = document.getElementById('battle-alert');
+
+        // Verificar se os elementos de alerta existem
+        if (!hungerWarning || !happinessWarning || !battleAlert) {
+            console.error('Um ou mais elementos de alerta não encontrados:', {
+                hungerWarning: !!hungerWarning,
+                happinessWarning: !!happinessWarning,
+                battleAlert: !!battleAlert
+            });
+        }
+
+        // Objeto de gradientes baseado na raridade
+        const rarityGradients = {
+            'Comum': 'linear-gradient(135deg, #808080, #A9A9A9)',
+            'Incomum': 'linear-gradient(135deg, #D3D3D3, #E0E0E0)',
+            'Raro': 'linear-gradient(135deg, #32CD32, #228B22)',
+            'MuitoRaro': 'linear-gradient(135deg, #4682B4, #1E90FF)',
+            'Epico': 'linear-gradient(135deg, #800080, #DA70D6)',
+            'Lendario': 'linear-gradient(135deg, #FFD700, #FFA500)'
+        };
+
+        // Função para carregar os dados do pet e ajustar os alertas
+        function loadPet(data) {
+            if (data) {
+                petData = data;
+                console.log('Pet recebido via IPC na bandeja:', petData);
+            } else {
+                console.error('Nenhum petData recebido via IPC');
+            }
+
+            const petImage = document.getElementById('pet-image');
+            const petName = document.querySelector('.pet-name');
+            healthFill.style.width = `${(petData.currentHealth / petData.maxHealth || 0) * 100}%`;
+            energyFill.style.width = `${petData.energy || 0}%`;
+            levelDisplay.textContent = `Lvl ${petData.level || 1}`;
+            petImage.src = petData.image ? `assets/mons/${petData.image}` : 'assets/mons/eggsy.png';
+            petImageBackground.style.background = rarityGradients[petData.rarity] || rarityGradients['Comum'];
+            petName.textContent = petData.name || 'Eggsy';
+
+            // Ajustar a posição dos alertas com base no decaimento
+            adjustWarnings();
+        }
+
+        // Função para ajustar a posição e exibição dos alertas
+        function adjustWarnings() {
+            let baseTop = 110; // Posição inicial
+            let verticalOffset = 20; // Espaçamento entre ícones
+
+            if (hungerWarning && happinessWarning) {
+                // Verificar qual atributo está abaixo de 30 e definir a ordem
+                const hungerLow = petData.hunger < 30;
+                const happinessLow = petData.happiness < 30;
+
+                if (hungerLow && !happinessLow) {
+                    // Só fome está baixa
+                    hungerWarning.style.top = `${baseTop}px`;
+                    hungerWarning.style.display = 'block';
+                    happinessWarning.style.display = 'none';
+                    console.log('Fome abaixo de 30, mostrando alerta');
+                } else if (!hungerLow && happinessLow) {
+                    // Só felicidade está baixa
+                    happinessWarning.style.top = `${baseTop}px`;
+                    happinessWarning.style.display = 'block';
+                    hungerWarning.style.display = 'none';
+                    console.log('Felicidade abaixo de 30, mostrando alerta');
+                } else if (hungerLow && happinessLow) {
+                    // Ambos estão baixos, ajustar verticalmente (fome em cima, felicidade embaixo)
+                    hungerWarning.style.top = `${baseTop}px`;
+                    hungerWarning.style.display = 'block';
+                    happinessWarning.style.top = `${baseTop + verticalOffset}px`;
+                    happinessWarning.style.display = 'block';
+                    console.log('Fome e Felicidade abaixo de 30, mostrando alertas');
+                } else {
+                    // Nenhum está baixo
+                    hungerWarning.style.display = 'none';
+                    happinessWarning.style.display = 'none';
+                    console.log('Fome e Felicidade acima de 30, escondendo alertas');
+                }
+            } else {
+                console.error('Elementos de alerta não encontrados');
+            }
+        }
+
+        // Carregar dados iniciais
+        loadPet(petData);
+
+        // Toggle entre raridade e textura
+        let showRarity = true;
+        const toggleSwitch = document.querySelector('.toggle-switch');
+        if (toggleSwitch) {
+            toggleSwitch.addEventListener('click', () => {
+                showRarity = !showRarity;
+                toggleSwitch.classList.toggle('active');
+                if (!petImageBackground || !texture || !petInfo) {
+                    console.error('Um ou mais elementos não encontrados para o toggle:', {
+                        petImageBackground: !!petImageBackground,
+                        texture: !!texture,
+                        petInfo: !!petInfo
+                    });
+                    return;
+                }
+                if (showRarity) {
+                    petImageBackground.style.display = 'block';
+                    texture.style.display = 'block';
+                    petInfo.style.display = 'block';
+                } else {
+                    petImageBackground.style.display = 'none';
+                    texture.style.display = 'none';
+                    petInfo.style.display = 'none';
+                }
+            });
+        } else {
+            console.error('Toggle switch não encontrado');
+        }
+
+        // Menu hamburger
+        const hamburgerMenu = document.querySelector('.hamburger-menu');
+        const menuDropdown = document.querySelector('.menu-dropdown');
+
+        if (hamburgerMenu && menuDropdown) {
+            hamburgerMenu.addEventListener('click', (e) => {
+                e.stopPropagation();
+                menuDropdown.classList.toggle('active');
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!hamburgerMenu.contains(e.target)) {
+                    menuDropdown.classList.remove('active');
+                }
+            });
+        } else {
+            console.error('Hamburger menu ou dropdown não encontrados');
+        }
+
+        // Ações do menu
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const action = e.target.dataset.action;
+                if (action === 'open-status') {
+                    console.log('Abrir Status');
+                    window.electronAPI.send('open-status-window');
+                } else if (action === 'load-pet') {
+                    console.log('Mudar de Pet');
+                    window.electronAPI.send('open-load-pet-window');
+                } else if (action === 'exit') {
+                    console.log('Sair');
+                    window.electronAPI.send('exit-app');
+                } else if (action === 'train-pet') {
+                    console.log('Treinar Pet');
+                    window.electronAPI.send('train-pet');
+                } else if (action === 'care-pet') {
+                    console.log('Cuidar do Pet');
+                    window.electronAPI.send('care-pet');
+                } else if (action === 'battle-pet') {
+                    console.log('Abrir Modo de Batalha');
+                    window.electronAPI.send('open-battle-mode-window'); // Alterado pra abrir a nova janela
+                } else if (action === 'itens-pet') {
+                    console.log('Abrir Itens');
+                    window.electronAPI.send('itens-pet');
+                } else if (action === 'store-pet') {
+                    console.log('Abrir Loja');
+                    window.electronAPI.send('store-pet');
+                }
+            });
+        });
+
+        // Receber dados do pet via IPC
+        window.electronAPI.on('pet-data', (event, petData) => {
+            console.log('Dados do pet recebidos via IPC:', petData);
+            loadPet(petData);
+        });
+
+        // Escutar o evento de erro de batalha e exibir o alerta
+        window.electronAPI.on('show-battle-error', (event, message) => {
+            if (battleAlert) {
+                battleAlert.textContent = message || 'Erro desconhecido';
+                battleAlert.style.display = 'block';
+                // Esconde o alerta após 3 segundos
+                setTimeout(() => {
+                    battleAlert.style.display = 'none';
+                }, 3000);
+            } else {
+                console.error('Elemento #battle-alert não encontrado');
+            }
+        });
+    </script>
+</body>
+
+</html>

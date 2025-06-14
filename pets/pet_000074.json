@@ -1,0 +1,26 @@
+{
+  "petId": "000074",
+  "name": "cadir",
+  "element": "ar",
+  "attributes": {
+    "attack": 1,
+    "defense": 2,
+    "speed": 2,
+    "magic": 3,
+    "life": 50
+  },
+  "specie": "Ave",
+  "rarity": "MuitoRaro",
+  "level": 1,
+  "experience": 0,
+  "createdAt": "2025-03-26T22:01:31.694Z",
+  "lastAccessed": "2025-03-26T22:01:31.698Z",
+  "fileName": "pet_000074.json",
+  "hunger": 100,
+  "happiness": 100,
+  "energy": 100,
+  "currentHealth": 50,
+  "maxHealth": 50,
+  "moves": [],
+  "image": "ave/ave.png"
+}

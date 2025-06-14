@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+    <title>Kadir11 - Criar Pet</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        .create-pet-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .create-pet-container h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .create-pet-container .question {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        #options-container {
+            display: grid;
+            grid-template-rows: repeat(2, auto);
+            /* Forçar 2 linhas */
+            gap: 10px;
+            /* Espaço entre os botões */
+            width: 100%;
+            max-width: 400px;
+            /* Limitar a largura para melhor visualização */
+            justify-items: center;
+            /* Centralizar os botões horizontalmente */
+        }
+
+        .option-button {
+            width: 200px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .create-pet-container .element-selection {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .create-pet-container .element-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            position: relative;
+            /* Para posicionar o texto abaixo */
+        }
+
+        .create-pet-container .element-button img {
+            width: 60px;
+            height: 60px;
+            border-radius: 7px;
+            border: 2px solid #2a323e;
+        }
+
+        .create-pet-container .element-button:hover {
+            transform: scale(1.1);
+        }
+
+        .create-pet-container .element-label {
+            display: none;
+            /* Oculto por padrão */
+            position: absolute;
+            bottom: -25px;
+            /* Distância abaixo da imagem */
+            left: 50%;
+            transform: translateX(-50%);
+            /* Centralizar horizontalmente */
+            color: #ffffff;
+            font-family: 'PixelOperator', sans-serif;
+            font-size: 14px;
+            white-space: nowrap;
+            /* Evitar que o texto quebre em várias linhas */
+        }
+
+        .create-pet-container .element-button:hover .element-label {
+            display: block;
+            /* Mostrar o texto ao passar o mouse */
+        }
+
+        .create-pet-container input {
+            background-color: #2a323e;
+            border: 2px solid #2a323e;
+            border-radius: 7px;
+            padding: 5px;
+            margin: 10px 0;
+            color: #ffffff;
+            font-family: 'PixelOperator', sans-serif;
+            font-size: 16px;
+            width: 200px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="window">
+        <div class="create-pet-container" id="create-pet-container">
+            <h2 id="question-title">Pergunta 1/5</h2>
+            <div class="question" id="question-text"></div>
+            <div id="options-container"></div>
+            <div id="element-selection" style="display: none;">
+                <h2>Escolha um Elemento</h2>
+                <div class="element-selection">
+                    <button class="element-button" data-element="fogo">
+                        <img src="assets/elements/fogo.png" alt="Fogo">
+                        <span class="element-label"></span>
+                    </button>
+                    <button class="element-button" data-element="ar">
+                        <img src="assets/elements/ar.png" alt="Ar">
+                        <span class="element-label"></span>
+                    </button>
+                    <button class="element-button" data-element="terra">
+                        <img src="assets/elements/terra.png" alt="Terra">
+                        <span class="element-label"></span>
+                    </button>
+                    <button class="element-button" data-element="agua">
+                        <img src="assets/elements/agua.png" alt="Água">
+                        <span class="element-label"></span>
+                    </button>
+                    <button class="element-button" data-element="puro">
+                        <img src="assets/elements/puro.png" alt="Puro">
+                        <span class="element-label"></span>
+                    </button>
+                </div>
+            </div>
+            <div id="name-selection" style="display: none;">
+                <h2>Por fim, dê um nome para seu pet</h2>
+                <input type="text" id="pet-name" placeholder="Nome do pet (máx. 15 caracteres)" maxlength="15" />
+                <button class="button" id="create-pet-button">Criar</button>
+            </div>
+            <!-- Animação final (evolution.gif) -->
+            <!-- Animação final (evolution.gif) -->
+            <!-- Animação final (evolution.gif) -->
+            <div id="final-animation"
+                style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 10; justify-content: center; align-items: center;">
+                <img id="final-animation-gif" src="assets/mons/evolution.gif" alt="Animação Final"
+                    style="width: 256px; height: 256px; opacity: 0; transition: opacity 0.5s ease-in;">
+            </div>
+
+            <!-- Container para o pet gerado e mensagem -->
+            <div id="pet-reveal"
+                style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); z-index: 11; justify-content: center; align-items: center; flex-direction: column;">
+                <img id="pet-image" src="" alt="Pet Gerado"
+                    style="width: 256px; height: 256px; opacity: 0; transition: opacity 1s ease-in;">
+                <p id="pet-message"
+                    style="color: white; font-size: 18px; margin-top: 20px; opacity: 0; transition: opacity 1s ease-in;">
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script src="scripts/create-pet.js"></script>
+</body>
+
+</html>

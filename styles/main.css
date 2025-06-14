@@ -1,0 +1,87 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Definir a fonte principal */
+@font-face {
+    font-family: 'PixelOperator';
+    src: url('../Assets/Fonts/PixelOperator.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/* Ajustar o body para evitar áreas transparentes */
+body {
+    background-color: transparent; /* Remove o fundo do body para usar apenas o da div */
+    font-family: 'PixelOperator', sans-serif;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+    overflow: hidden; /* Evita barras de rolagem desnecessárias */
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Estilo da janela principal */
+.window {
+    width: 100%;
+    height: 100%;
+    background-color: #101218; /* Cor primária */
+    border: 2px solid #2a323e; /* Borda */
+    border-radius: 7px; /* Cantos arredondados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5); /* Sombra padrão */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px; /* Reduzir o padding para ajustar ao tamanho menor */
+}
+
+/* Estilo dos botões */
+.button {
+    background-color: #2a323e; /* Cor secundária */
+    border: 2px solid #2a323e;
+    border-radius: 7px;
+    padding: 8px 16px; /* Reduzir o padding dos botões */
+    margin: 5px; /* Reduzir o margin para ajustar ao espaço */
+    font-size: 18px; /* Reduzir o tamanho da fonte */
+    color: #ffffff;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 120px; /* Definir uma largura fixa para os botões */
+    text-align: center;
+}
+
+.button:hover {
+    background-color: #3a4250; /* Um tom mais claro para hover */
+}
+
+.button:active {
+    background-color: #1a222e; /* Um tom mais escuro para clique */
+}
+
+/* Estilo do scrollbar (para telas futuras) */
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+    background-color: #101218;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #4a5666;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #5a6676;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #101218;
+}

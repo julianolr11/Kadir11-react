@@ -1,0 +1,26 @@
+{
+  "petId": "000070",
+  "name": "jaci",
+  "element": "terra",
+  "attributes": {
+    "attack": 2,
+    "defense": 1,
+    "speed": 2,
+    "magic": 4,
+    "life": 30
+  },
+  "specie": "Ave",
+  "rarity": "Lendario",
+  "level": 1,
+  "experience": 0,
+  "createdAt": "2025-03-23T22:13:14.932Z",
+  "lastAccessed": "2025-03-23T22:46:14.795Z",
+  "fileName": "pet_000070.json",
+  "hunger": 100,
+  "happiness": 100,
+  "energy": 100,
+  "currentHealth": 30,
+  "maxHealth": 30,
+  "moves": [],
+  "image": "ave/ave.png"
+}
