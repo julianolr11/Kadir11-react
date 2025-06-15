@@ -28,6 +28,7 @@ let lastUpdate = Date.now();
 let battleModeWindow = null;
 let journeyModeWindow = null;
 let trainWindow = null;
+let journeyImagesCache = null;
 
 app.whenReady().then(() => {
     console.log('Aplicativo iniciado');
@@ -437,11 +438,15 @@ ipcMain.on('set-mute-state', (event, isMuted) => {
 });
 
 ipcMain.handle('get-journey-images', async () => {
+    if (journeyImagesCache) {
+        return journeyImagesCache;
+    }
     try {
         const dir = path.join(__dirname, 'Assets', 'Modes', 'Journeys');
         const files = await fs.promises.readdir(dir);
-        return files.filter(f => /\.(png|jpg|jpeg|gif)$/i.test(f))
+        journeyImagesCache = files.filter(f => /\.(png|jpg|jpeg|gif)$/i.test(f))
             .map(f => path.join('Assets', 'Modes', 'Journeys', f).replace(/\\/g, '/'));
+        return journeyImagesCache;
     } catch (err) {
         console.error('Erro ao listar imagens de jornada:', err);
         return [];
