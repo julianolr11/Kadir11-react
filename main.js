@@ -423,7 +423,8 @@ ipcMain.on('battle-pet', async () => {
 function createBattleModeWindow() {
     if (battleModeWindow) return battleModeWindow;
 
-    const preloadPath = require('path').join(__dirname, '..', 'preload.js');
+    // Usar o diretório atual pois main.js está na raiz do projeto
+    const preloadPath = require('path').join(__dirname, 'preload.js');
     console.log('Caminho do preload.js para battleModeWindow:', preloadPath);
 
     battleModeWindow = new BrowserWindow({
