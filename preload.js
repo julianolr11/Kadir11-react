@@ -24,6 +24,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'open-journey-mode-window',
             'resize-journey-window',
             'set-mute-state',
+            'get-journey-images',
             'animation-finished' // Novo canal pra sinalizar o fim da animação
         ];
         if (validChannels.includes(channel)) {
@@ -77,6 +78,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getMuteState: () => {
         console.log('Enviando get-mute-state');
         return ipcRenderer.invoke('get-mute-state');
+    },
+    getJourneyImages: () => {
+        console.log('Enviando get-journey-images');
+        return ipcRenderer.invoke('get-journey-images');
     }
 });
 

@@ -3,6 +3,8 @@ const windowManager = require('./scripts/windowManager');
 const petManager = require('./scripts/petManager');
 const { getRequiredXpForNextLevel, calculateXpGain, increaseAttributesOnLevelUp } = require('./scripts/petExperience');
 const { startPetUpdater, resetTimers } = require('./scripts/petUpdater');
+const fs = require('fs');
+const path = require('path');
 
 // Importar o electron-store no processo principal
 let Store;
@@ -432,6 +434,18 @@ ipcMain.on('set-mute-state', (event, isMuted) => {
     console.log('Recebido set-mute-state:', isMuted);
     store.set('isMuted', isMuted);
     console.log('Estado de mute salvo:', isMuted);
+});
+
+ipcMain.handle('get-journey-images', async () => {
+    try {
+        const dir = path.join(__dirname, 'Assets', 'Modes', 'Journeys');
+        const files = await fs.promises.readdir(dir);
+        return files.filter(f => /\.(png|jpg|jpeg|gif)$/i.test(f))
+            .map(f => path.join('Assets', 'Modes', 'Journeys', f));
+    } catch (err) {
+        console.error('Erro ao listar imagens de jornada:', err);
+        return [];
+    }
 });
 
 module.exports = { app, ipcMain, globalShortcut, windowManager, petManager };
