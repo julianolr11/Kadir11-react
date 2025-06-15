@@ -19,8 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (modeJourney) {
         modeJourney.addEventListener('click', () => {
             console.log('Modo Jornada selecionado');
-            // Lógica futura pra modo Jornada
-            window.close(); // Fecha a janela por enquanto
+            // Abrir a janela do modo jornada
+            window.electronAPI.send('open-journey-mode-window');
+            window.close();
         });
     }
 

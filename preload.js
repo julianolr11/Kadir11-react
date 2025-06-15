@@ -20,6 +20,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'store-pet',
             'train-pet',
             'open-battle-mode-window',
+            'open-journey-mode-window',
             'set-mute-state',
             'animation-finished' // Novo canal pra sinalizar o fim da animação
         ];
