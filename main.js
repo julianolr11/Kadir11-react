@@ -323,8 +323,9 @@ function createJourneyModeWindow() {
     console.log('Caminho do preload.js para journeyModeWindow:', preloadPath);
 
     journeyModeWindow = new BrowserWindow({
-        width: 900,
-        height: 500,
+      width: 1100,
+        height: 700,
+
         frame: false,
         transparent: true,
         resizable: false,
