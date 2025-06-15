@@ -50,6 +50,26 @@
             font-weight: bold;
             text-shadow: none;
         }
+        #title-bar-buttons {
+            display: flex;
+            gap: 5px;
+            -webkit-app-region: no-drag;
+        }
+        #back-train-window {
+            width: 20px;
+            height: 20px;
+            background-color: #44aaff;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a435b;
+            font-family: cursive;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: none;
+        }
         #train-container { flex:1; padding:0; overflow-y:auto; }
         table { width:100%; border-collapse:collapse; table-layout:fixed; }
         th, td { border:1px solid #2a323e; padding:4px; text-align:center; font-size:14px; }
@@ -67,7 +87,10 @@
     <div class="window">
         <div id="title-bar">
             <div id="title-bar-content"><span>Treinar Golpes</span></div>
-            <div id="close-train-window">X</div>
+            <div id="title-bar-buttons">
+                <div id="back-train-window">↩</div>
+                <div id="close-train-window">X</div>
+            </div>
         </div>
         <div id="train-container">
             <table id="moves-table">

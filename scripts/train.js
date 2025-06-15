@@ -8,6 +8,10 @@ function closeWindow() {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-train-window')?.addEventListener('click', closeWindow);
+    document.getElementById('back-train-window')?.addEventListener('click', () => {
+        window.electronAPI.send('open-status-window');
+        closeWindow();
+    });
 
     window.electronAPI.on('pet-data', (event, data) => {
         pet = data;
