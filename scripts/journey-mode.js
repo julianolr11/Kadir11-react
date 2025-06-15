@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.close();
     });
 
+    const loading = document.getElementById('loading');
+    const grid = document.getElementById('missions-grid');
+
     window.electronAPI.getJourneyImages().then(files => {
         const missions = files.map((img, idx) => {
             const base = img.split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
@@ -23,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return { name: formatted, range, minLevel: min, image: img };
         });
 
-        const grid = document.getElementById('missions-grid');
         missions.forEach(mission => {
             const tile = document.createElement('div');
             tile.className = 'mission-tile';
@@ -43,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             grid.appendChild(tile);
         });
+
+        if (loading) loading.style.display = 'none';
 
         updateLocks();
 
