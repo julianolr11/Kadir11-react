@@ -95,13 +95,13 @@ function updateStatus() {
 
     // Atualizar a imagem do elemento na barra de título
     const elementImages = {
-        'ar': './assets/elements/ar.png',
-        'fogo': './assets/elements/fogo.png',
-        'agua': './assets/elements/agua.png',
-        'terra': './assets/elements/terra.png',
-        'puro': './assets/elements/puro.png'
+        'ar': './Assets/Elements/ar.png',
+        'fogo': './Assets/Elements/fogo.png',
+        'agua': './Assets/Elements/agua.png',
+        'terra': './Assets/Elements/terra.png',
+        'puro': './Assets/Elements/puro.png'
     };
-    const elementImageSrc = elementImages[pet.element.toLowerCase()] || './assets/elements/default.png';
+    const elementImageSrc = elementImages[pet.element.toLowerCase()] || './Assets/Elements/default.png';
     console.log('Atualizando elemento na barra de título:', elementImageSrc);
     titleBarElement.src = elementImageSrc;
     titleBarElement.alt = `Elemento: ${pet.element}`;
@@ -141,9 +141,9 @@ function updateStatus() {
     });
     statusPetImage.addEventListener('error', (e) => {
         console.error('Erro ao carregar a imagem do pet:', e);
-        statusPetImage.src = 'assets/mons/eggsy.png'; // Fallback ajustado pro caminho correto
+        statusPetImage.src = 'Assets/Mons/eggsy.png'; // Fallback ajustado pro caminho correto
     });
-    statusPetImage.src = pet.image ? `assets/mons/${pet.image}` : 'assets/mons/eggsy.png';
+    statusPetImage.src = pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png';
 }
 
 function closeWindow() {

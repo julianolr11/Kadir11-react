@@ -157,7 +157,7 @@ function showFinalAnimation(newPet) {
         const petImage = document.getElementById('pet-image');
         const petMessage = document.getElementById('pet-message');
 
-        petImage.src = `assets/mons/${newPet.image}`; // Caminho da imagem do pet
+        petImage.src = `Assets/Mons/${newPet.image}`; // Caminho da imagem do pet
         petMessage.textContent = `Parabéns! Você adquiriu ${newPet.name}`;
         petReveal.style.display = 'flex';
 
