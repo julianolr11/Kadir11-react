@@ -9,6 +9,10 @@ function closeWindow() {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('close-journey-mode')?.addEventListener('click', closeWindow);
+    document.getElementById('back-journey-mode')?.addEventListener('click', () => {
+        window.electronAPI.send('open-battle-mode-window');
+        window.close();
+    });
 
     const missions = [
         { name: 'Bosque Sombrio', range: '1~3', minLevel: 1, image: 'Assets/Modes/Journeys/forest.jpg' },
@@ -54,6 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     updateLocks();
+
+    const container = document.getElementById('journey-container');
+    const titleBar = document.getElementById('title-bar');
+    const totalWidth = container.scrollWidth + 10; // small padding
+    const totalHeight = titleBar.offsetHeight + container.scrollHeight + 10;
+    window.electronAPI.send('resize-journey-window', { width: totalWidth, height: totalHeight });
 });
 
 function updateLocks() {

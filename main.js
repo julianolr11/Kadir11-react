@@ -360,6 +360,12 @@ ipcMain.on('open-journey-mode-window', () => {
     }
 });
 
+ipcMain.on('resize-journey-window', (event, size) => {
+    if (journeyModeWindow && size && size.width && size.height) {
+        journeyModeWindow.setSize(Math.round(size.width), Math.round(size.height));
+    }
+});
+
 // Novos handlers IPC para o electron-store
 ipcMain.handle('get-mute-state', async () => {
     console.log('Recebido get-mute-state');
