@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Adicionar evento ao botão de fechar
     document.getElementById('close-battle-mode')?.addEventListener('click', closeWindow);
+    document.getElementById('back-battle-mode')?.addEventListener('click', closeWindow);
 
     // Adicionar eventos pras divs de modo
     const modeJourney = document.getElementById('mode-journey');

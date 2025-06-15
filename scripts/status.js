@@ -206,4 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Adicionar evento ao botão de fechar
     document.getElementById('close-status-titlebar')?.addEventListener('click', closeWindow);
+    document.getElementById('back-status-titlebar')?.addEventListener('click', () => {
+        closeWindow();
+    });
 });

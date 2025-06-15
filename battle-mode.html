@@ -61,6 +61,26 @@
             font-weight: bold;
             text-shadow: none;
         }
+        #title-bar-buttons {
+            display: flex;
+            gap: 5px;
+            -webkit-app-region: no-drag;
+        }
+        #back-battle-mode {
+            width: 20px;
+            height: 20px;
+            background-color: #44aaff;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a435b;
+            font-family: cursive;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: none;
+        }
 
         #battle-mode-container {
             flex: 1;
@@ -150,7 +170,10 @@
             <div id="title-bar-content">
                 <span>Modo de Batalha</span>
             </div>
-            <div id="close-battle-mode">X</div>
+            <div id="title-bar-buttons">
+                <div id="back-battle-mode">↩</div>
+                <div id="close-battle-mode">X</div>
+            </div>
         </div>
         <div id="battle-mode-container">
             <div id="mode-selection-text">Selecione o modo</div>

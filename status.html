@@ -80,6 +80,26 @@
             font-weight: bold;
             text-shadow: none;
         }
+        #title-bar-buttons {
+            display: flex;
+            gap: 5px;
+            -webkit-app-region: no-drag;
+        }
+        #back-status-titlebar {
+            width: 20px;
+            height: 20px;
+            background-color: #44aaff;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a435b;
+            font-family: cursive;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: none;
+        }
 
         #status-container {
             flex: 1;
@@ -373,7 +393,10 @@
                 <img id="title-bar-element" src="Assets/Elements/default.png" alt="Elemento">
                 <span id="title-bar-pet-name">Nome do Pet</span>
             </div>
-            <div id="close-status-titlebar">X</div>
+            <div id="title-bar-buttons">
+                <div id="back-status-titlebar">↩</div>
+                <div id="close-status-titlebar">X</div>
+            </div>
         </div>
         <div id="status-container">
             <div id="status-content">
