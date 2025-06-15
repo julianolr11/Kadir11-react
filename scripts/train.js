@@ -66,7 +66,7 @@ function renderMoves(moves) {
             <td>${move.effect}</td>
             <td>${move.cost}</td>
             <td>${move.level}</td>
-            <td><button class="button action-button ${actionClass}">${action}</button></td>
+            <td><button class="button small-button action-button ${actionClass}">${action}</button></td>
         `;
 
         const btn = tr.querySelector('button');
