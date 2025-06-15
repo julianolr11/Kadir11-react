@@ -110,19 +110,26 @@ function updateStatus() {
     console.log('Atualizando nome na barra de título:', pet.name);
     titleBarPetName.textContent = pet.name;
 
-    // Atualizar a lista de golpes
     statusMoves.innerHTML = '';
-    if (pet.moves && pet.moves.length > 0) {
-        const moveList = document.createElement('ul');
-        pet.moves.forEach(move => {
-            const moveItem = document.createElement('li');
-            moveItem.textContent = move.name;
-            moveList.appendChild(moveItem);
-        });
-        statusMoves.appendChild(moveList);
-    } else {
-        statusMoves.textContent = 'Nenhum golpe aprendido.';
+    const grid = document.createElement('div');
+    grid.className = 'moves-grid';
+    for (let i = 0; i < 4; i++) {
+        const slot = document.createElement('div');
+        slot.className = 'move-slot';
+        if (pet.moves && pet.moves[i]) {
+            slot.textContent = pet.moves[i].name;
+        } else {
+            const btn = document.createElement('button');
+            btn.className = 'button add-move-button';
+            btn.textContent = '+';
+            btn.addEventListener('click', () => {
+                window.electronAPI.send('train-pet');
+            });
+            slot.appendChild(btn);
+        }
+        grid.appendChild(slot);
     }
+    statusMoves.appendChild(grid);
 
     const healthPercentage = (pet.currentHealth || 0) / (pet.maxHealth || 1) * 100;
     statusHealthFill.style.width = `${healthPercentage}%`;
@@ -181,15 +188,14 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('Botão da aba Status não encontrado');
     }
 
-    // Adicionar evento ao botão "Reaprender Golpes" (placeholder)
-    const relearnMovesButton = document.getElementById('relearn-moves-button');
-    if (relearnMovesButton) {
-        relearnMovesButton.addEventListener('click', () => {
-            console.log('Botão Reaprender Golpes clicado, abrindo janela de treinamento');
-            // Placeholder para funcionalidade futura
+    const trainMovesButton = document.getElementById('train-moves-button');
+    if (trainMovesButton) {
+        trainMovesButton.addEventListener('click', () => {
+            console.log('Botão Treinar Golpes clicado, abrindo janela de treinamento');
+            window.electronAPI.send('train-pet');
         });
     } else {
-        console.warn('relearn-moves-button element not found');
+        console.warn('train-moves-button element not found');
     }
 
     // Registrar o listener para o evento pet-data dentro do DOMContentLoaded

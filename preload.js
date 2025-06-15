@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'itens-pet',
             'store-pet',
             'train-pet',
+            'learn-move',
             'open-battle-mode-window',
             'open-journey-mode-window',
             'resize-journey-window',
