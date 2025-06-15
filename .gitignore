@@ -1,23 +1,37 @@
 # Ignora dependências e builds
 node_modules/
 dist/
+build/
 
 # Ignora arquivos de log e cache do sistema
 *.log
+npm-debug.log
+yarn-debug.log
+yarn-error.log
 .DS_Store
+Thumbs.db
+desktop.ini
 .env
 
 # Ignora configurações locais de IDE
 .vscode/
+.idea/
+.sublime-workspace
+.sublime-project
 
 # Ignora arquivos compactados
 *.zip
+*.tar.gz
 *.rar
 
 # Ignora backups pesados e arquivos grandes
 backups/
 *.exe
-backups/
-node_modules/
-*.zip
-*.exe
+*.dmg
+*.app
+*.snap
+*.deb
+*.rpm
+
+# Git
+.git
