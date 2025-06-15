@@ -441,7 +441,7 @@ ipcMain.handle('get-journey-images', async () => {
         const dir = path.join(__dirname, 'Assets', 'Modes', 'Journeys');
         const files = await fs.promises.readdir(dir);
         return files.filter(f => /\.(png|jpg|jpeg|gif)$/i.test(f))
-            .map(f => path.join('Assets', 'Modes', 'Journeys', f));
+            .map(f => path.join('Assets', 'Modes', 'Journeys', f).replace(/\\/g, '/'));
     } catch (err) {
         console.error('Erro ao listar imagens de jornada:', err);
         return [];
