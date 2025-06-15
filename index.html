@@ -8,7 +8,7 @@
     <style>
         @font-face {
             font-family: 'PixelOperator';
-            src: url('assets/fonts/PixelOperator.ttf') format('truetype');
+            src: url('Assets/Fonts/PixelOperator.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
@@ -282,7 +282,7 @@
         <div class="pet-image-container">
             <div class="pet-image-background"></div>
             <div class="pet-image-texture"></div>
-            <img id="pet-image" src="assets/mons/eggsy.png" alt="Pet Image" />
+            <img id="pet-image" src="Assets/Mons/eggsy.png" alt="Pet Image" />
             <div class="pet-info">
                 <div class="pet-name">Eggsy</div>
                 <div class="health-bar">
@@ -294,7 +294,7 @@
                 <div class="pet-level" id="level-display">Lvl 5</div>
             </div>
             <div class="hamburger-menu">
-                <img class="hamburger-icon" src="assets/icons/Hamburger_icon.svg.png" alt="Menu" />
+                <img class="hamburger-icon" src="Assets/Icons/Hamburger_icon.svg.png" alt="Menu" />
                 <div class="menu-dropdown">
                     <div class="menu-item" data-action="open-status">Status</div>
                     <div class="menu-item" data-action="train-pet">Treinar</div>
@@ -307,8 +307,8 @@
                 </div>
             </div>
             <!-- Imagens de alerta -->
-            <img id="hunger-warning" class="warning-image" src="assets/shop/meat1.png" alt="Fome baixa">
-            <img id="happiness-warning" class="warning-image" src="assets/shop/sad.png" alt="Felicidade baixa">
+            <img id="hunger-warning" class="warning-image" src="Assets/Shop/meat1.png" alt="Fome baixa">
+            <img id="happiness-warning" class="warning-image" src="Assets/Shop/sad.png" alt="Felicidade baixa">
             <!-- Alerta de batalha -->
             <div id="battle-alert"></div>
         </div>
@@ -378,7 +378,7 @@
             healthFill.style.width = `${(petData.currentHealth / petData.maxHealth || 0) * 100}%`;
             energyFill.style.width = `${petData.energy || 0}%`;
             levelDisplay.textContent = `Lvl ${petData.level || 1}`;
-            petImage.src = petData.image ? `assets/mons/${petData.image}` : 'assets/mons/eggsy.png';
+            petImage.src = petData.image ? `Assets/Mons/${petData.image}` : 'Assets/Mons/eggsy.png';
             petImageBackground.style.background = rarityGradients[petData.rarity] || rarityGradients['Comum'];
             petName.textContent = petData.name || 'Eggsy';
 
