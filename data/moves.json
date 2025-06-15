@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Arranhão",
+    "rarity": "Comum",
+    "elements": ["fogo", "agua", "terra", "ar", "puro"],
+    "species": ["Ave", "Besta", "Fera", "Monstro", "Reptilóide"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Asas de Brasa",
+    "rarity": "Raro",
+    "elements": ["fogo"],
+    "species": ["Ave"],
+    "power": 25,
+    "effect": "queimado",
+    "cost": 20,
+    "level": 5
+  },
+  {
+    "name": "Mordida Sombria",
+    "rarity": "Incomum",
+    "elements": ["terra"],
+    "species": ["Fera", "Monstro", "Criatura Sombria"],
+    "power": 18,
+    "effect": "envenenamento",
+    "cost": 10,
+    "level": 3
+  }
+]

@@ -25,6 +25,7 @@ let currentPet = null;
 let lastUpdate = Date.now();
 let battleModeWindow = null;
 let journeyModeWindow = null;
+let trainWindow = null;
 
 app.whenReady().then(() => {
     console.log('Aplicativo iniciado');
@@ -207,7 +208,13 @@ ipcMain.on('open-status-window', () => {
 
 ipcMain.on('train-pet', async () => {
     if (currentPet) {
-        console.log('Treinando pet:', currentPet.name);
+        console.log('Abrindo janela de treinamento para:', currentPet.name);
+        const win = createTrainWindow();
+        if (win) {
+            win.webContents.on('did-finish-load', () => {
+                win.webContents.send('pet-data', currentPet);
+            });
+        }
     } else {
         console.error('Nenhum pet selecionado para treinar');
     }
@@ -345,6 +352,32 @@ function createJourneyModeWindow() {
     return journeyModeWindow;
 }
 
+function createTrainWindow() {
+    if (trainWindow) return trainWindow;
+
+    const preloadPath = require('path').join(__dirname, 'preload.js');
+
+    trainWindow = new BrowserWindow({
+        width: 800,
+        height: 500,
+        frame: false,
+        transparent: true,
+        resizable: false,
+        webPreferences: {
+            preload: preloadPath,
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
+    });
+
+    trainWindow.loadFile('train.html');
+    trainWindow.on('closed', () => {
+        trainWindow = null;
+    });
+
+    return trainWindow;
+}
+
 ipcMain.on('open-battle-mode-window', () => {
     console.log('Recebido open-battle-mode-window');
     createBattleModeWindow();
@@ -363,6 +396,27 @@ ipcMain.on('open-journey-mode-window', () => {
 ipcMain.on('resize-journey-window', (event, size) => {
     if (journeyModeWindow && size && size.width && size.height) {
         journeyModeWindow.setSize(Math.round(size.width), Math.round(size.height));
+    }
+});
+
+ipcMain.on('learn-move', async (event, move) => {
+    if (!currentPet) return;
+    if (!currentPet.moves) currentPet.moves = [];
+    const idx = currentPet.moves.findIndex(m => m.name === move.name);
+    if (idx >= 0) {
+        currentPet.moves[idx] = move;
+    } else if (currentPet.moves.length >= 4) {
+        currentPet.moves[0] = move;
+    } else {
+        currentPet.moves.push(move);
+    }
+    try {
+        await petManager.updatePet(currentPet.petId, { moves: currentPet.moves });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+        });
+    } catch (err) {
+        console.error('Erro ao aprender golpe:', err);
     }
 });
 

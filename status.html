@@ -308,6 +308,33 @@
             grid-area: magic;
         }
 
+        #tab-moves {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #status-moves {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .move-slot {
+            background-color: #2a323e;
+            border-radius: 7px;
+            padding: 5px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .add-move-button {
+            width: 100%;
+            height: 100%;
+        }
+
         .tab-content-item {
             display: none !important;
             /* Forçar o comportamento */
@@ -399,8 +426,8 @@
                         </div>
                     </div>
                     <div id="tab-moves" class="tab-content-item">
-                        <div id="status-moves">Nenhum golpe aprendido.</div>
-                        <button class="button" id="relearn-moves-button">Reaprender Golpes</button>
+                        <div id="status-moves"></div>
+                        <button class="button" id="train-moves-button">Treinar Golpes</button>
                     </div>
                 </div>
             </div>
