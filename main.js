@@ -24,6 +24,7 @@ const store = new Store();
 let currentPet = null;
 let lastUpdate = Date.now();
 let battleModeWindow = null;
+let journeyModeWindow = null;
 
 app.whenReady().then(() => {
     console.log('Aplicativo iniciado');
@@ -315,9 +316,47 @@ function createBattleModeWindow() {
     return battleModeWindow;
 }
 
+function createJourneyModeWindow() {
+    if (journeyModeWindow) return journeyModeWindow;
+
+    const preloadPath = require('path').join(__dirname, 'preload.js');
+    console.log('Caminho do preload.js para journeyModeWindow:', preloadPath);
+
+    journeyModeWindow = new BrowserWindow({
+        width: 1100,
+        height: 700,
+        frame: false,
+        transparent: true,
+        resizable: false,
+        webPreferences: {
+            preload: preloadPath,
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
+    });
+
+    journeyModeWindow.loadFile('journey-mode.html');
+    journeyModeWindow.on('closed', () => {
+        console.log('journeyModeWindow fechada');
+        journeyModeWindow = null;
+    });
+
+    return journeyModeWindow;
+}
+
 ipcMain.on('open-battle-mode-window', () => {
     console.log('Recebido open-battle-mode-window');
     createBattleModeWindow();
+});
+
+ipcMain.on('open-journey-mode-window', () => {
+    console.log('Recebido open-journey-mode-window');
+    const win = createJourneyModeWindow();
+    if (currentPet && win) {
+        win.webContents.on('did-finish-load', () => {
+            win.webContents.send('pet-data', currentPet);
+        });
+    }
 });
 
 // Novos handlers IPC para o electron-store
