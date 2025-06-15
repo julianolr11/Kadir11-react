@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
         window.electronAPI.send('open-status-window');
         closeWindow();
     });
+    document.getElementById('back-button')?.addEventListener('click', () => {
+        window.electronAPI.send('open-status-window');
+        closeWindow();
+    });
 
     window.electronAPI.on('pet-data', (event, data) => {
         pet = data;
