@@ -318,8 +318,13 @@
         #status-moves {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, auto);
             gap: 5px;
             margin-bottom: 5px;
+        }
+
+        .moves-grid {
+            display: contents;
         }
 
         .move-slot {
@@ -427,7 +432,7 @@
                     </div>
                     <div id="tab-moves" class="tab-content-item">
                         <div id="status-moves"></div>
-                        <button class="button" id="train-moves-button">Treinar Golpes</button>
+                        <button class="button small-button" id="train-moves-button">Treinar</button>
                     </div>
                 </div>
             </div>
