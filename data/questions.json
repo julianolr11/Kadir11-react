@@ -1,0 +1,162 @@
+[
+  {
+    "text": "Você está perdido em uma floresta. O que você faz?",
+    "options": [
+      {"text": "Procuro um rio para seguir", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Escalo uma árvore para me orientar", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}},
+      {"text": "Construo um abrigo e espero ajuda", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}}
+    ]
+  },
+  {
+    "text": "Um estranho se aproxima. Qual é sua reação?",
+    "options": [
+      {"text": "Fico em guarda e observo", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 0}},
+      {"text": "Saúdo amigavelmente", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}},
+      {"text": "Me escondo rapidamente", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você encontra um artefato brilhante. O que faz?",
+    "options": [
+      {"text": "Toco para ver o que acontece", "points": {"attack": 1, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Estudo de longe", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Ignoro e sigo em frente", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Está escurecendo. Como você se prepara?",
+    "options": [
+      {"text": "Acendo uma fogueira", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}},
+      {"text": "Procuro um lugar seguro", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Continuo andando", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você ouve um rugido à distância. O que faz?",
+    "options": [
+      {"text": "Vou investigar", "points": {"attack": 1, "defense": 0, "speed": 0, "magic": 0, "life": 0}},
+      {"text": "Fico quieto e observo", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}},
+      {"text": "Corro na direção oposta", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você encontra uma caverna misteriosa. O que faz?",
+    "options": [
+      {"text": "Entro para explorar", "points": {"attack": 1, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Observo de fora", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}},
+      {"text": "Passo longe dela", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Está chovendo forte. Qual é sua atitude?",
+    "options": [
+      {"text": "Aproveito para descansar", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Procuro abrigo", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Continuo minha jornada", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você encontra um lago cristalino. O que faz?",
+    "options": [
+      {"text": "Mergulho para nadar", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 1}},
+      {"text": "Bebo a água", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Sigo meu caminho", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Um pássaro gigante voa sobre você. O que faz?",
+    "options": [
+      {"text": "Tento chamar sua atenção", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Me escondo", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 0}},
+      {"text": "Observo de longe", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}}
+    ]
+  },
+  {
+    "text": "Você encontra uma planta estranha. O que faz?",
+    "options": [
+      {"text": "Toco para sentir", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Estudo sem tocar", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Evito e sigo em frente", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você sente um tremor. O que faz?",
+    "options": [
+      {"text": "Corro para um lugar aberto", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}},
+      {"text": "Procuro algo para me proteger", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Fico parado e observo", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você encontra um caminho bifurcado. Qual escolhe?",
+    "options": [
+      {"text": "O caminho escuro e misterioso", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "O caminho iluminado e tranquilo", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "O caminho estreito e rápido", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você ouve um som estranho. O que faz?",
+    "options": [
+      {"text": "Investigo a origem", "points": {"attack": 1, "defense": 0, "speed": 0, "magic": 0, "life": 0}},
+      {"text": "Fico alerta mas não me movo", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Saio rapidamente", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você encontra uma pedra brilhante. O que faz?",
+    "options": [
+      {"text": "Pego para examinar", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Observo sem tocar", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}},
+      {"text": "Deixo para trás", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Está muito quente. Como você reage?",
+    "options": [
+      {"text": "Procuro sombra", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Continuo andando", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}},
+      {"text": "Tento encontrar água", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}}
+    ]
+  },
+  {
+    "text": "Você encontra um animal ferido. O que faz?",
+    "options": [
+      {"text": "Tento ajudar", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Observo de longe", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Sigo meu caminho", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você vê um arco-íris. O que faz?",
+    "options": [
+      {"text": "Tento seguir até o fim", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 1, "life": 0}},
+      {"text": "Aprecio a vista", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}},
+      {"text": "Ignoro e sigo em frente", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você encontra uma ponte quebrada. O que faz?",
+    "options": [
+      {"text": "Tento atravessar com cuidado", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}},
+      {"text": "Procuro outro caminho", "points": {"attack": 0, "defense": 1, "speed": 0, "magic": 0, "life": 1}},
+      {"text": "Construo algo para atravessar", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}}
+    ]
+  },
+  {
+    "text": "Você vê uma estrela cadente. O que faz?",
+    "options": [
+      {"text": "Faço um pedido", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}},
+      {"text": "Observo em silêncio", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 0}},
+      {"text": "Sigo meu caminho", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  },
+  {
+    "text": "Você encontra um mapa antigo. O que faz?",
+    "options": [
+      {"text": "Sigo o mapa", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}},
+      {"text": "Guardo para estudar depois", "points": {"attack": 0, "defense": 0, "speed": 0, "magic": 1, "life": 1}},
+      {"text": "Ignoro o mapa", "points": {"attack": 0, "defense": 0, "speed": 1, "magic": 0, "life": 0}}
+    ]
+  }
+]
