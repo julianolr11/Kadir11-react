@@ -18,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const missions = files.map((img, idx) => {
             const base = img.split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
             const formatted = base.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-            const min = idx * 4 + 1;
-            const range = `${min}~${min + 3}`;
+            const min = idx * 5 + 1;
+            const range = `${min}~${min + 4}`;
             return { name: formatted, range, minLevel: min, image: img };
         });
 
