@@ -39,15 +39,34 @@ function renderMoves(moves) {
         if (pet.moves && pet.moves.length >= 4 && !known) action = 'Trocar';
         if (pet.level < move.level) action = 'Indisponível';
 
+        const elementIcons = move.elements.map(el =>
+            `<img class="element-icon" src="Assets/Elements/${el}.png" alt="${el}">`
+        ).join(' ');
+
+        let actionClass = '';
+        switch (action) {
+            case 'Aprender':
+                actionClass = 'action-aprender';
+                break;
+            case 'Reaprender':
+                actionClass = 'action-reaprender';
+                break;
+            case 'Trocar':
+                actionClass = 'action-trocar';
+                break;
+            default:
+                actionClass = 'action-indisponivel';
+        }
+
         tr.innerHTML = `
             <td>${move.name}</td>
             <td>${move.rarity}</td>
-            <td>${move.elements.join(', ')}</td>
+            <td>${elementIcons}</td>
             <td>${move.power}</td>
             <td>${move.effect}</td>
             <td>${move.cost}</td>
             <td>${move.level}</td>
-            <td><button class="button action-button">${action}</button></td>
+            <td><button class="button action-button ${actionClass}">${action}</button></td>
         `;
 
         const btn = tr.querySelector('button');
