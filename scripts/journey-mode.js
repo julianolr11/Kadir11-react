@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
         missions.forEach(mission => {
             const tile = document.createElement('div');
             tile.className = 'mission-tile';
-            tile.style.backgroundImage = `url('${mission.image}')`;
+            const imgPath = mission.image.replace(/\\/g, '/');
+            tile.style.backgroundImage = `url('${imgPath}')`;
             tile.dataset.minLevel = mission.minLevel;
 
             const info = document.createElement('div');
