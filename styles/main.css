@@ -27,6 +27,14 @@ body {
     align-items: center;
 }
 
+/* Garantir que todas as imagens sejam exibidas com pixels nítidos */
+img {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+}
+
 /* Estilo da janela principal */
 .window {
     width: 100%;
