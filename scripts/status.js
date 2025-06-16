@@ -60,14 +60,13 @@ function updateStatus() {
     const statusMoves = document.getElementById('status-moves');
     const statusPetImage = document.getElementById('status-pet-image');
     const statusBioImage = document.getElementById('status-bio-image');
-    const bioImage = document.getElementById('bio-image');
     const bioText = document.getElementById('bio-text');
     const titleBarElement = document.getElementById('title-bar-element');
     const titleBarPetName = document.getElementById('title-bar-pet-name');
     const statusPetImageGradient = document.getElementById('status-pet-image-gradient');
 
     // Verificar se todos os elementos estão disponíveis
-    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioImage || !bioText) {
+    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText) {
         console.error('Um ou mais elementos do status-container ou title-bar não encontrados', {
             healthContainer: !!healthContainer,
             hungerContainer: !!hungerContainer,
@@ -156,13 +155,8 @@ function updateStatus() {
     statusMoves.appendChild(grid);
 
     // Atualizar bio
-    if (bioImage && bioText) {
+    if (bioText) {
         bioText.textContent = pet.bio || '';
-        if (pet.bioImage) {
-            bioImage.src = `Assets/Mons/${pet.bioImage}`;
-        } else {
-            bioImage.src = '';
-        }
     }
 
     const healthPercentage = (pet.currentHealth || 0) / (pet.maxHealth || 1) * 100;
