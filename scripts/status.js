@@ -59,6 +59,7 @@ function updateStatus() {
     const statusLevel = document.getElementById('status-level');
     const statusMoves = document.getElementById('status-moves');
     const statusPetImage = document.getElementById('status-pet-image');
+    const statusBioImage = document.getElementById('status-bio-image');
     const bioImage = document.getElementById('bio-image');
     const bioText = document.getElementById('bio-text');
     const titleBarElement = document.getElementById('title-bar-element');
@@ -66,7 +67,7 @@ function updateStatus() {
     const statusPetImageGradient = document.getElementById('status-pet-image-gradient');
 
     // Verificar se todos os elementos estão disponíveis
-    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusMoves || !statusPetImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioImage || !bioText) {
+    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioImage || !bioText) {
         console.error('Um ou mais elementos do status-container ou title-bar não encontrados', {
             healthContainer: !!healthContainer,
             hungerContainer: !!hungerContainer,
@@ -84,6 +85,7 @@ function updateStatus() {
             statusLevel: !!statusLevel,
             statusMoves: !!statusMoves,
             statusPetImage: !!statusPetImage,
+            statusBioImage: !!statusBioImage,
             titleBarElement: !!titleBarElement,
             titleBarPetName: !!titleBarPetName,
             statusPetImageGradient: !!statusPetImageGradient
@@ -185,6 +187,15 @@ function updateStatus() {
         setImageWithFallback(statusPetImage, pet.image);
     }
 
+    if (statusBioImage) {
+        if (pet.bioImage) {
+            statusBioImage.src = `Assets/Mons/${pet.bioImage}`;
+        } else {
+            statusBioImage.src = '';
+        }
+        statusBioImage.style.display = 'none';
+    }
+
     const activeBtn = document.querySelector('.tab-button.active');
     if (activeBtn) {
         const tabId = activeBtn.getAttribute('data-tab');
@@ -198,19 +209,15 @@ function closeWindow() {
 }
 
 function updateTabImage(tabId) {
-    const statusPetImage = document.getElementById('status-pet-image');
-    if (!statusPetImage) return;
+    const statusBioImage = document.getElementById('status-bio-image');
+    if (!statusBioImage) return;
 
     if (tabId === 'tab-sobre') {
         if (pet.bioImage) {
-            setImageWithFallback(statusPetImage, pet.bioImage);
+            statusBioImage.style.display = 'block';
         }
     } else {
-        if (pet.statusImage) {
-            setImageWithFallback(statusPetImage, pet.statusImage);
-        } else {
-            setImageWithFallback(statusPetImage, pet.image);
-        }
+        statusBioImage.style.display = 'none';
     }
 }
 
