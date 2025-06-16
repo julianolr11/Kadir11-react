@@ -209,7 +209,7 @@
                         <div class="pet-image-container">
                             <div class="pet-image-background"></div>
                             <div class="pet-image-texture"></div>
-                            <img src="${pet.statusImage ? `Assets/Mons/${pet.statusImage}` : (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png')}" alt="${pet.name}" />
+                            <img src="${pet.statusImage ? `Assets/Mons/${pet.statusImage}` : (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png')}" alt="${pet.name}" style="image-rendering: pixelated;" />
                         </div>
                         <div class="pet-info">
                             <p><strong>Nome:</strong> ${pet.name}</p>
@@ -218,7 +218,7 @@
                             <p><strong>Último Acesso:</strong> ${pet.lastAccessed ? formatDate(pet.lastAccessed) : 'Nunca'}</p>
                         </div>
                         <button class="delete-button" data-pet-id="${pet.petId}">
-                            <img src="Assets/Icons/trash-can.svg" alt="Delete Icon" />
+                            <img src="Assets/Icons/trash-can.svg" alt="Delete Icon" style="image-rendering: pixelated;" />
                         </button>
                     `;
                     petItem.addEventListener('click', () => {
