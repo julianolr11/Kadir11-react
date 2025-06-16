@@ -1,4 +1,5 @@
 const fs = require('fs').promises;
+const fsSync = require('fs');
 const path = require('path');
 
 const petsDir = path.join(__dirname, '..', 'pets');
@@ -40,6 +41,23 @@ async function savePetCounter() {
     }
 }
 
+function ensureStatusImage(pet) {
+    if (pet.statusImage || !pet.image) return;
+
+    const relativeDir = path.posix.dirname(pet.image);
+    if (!relativeDir || relativeDir === '.') return;
+
+    const baseDir = path.join(__dirname, '..', 'Assets', 'Mons', relativeDir);
+    const gifPath = path.join(baseDir, 'front.gif');
+    const pngPath = path.join(baseDir, 'front.png');
+
+    if (fsSync.existsSync(gifPath)) {
+        pet.statusImage = path.posix.join(relativeDir, 'front.gif');
+    } else if (fsSync.existsSync(pngPath)) {
+        pet.statusImage = path.posix.join(relativeDir, 'front.png');
+    }
+}
+
 // Função para criar um novo pet
 async function createPet(petData) {
     await ensurePetsDir();
@@ -75,6 +93,8 @@ async function createPet(petData) {
         statusImage: petData.statusImage || null,
     };
 
+    ensureStatusImage(newPet);
+
     try {
         await fs.writeFile(petFilePath, JSON.stringify(newPet, null, 2), 'utf8');
         await savePetCounter();
@@ -99,6 +119,7 @@ async function listPets() {
                     const data = await fs.readFile(filePath, 'utf8');
                     const pet = JSON.parse(data);
                     pet.fileName = file; // Garantir que o fileName esteja atualizado
+                    ensureStatusImage(pet);
                     return pet;
                 } catch (err) {
                     console.error(`Erro ao ler pet do arquivo ${file}:`, err);
@@ -122,6 +143,7 @@ async function loadPet(petId) {
     try {
         const data = await fs.readFile(petFilePath, 'utf8');
         const pet = JSON.parse(data);
+        ensureStatusImage(pet);
         pet.lastAccessed = new Date().toISOString();
         pet.fileName = petFileName; // Garantir que o fileName esteja atualizado
         await fs.writeFile(petFilePath, JSON.stringify(pet, null, 2), 'utf8');
