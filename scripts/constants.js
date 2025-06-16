@@ -7,6 +7,15 @@ export const rarityGradients = {
     'Lendario': 'linear-gradient(135deg, #FFD700, #FFA500)'
 };
 
+export const rarityColors = {
+    'Comum': '#808080',
+    'Incomum': '#D3D3D3',
+    'Raro': '#32CD32',
+    'MuitoRaro': '#4682B4',
+    'Epico': '#800080',
+    'Lendario': '#FFD700'
+};
+
 // Caminho da imagem em alta resolução de cada espécie para ser exibida na aba
 // "Sobre". Utilizada como fallback quando o pet não define uma imagem de bio
 // específica.
