@@ -370,7 +370,7 @@
             healthFill.style.width = `${(petData.currentHealth / petData.maxHealth || 0) * 100}%`;
             energyFill.style.width = `${petData.energy || 0}%`;
             levelDisplay.textContent = `Lvl ${petData.level || 1}`;
-            petImage.src = petData.image ? `Assets/Mons/${petData.image}` : 'Assets/Mons/eggsy.png';
+            petImage.src = petData.statusImage ? `Assets/Mons/${petData.statusImage}` : (petData.image ? `Assets/Mons/${petData.image}` : 'Assets/Mons/eggsy.png');
             petImageBackground.style.background = rarityGradients[petData.rarity] || rarityGradients['Comum'];
             petName.textContent = petData.name || 'Eggsy';
 

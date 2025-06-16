@@ -199,7 +199,7 @@
                         <div class="pet-image-container">
                             <div class="pet-image-background"></div>
                             <div class="pet-image-texture"></div>
-                            <img src="${pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png'}" alt="${pet.name}" />
+                            <img src="${pet.statusImage ? `Assets/Mons/${pet.statusImage}` : (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png')}" alt="${pet.name}" />
                         </div>
                         <div class="pet-info">
                             <p><strong>Nome:</strong> ${pet.name}</p>
