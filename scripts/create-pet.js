@@ -20,6 +20,14 @@ const specieImages = Object.fromEntries(
     })
 );
 
+// Imagem em alta resolução de cada espécie para exibir na seção de biografia
+const specieBioImages = Object.fromEntries(
+    Object.entries(specieData).map(([key, value]) => {
+        const fileName = `${value.dir.toLowerCase()}.png`;
+        return [key, `${value.dir}/${fileName}`];
+    })
+);
+
 // Perguntas carregadas de data/questions.json
 
 let questions = [];
@@ -226,14 +234,13 @@ function showNameSelection(element) {
         const image = specieImages[specie] || 'eggsy.png';
 
         let race = null;
-        let bioImage = null;
+        let bioImage = specieBioImages[specie] || null;
         let statusImage = null;
         const info = specieData[specie];
         if (info) {
             race = info.race || null;
             if (info.race) {
                 const base = info.element ? `${info.dir}/${info.element}/${info.race}` : `${info.dir}/${info.race}`;
-                bioImage = `${base}/${info.race}.png`;
                 statusImage = `${base}/front.gif`;
             }
         }

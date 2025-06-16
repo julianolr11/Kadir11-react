@@ -6,3 +6,16 @@ export const rarityGradients = {
     'Epico': 'linear-gradient(135deg, #800080, #DA70D6)',
     'Lendario': 'linear-gradient(135deg, #FFD700, #FFA500)'
 };
+
+// Caminho da imagem em alta resolução de cada espécie para ser exibida na aba
+// "Sobre". Utilizada como fallback quando o pet não define uma imagem de bio
+// específica.
+export const specieBioImages = {
+    'Draconídeo': 'Draconideo/draconideo.png',
+    'Reptilóide': 'Reptiloide/puro/viborom/reptiloide.png',
+    'Ave': 'Ave/ave.png',
+    'Criatura Mística': 'CriaturaMistica/CriaturaMistica.png',
+    'Criatura Sombria': 'CriaturaSombria/criaturasombria.png',
+    'Monstro': 'Monstro/monstro.png',
+    'Fera': 'Fera/fera.png'
+};
