@@ -44,7 +44,7 @@ function renderMoves(moves) {
         if (pet.level < move.level) action = 'Indisponível';
 
         const elementIcons = move.elements.map(el =>
-            `<img class="element-icon" src="Assets/Elements/${el}.png" alt="${el}">`
+            `<img class="element-icon" src="Assets/Elements/${el}.png" alt="${el}" style="image-rendering: pixelated;">`
         ).join(' ');
 
         let actionClass = '';
