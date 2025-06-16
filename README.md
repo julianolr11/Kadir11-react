@@ -25,6 +25,7 @@ O comando `npm start` executa `electron .` abrindo a janela inicial (`start.html
 
 - Na tela inicial é possível **criar** um novo pet ou **carregar** um existente.
 - Os dados dos pets ficam salvos no diretório `pets/`.
+- As imagens de cada pet ficam organizadas em pastas dentro de `Assets/Mons/`. Caso não exista uma pasta específica para um pet, a imagem `eggsy.png` é utilizada como padrão.
 - O atalho `Ctrl+Shift+D` abre as ferramentas de desenvolvedor do Electron.
 
 O projeto utiliza `electron-store` para persistência de algumas informações e
