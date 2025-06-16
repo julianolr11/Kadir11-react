@@ -1,5 +1,15 @@
 console.log('journey-mode.js carregado');
 
+// Mapa de níveis mínimos por nome de missão.
+// O valor é definido pelo nome do arquivo de imagem em
+// Assets/Modes/Journeys sem a extensão.
+const journeyLevels = {
+    forest: 1,
+    lake: 6,
+    mountain: 11,
+    abyss: 16
+};
+
 let petLevel = 1;
 
 function closeWindow() {
@@ -21,7 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const missions = files.map((img, idx) => {
             const base = img.split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
             const formatted = base.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-            const min = idx * 5 + 1;
+            const mapped = journeyLevels[base.toLowerCase()];
+            const min = mapped !== undefined ? mapped : idx * 5 + 1;
             const range = `${min}~${min + 4}`;
             return { name: formatted, range, minLevel: min, image: img };
         });
