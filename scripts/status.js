@@ -1,4 +1,4 @@
-import { rarityGradients, specieBioImages } from './constants.js';
+import { rarityGradients, rarityColors, specieBioImages } from './constants.js';
 console.log('status.js carregado com sucesso');
 
 let pet = {};
@@ -169,6 +169,9 @@ function updateStatus() {
     const gradient = rarityGradients[pet.rarity] || 'linear-gradient(135deg, #808080, #A9A9A9)';
     console.log('Aplicando gradiente:', gradient);
     statusPetImageGradient.style.background = gradient;
+
+    const borderColor = rarityColors[pet.rarity] || '#808080';
+    statusPetImage.style.borderColor = borderColor;
 
     // Atualizar a imagem do pet
     statusPetImage.addEventListener('load', () => {
