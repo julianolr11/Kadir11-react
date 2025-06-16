@@ -1,4 +1,4 @@
-import { rarityGradients } from './constants.js';
+import { rarityGradients, specieBioImages } from './constants.js';
 console.log('status.js carregado com sucesso');
 
 let pet = {};
@@ -182,8 +182,9 @@ function updateStatus() {
     }
 
     if (statusBioImage) {
-        if (pet.bioImage) {
-            statusBioImage.src = `Assets/Mons/${pet.bioImage}`;
+        const bioPath = pet.bioImage || specieBioImages[pet.specie];
+        if (bioPath) {
+            statusBioImage.src = `Assets/Mons/${bioPath}`;
         } else {
             statusBioImage.src = '';
         }
@@ -207,7 +208,8 @@ function updateTabImage(tabId) {
     if (!statusBioImage) return;
 
     if (tabId === 'tab-sobre') {
-        if (pet.bioImage) {
+        const bioPath = pet.bioImage || specieBioImages[pet.specie];
+        if (bioPath) {
             statusBioImage.style.display = 'block';
         }
     } else {
