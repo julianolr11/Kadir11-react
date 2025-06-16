@@ -1,4 +1,26 @@
-    import { rarityGradients } from './constants.js';
+import { rarityGradients } from './constants.js';
+
+function setImageWithFallback(imgElement, relativePath) {
+    if (!imgElement) return;
+    if (!relativePath) {
+        imgElement.src = 'Assets/Mons/eggsy.png';
+        return;
+    }
+
+    const gifSrc = relativePath.endsWith('.gif') ? `Assets/Mons/${relativePath}` : null;
+    const pngSrc = gifSrc ? gifSrc.replace(/\.gif$/i, '.png') : `Assets/Mons/${relativePath}`;
+
+    imgElement.onerror = () => {
+        if (gifSrc && imgElement.src.endsWith('.gif')) {
+            imgElement.src = pngSrc;
+        } else if (!imgElement.src.endsWith('eggsy.png')) {
+            imgElement.onerror = null;
+            imgElement.src = 'Assets/Mons/eggsy.png';
+        }
+    };
+
+    imgElement.src = gifSrc || pngSrc;
+}
     // Verificar se electronAPI está disponível
     if (!window.electronAPI) {
     console.error('Erro: window.electronAPI não está disponível. Verifique o preload.js');
@@ -53,7 +75,11 @@
     healthFill.style.width = `${(petData.currentHealth / petData.maxHealth || 0) * 100}%`;
     energyFill.style.width = `${petData.energy || 0}%`;
     levelDisplay.textContent = `Lvl ${petData.level || 1}`;
-    petImage.src = petData.image ? `Assets/Mons/${petData.image}` : 'Assets/Mons/eggsy.png';
+    if (petData.statusImage) {
+        setImageWithFallback(petImage, petData.statusImage);
+    } else {
+        setImageWithFallback(petImage, petData.image);
+    }
     petImageBackground.style.background = rarityGradients[petData.rarity] || rarityGradients['Comum'];
     petName.textContent = petData.name || 'Eggsy';
     
