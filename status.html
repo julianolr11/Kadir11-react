@@ -337,6 +337,13 @@
             gap: 5px;
         }
 
+        #tab-sobre {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
         #status-moves {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -413,6 +420,7 @@
                     <button class="tab-button active" data-tab="tab-status">Status</button>
                     <button class="tab-button" data-tab="tab-atributos">Atributos</button>
                     <button class="tab-button" data-tab="tab-moves">Golpes</button>
+                    <button class="tab-button" data-tab="tab-sobre">Sobre</button>
                 </div>
                 <div class="tab-content">
                     <div id="tab-status" class="tab-content-item active">
@@ -466,6 +474,10 @@
                     <div id="tab-moves" class="tab-content-item">
                         <div id="status-moves"></div>
                         <button class="button small-button" id="train-moves-button">Treinar</button>
+                    </div>
+                    <div id="tab-sobre" class="tab-content-item">
+                        <img id="bio-image" src="" alt="Imagem do Pet" style="width:256px;height:256px;border-radius:7px;margin-bottom:10px;" />
+                        <p id="bio-text" style="text-align:center;"></p>
                     </div>
                 </div>
             </div>

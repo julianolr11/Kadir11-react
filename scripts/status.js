@@ -3,6 +3,26 @@ console.log('status.js carregado com sucesso');
 
 let pet = {};
 
+function setImageWithFallback(imgElement, relativePath) {
+    if (!imgElement) return;
+    if (!relativePath) {
+        imgElement.src = 'Assets/Mons/eggsy.png';
+        return;
+    }
+    const gifSrc = relativePath.endsWith('.gif') ? `Assets/Mons/${relativePath}` : null;
+    const pngSrc = gifSrc ? gifSrc.replace(/\.gif$/i, '.png') : `Assets/Mons/${relativePath}`;
+
+    imgElement.onerror = () => {
+        if (gifSrc && imgElement.src.endsWith('.gif')) {
+            imgElement.src = pngSrc;
+        } else if (!imgElement.src.endsWith('eggsy.png')) {
+            imgElement.onerror = null;
+            imgElement.src = 'Assets/Mons/eggsy.png';
+        }
+    };
+
+    imgElement.src = gifSrc || pngSrc;
+}
 function formatRarity(rarity) {
     if (!rarity) return 'Desconhecida';
     return rarity
@@ -39,12 +59,14 @@ function updateStatus() {
     const statusLevel = document.getElementById('status-level');
     const statusMoves = document.getElementById('status-moves');
     const statusPetImage = document.getElementById('status-pet-image');
+    const bioImage = document.getElementById('bio-image');
+    const bioText = document.getElementById('bio-text');
     const titleBarElement = document.getElementById('title-bar-element');
     const titleBarPetName = document.getElementById('title-bar-pet-name');
     const statusPetImageGradient = document.getElementById('status-pet-image-gradient');
 
     // Verificar se todos os elementos estão disponíveis
-    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusMoves || !statusPetImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient) {
+    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusMoves || !statusPetImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioImage || !bioText) {
         console.error('Um ou mais elementos do status-container ou title-bar não encontrados', {
             healthContainer: !!healthContainer,
             hungerContainer: !!hungerContainer,
@@ -131,6 +153,16 @@ function updateStatus() {
     }
     statusMoves.appendChild(grid);
 
+    // Atualizar bio
+    if (bioImage && bioText) {
+        bioText.textContent = pet.bio || '';
+        if (pet.bioImage) {
+            bioImage.src = `Assets/Mons/${pet.bioImage}`;
+        } else {
+            bioImage.src = '';
+        }
+    }
+
     const healthPercentage = (pet.currentHealth || 0) / (pet.maxHealth || 1) * 100;
     statusHealthFill.style.width = `${healthPercentage}%`;
     statusHungerFill.style.width = `${pet.hunger || 0}%`;
@@ -146,16 +178,40 @@ function updateStatus() {
     statusPetImage.addEventListener('load', () => {
         console.log('Imagem do pet carregada com sucesso');
     });
-    statusPetImage.addEventListener('error', (e) => {
-        console.error('Erro ao carregar a imagem do pet:', e);
-        statusPetImage.src = 'Assets/Mons/eggsy.png'; // Fallback ajustado pro caminho correto
-    });
-    statusPetImage.src = pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png';
+    statusPetImage.onerror = null;
+    if (pet.statusImage) {
+        setImageWithFallback(statusPetImage, pet.statusImage);
+    } else {
+        setImageWithFallback(statusPetImage, pet.image);
+    }
+
+    const activeBtn = document.querySelector('.tab-button.active');
+    if (activeBtn) {
+        const tabId = activeBtn.getAttribute('data-tab');
+        updateTabImage(tabId);
+    }
 }
 
 function closeWindow() {
     console.log('Botão Fechar clicado na janela de status');
     window.close();
+}
+
+function updateTabImage(tabId) {
+    const statusPetImage = document.getElementById('status-pet-image');
+    if (!statusPetImage) return;
+
+    if (tabId === 'tab-sobre') {
+        if (pet.bioImage) {
+            setImageWithFallback(statusPetImage, pet.bioImage);
+        }
+    } else {
+        if (pet.statusImage) {
+            setImageWithFallback(statusPetImage, pet.statusImage);
+        } else {
+            setImageWithFallback(statusPetImage, pet.image);
+        }
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -177,6 +233,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Adicionar a classe active à aba e botão selecionados
             document.getElementById(tabId)?.classList.add('active');
             button.classList.add('active');
+
+            updateTabImage(tabId);
         });
     });
 

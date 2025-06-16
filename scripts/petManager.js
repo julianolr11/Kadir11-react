@@ -69,6 +69,10 @@ async function createPet(petData) {
         maxHealth: petData.maxHealth || (petData.attributes?.life || 100),
         moves: [],
         image: petData.image, // A propriedade image será salva aqui
+        race: petData.race || null,
+        bio: petData.bio || '',
+        bioImage: petData.bioImage || null,
+        statusImage: petData.statusImage || null,
     };
 
     try {

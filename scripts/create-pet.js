@@ -1,15 +1,24 @@
 console.log('Script do create-pet.js carregado');
 
-// Mapeamento de espécies para imagens
-const specieImages = {
-    'Draconídeo': 'draconideo/draconideo.png',
-    'Reptilóide': 'reptiloide/reptiloide.png',
-    'Ave': 'ave/ave.png',
-    'Criatura Mística': 'criaturamistica/criaturamistica.png',
-    'Criatura Sombria': 'criaturasombria/criaturasombria.png',
-    'Monstro': 'monstro/monstro.png',
-    'Fera': 'fera/fera.png'
+// Informações de pasta e raça para cada espécie
+const specieData = {
+    'Draconídeo': { dir: 'Draconideo', race: 'draak', element: 'puro' },
+    'Reptilóide': { dir: 'Reptiloide', race: 'viborom', element: 'puro' },
+    'Ave': { dir: 'Ave', race: 'pidgly' },
+    'Criatura Mística': { dir: 'CriaturaMistica' },
+    'Criatura Sombria': { dir: 'CriaturaSombria' },
+    'Monstro': { dir: 'Monstro' },
+    'Fera': { dir: 'Fera', race: 'Foxyl' }
 };
+
+// Gera o caminho da imagem base para cada espécie
+const specieImages = Object.fromEntries(
+    Object.entries(specieData).map(([key, value]) => {
+        const fileName = `${value.dir.toLowerCase()}.png`;
+        const path = `${value.dir}/${fileName}`;
+        return [key, path];
+    })
+);
 
 // Perguntas carregadas de data/questions.json
 
@@ -213,8 +222,21 @@ function showNameSelection(element) {
         const specie = generateSpecie(stats);
         const rarity = generateRarity();
 
-        // Definir a imagem com base na espécie
+        // Definir a imagem e demais caminhos de acordo com a espécie
         const image = specieImages[specie] || 'eggsy.png';
+
+        let race = null;
+        let bioImage = null;
+        let statusImage = null;
+        const info = specieData[specie];
+        if (info) {
+            race = info.race || null;
+            if (info.race) {
+                const base = info.element ? `${info.dir}/${info.element}/${info.race}` : `${info.dir}/${info.race}`;
+                bioImage = `${base}/${info.race}.png`;
+                statusImage = `${base}/front.gif`;
+            }
+        }
 
         const petData = {
             name,
@@ -226,6 +248,10 @@ function showNameSelection(element) {
             experience: 0,
             createdAt: new Date().toISOString(),
             image,
+            race,
+            bio: '',
+            bioImage,
+            statusImage,
             hunger: 100,
             happiness: 100,
             currentHealth: stats.life,

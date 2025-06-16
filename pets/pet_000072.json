@@ -22,5 +22,9 @@
   "currentHealth": 20,
   "maxHealth": 20,
   "moves": [],
-  "image": "draconideo/draconideo.png"
+  "image": "Draconideo/draconideo.png",
+  "race": "draak",
+  "bio": "Um dragão puro de fogo",
+  "bioImage": "Draconideo/puro/draak/draak.png",
+  "statusImage": "Draconideo/puro/draak/front.gif"
 }
