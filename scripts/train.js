@@ -4,6 +4,20 @@ let pet = null;
 
 let descriptionEl = null;
 
+function showDescription(text, evt) {
+    if (!descriptionEl) return;
+    descriptionEl.textContent = text;
+    descriptionEl.style.left = `${evt.pageX + 10}px`;
+    descriptionEl.style.top = `${evt.pageY + 10}px`;
+    descriptionEl.style.visibility = 'visible';
+}
+
+function hideDescription() {
+    if (!descriptionEl) return;
+    descriptionEl.textContent = '';
+    descriptionEl.style.visibility = 'hidden';
+}
+
 function closeWindow() {
     window.close();
 }
@@ -41,12 +55,16 @@ function renderMoves(moves) {
             return;
         }
         const tr = document.createElement('tr');
-        tr.addEventListener('mouseenter', () => {
-            if (descriptionEl) descriptionEl.textContent = move.description || '';
+        tr.addEventListener('mouseenter', (e) => {
+            showDescription(move.description || '', e);
         });
-        tr.addEventListener('mouseleave', () => {
-            if (descriptionEl) descriptionEl.textContent = '';
+        tr.addEventListener('mousemove', (e) => {
+            if (descriptionEl && descriptionEl.style.visibility === 'visible') {
+                descriptionEl.style.left = `${e.pageX + 10}px`;
+                descriptionEl.style.top = `${e.pageY + 10}px`;
+            }
         });
+        tr.addEventListener('mouseleave', hideDescription);
 
         let action = 'Aprender';
         const known = pet.moves && pet.moves.some(m => m.name === move.name);
