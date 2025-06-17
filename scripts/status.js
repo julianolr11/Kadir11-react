@@ -5,6 +5,20 @@ let pet = {};
 
 let descriptionEl = null;
 
+function showDescription(text, evt) {
+    if (!descriptionEl) return;
+    descriptionEl.textContent = text;
+    descriptionEl.style.left = `${evt.pageX + 10}px`;
+    descriptionEl.style.top = `${evt.pageY + 10}px`;
+    descriptionEl.style.visibility = 'visible';
+}
+
+function hideDescription() {
+    if (!descriptionEl) return;
+    descriptionEl.textContent = '';
+    descriptionEl.style.visibility = 'hidden';
+}
+
 function setImageWithFallback(imgElement, relativePath) {
     if (!imgElement) return;
     if (!relativePath) {
@@ -144,12 +158,16 @@ function updateStatus() {
         if (pet.moves && pet.moves[i]) {
             slot.textContent = pet.moves[i].name;
             const desc = pet.moves[i].description || '';
-            slot.addEventListener('mouseenter', () => {
-                if (descriptionEl) descriptionEl.textContent = desc;
+            slot.addEventListener('mouseenter', (e) => {
+                showDescription(desc, e);
             });
-            slot.addEventListener('mouseleave', () => {
-                if (descriptionEl) descriptionEl.textContent = '';
+            slot.addEventListener('mousemove', (e) => {
+                if (descriptionEl && descriptionEl.style.visibility === 'visible') {
+                    descriptionEl.style.left = `${e.pageX + 10}px`;
+                    descriptionEl.style.top = `${e.pageY + 10}px`;
+                }
             });
+            slot.addEventListener('mouseleave', hideDescription);
         } else {
             const btn = document.createElement('button');
             btn.className = 'button add-move-button';
