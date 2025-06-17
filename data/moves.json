@@ -3,7 +3,47 @@
     "name": "Arranhão",
     "rarity": "Comum",
     "elements": ["fogo", "agua", "terra", "ar", "puro"],
-    "species": ["Ave", "Besta", "Fera", "Monstro", "Reptilóide"],
+    "species": ["Draconídeo", "Ave", "Fera"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Mordida",
+    "rarity": "Comum",
+    "elements": ["fogo", "agua", "terra", "ar", "puro"],
+    "species": ["Draconídeo", "Fera", "Reptilóide"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Empurrar",
+    "rarity": "Comum",
+    "elements": ["fogo", "agua", "terra", "ar", "puro"],
+    "species": ["Ave", "Reptilóide", "Monstro"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Pulso",
+    "rarity": "Comum",
+    "elements": ["fogo", "agua", "terra", "ar", "puro"],
+    "species": ["Criatura Mística", "Criatura Sombria", "Monstro"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Olhar",
+    "rarity": "Comum",
+    "elements": ["fogo", "agua", "terra", "ar", "puro"],
+    "species": ["Criatura Mística", "Criatura Sombria"],
     "power": 10,
     "effect": "nenhum",
     "cost": 5,
