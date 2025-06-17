@@ -37,6 +37,7 @@ function renderMoves(moves) {
             return;
         }
         const tr = document.createElement('tr');
+        tr.title = move.description;
         let action = 'Aprender';
         const known = pet.moves && pet.moves.some(m => m.name === move.name);
         if (known) action = 'Reaprender';
