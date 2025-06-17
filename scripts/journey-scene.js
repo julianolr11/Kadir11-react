@@ -4,6 +4,11 @@ function closeWindow() {
     window.close();
 }
 
+function assetPath(relative) {
+    if (!relative) return '';
+    return relative.startsWith('Assets/') ? relative : `Assets/Mons/${relative}`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const bg = document.getElementById('scene-bg');
     const player = document.getElementById('player-pet');
@@ -20,13 +25,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.electronAPI.on('scene-data', (event, data) => {
         if (data.background && bg) bg.src = data.background;
-        if (data.playerPet && player) player.src = data.playerPet;
-        if (data.enemyPet && enemy) enemy.src = data.enemyPet;
-        if (data.playerPet && playerFront) playerFront.src = data.playerPet;
+        if (data.playerPet && player) player.src = assetPath(data.playerPet);
+        if (data.enemyPet && enemy) enemy.src = assetPath(data.enemyPet);
+
+        if (data.playerPet && playerFront) {
+            const frontPath = data.playerPet.replace(/idle\.gif$/i, 'front.gif');
+            playerFront.src = assetPath(frontPath);
+        }
+
         if (data.enemyPet && enemyFront) {
             const frontPath = data.enemyPet.replace(/idle\.gif$/i, 'front.gif');
-            enemyFront.src = frontPath;
+            enemyFront.src = assetPath(frontPath);
         }
+
         if (data.enemyName && enemyName) enemyName.textContent = data.enemyName;
     });
 });
