@@ -1,3 +1,4 @@
+import { rarityGradients } from './constants.js';
 console.log('train.js carregado');
 
 let pet = null;
@@ -91,9 +92,10 @@ function renderMoves(moves) {
                 actionClass = 'action-indisponivel';
         }
 
+        const rarityStyle = rarityGradients[move.rarity] || rarityGradients['Comum'];
         tr.innerHTML = `
             <td>${move.name}</td>
-            <td>${move.rarity}</td>
+            <td><span style="padding: 5px; background: ${rarityStyle}; border-radius: 5px;">${move.rarity}</span></td>
             <td>${elementIcons}</td>
             <td>${move.power}</td>
             <td>${move.effect}</td>
