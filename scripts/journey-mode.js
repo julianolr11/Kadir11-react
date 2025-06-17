@@ -3,12 +3,19 @@ console.log('journey-mode.js carregado');
 // Mapa de níveis mínimos por nome de missão.
 // O valor é definido pelo nome do arquivo de imagem em
 // Assets/Modes/Journeys sem a extensão.
+// Ordem e níveis de cada missão da jornada.
 const journeyLevels = {
     forest: 1,
     lake: 4,
     mountain: 7,
     abyss: 10
 };
+
+// Para garantir que a fase "Forest" seja sempre listada primeiro
+// e que as demais venham na sequência correta, definimos a ordem
+// explicitamente. Caso novas fases sejam adicionadas, basta
+// acrescentar seus nomes neste array.
+const missionOrder = ['forest', 'lake', 'mountain', 'abyss'];
 
 let petLevel = 1;
 
@@ -28,6 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('missions-grid');
 
     window.electronAPI.getJourneyImages().then(files => {
+        // Ordenar as imagens conforme a ordem definida em missionOrder
+        const orderMap = missionOrder.reduce((acc, name, index) => {
+            acc[name] = index;
+            return acc;
+        }, {});
+
+        files.sort((a, b) => {
+            const baseA = a.split(/[\\/]/).pop().replace(/\.[^.]+$/, '').toLowerCase();
+            const baseB = b.split(/[\\/]/).pop().replace(/\.[^.]+$/, '').toLowerCase();
+            const idxA = orderMap[baseA] ?? Number.MAX_SAFE_INTEGER;
+            const idxB = orderMap[baseB] ?? Number.MAX_SAFE_INTEGER;
+            return idxA - idxB;
+        });
+
         const missions = files.map((img, idx) => {
             const base = img.split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
             const formatted = base.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
@@ -74,8 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function updateLocks() {
     document.querySelectorAll('.mission-tile').forEach(tile => {
         const min = parseInt(tile.dataset.minLevel, 10);
-        const max = parseInt(tile.dataset.maxLevel, 10);
-        if (petLevel < min || petLevel > max) {
+        if (petLevel < min) {
             tile.classList.add('locked');
         } else {
             tile.classList.remove('locked');
