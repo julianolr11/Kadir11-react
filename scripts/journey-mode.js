@@ -5,9 +5,9 @@ console.log('journey-mode.js carregado');
 // Assets/Modes/Journeys sem a extensão.
 const journeyLevels = {
     forest: 1,
-    lake: 6,
-    mountain: 11,
-    abyss: 16
+    lake: 4,
+    mountain: 7,
+    abyss: 10
 };
 
 let petLevel = 1;
@@ -32,9 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const base = img.split(/[\\/]/).pop().replace(/\.[^.]+$/, '');
             const formatted = base.replace(/[-_]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
             const mapped = journeyLevels[base.toLowerCase()];
-            const min = mapped !== undefined ? mapped : idx * 5 + 1;
-            const range = `${min}~${min + 4}`;
-            return { name: formatted, range, minLevel: min, image: img };
+            const min = mapped !== undefined ? mapped : idx * 3 + 1;
+            const max = min + 2;
+            const range = `${min}~${max}`;
+            return { name: formatted, range, minLevel: min, maxLevel: max, image: img };
         });
 
         missions.forEach(mission => {
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const imgPath = mission.image.replace(/\\/g, '/');
             tile.style.backgroundImage = `url('${imgPath}')`;
             tile.dataset.minLevel = mission.minLevel;
+            tile.dataset.maxLevel = mission.maxLevel;
 
             const info = document.createElement('div');
             info.className = 'mission-info';
@@ -71,8 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function updateLocks() {
     document.querySelectorAll('.mission-tile').forEach(tile => {
-        const required = parseInt(tile.dataset.minLevel, 10);
-        if (petLevel < required) {
+        const min = parseInt(tile.dataset.minLevel, 10);
+        const max = parseInt(tile.dataset.maxLevel, 10);
+        if (petLevel < min || petLevel > max) {
             tile.classList.add('locked');
         } else {
             tile.classList.remove('locked');
