@@ -428,11 +428,13 @@ ipcMain.on('open-journey-scene-window', async (event, data) => {
     const win = createJourneySceneWindow();
     if (!win) return;
     const enemy = await getRandomEnemyIdle(currentPet ? currentPet.statusImage : null);
+    const enemyName = enemy ? path.basename(path.dirname(enemy)) : '';
     win.webContents.on('did-finish-load', () => {
         win.webContents.send('scene-data', {
             background: data.background,
             playerPet: currentPet ? (currentPet.statusImage || currentPet.image) : null,
-            enemyPet: enemy
+            enemyPet: enemy,
+            enemyName
         });
     });
 });
