@@ -80,12 +80,16 @@
         .action-indisponivel { background-color:#7f8c8d; }
 
         #move-description {
-            margin: 8px;
-            padding: 4px;
-            min-height: 24px;
+            position: fixed;
+            pointer-events: none;
+            visibility: hidden;
+            padding: 4px 8px;
             background: #2a323e;
             color: #fff;
             font-size: 14px;
+            border-radius: 4px;
+            z-index: 1000;
+            white-space: nowrap;
         }
     </style>
 </head>
