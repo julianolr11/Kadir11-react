@@ -38,11 +38,76 @@
         #player-pet { left: 100px; transform: scaleX(-1); }
         #enemy-pet { right: 100px; transform: scaleX(1); }
 
+        .hud-container {
+            position: absolute;
+            top: 10px;
+            display: flex;
+            align-items: center;
+        }
+        #player-hud { left: 10px; }
+        #enemy-hud { right: 10px; flex-direction: row-reverse; }
+
+        .hud-pet {
+            width: 70px;
+            height: 70px;
+            image-rendering: pixelated;
+        }
+        .hud-bars {
+            display: flex;
+            flex-direction: column;
+            margin: 0 5px;
+        }
+        .health-bar,
+        .energy-bar {
+            width: 50px;
+            height: 6px;
+            background-color: #444;
+            border: 1px solid #fff;
+            border-radius: 3px;
+            margin-bottom: 3px;
+            position: relative;
+        }
+        .health-bar .bar,
+        .energy-bar .bar {
+            height: 100%;
+            border-radius: 3px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .health-bar .bar { background-color: #ff0000; }
+        .energy-bar .bar { background-color: #00b7eb; }
+
     </style>
 </head>
 <body>
     <div class="window">
         <img id="scene-bg" src="" alt="cenário">
+
+        <div id="player-hud" class="hud-container">
+            <img id="player-front" class="hud-pet" src="" alt="pet">
+            <div class="hud-bars">
+                <div class="health-bar">
+                    <div class="bar" id="player-health-fill" style="width:100%"></div>
+                </div>
+                <div class="energy-bar">
+                    <div class="bar" id="player-energy-fill" style="width:100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="enemy-hud" class="hud-container">
+            <img id="enemy-front" class="hud-pet" src="" alt="inimigo">
+            <div class="hud-bars">
+                <div class="health-bar">
+                    <div class="bar" id="enemy-health-fill" style="width:100%"></div>
+                </div>
+                <div class="energy-bar">
+                    <div class="bar" id="enemy-energy-fill" style="width:100%"></div>
+                </div>
+            </div>
+        </div>
+
         <img id="player-pet" class="pet" src="" alt="pet">
         <img id="enemy-pet" class="pet" src="" alt="inimigo">
     </div>
