@@ -30,12 +30,14 @@
         }
         .pet {
             position: absolute;
-            bottom: 20px;
+
+            bottom: 120px;
             width: 150px;
             image-rendering: pixelated;
         }
-        #player-pet { left: 50px; }
-        #enemy-pet { left: 120px; transform: scaleX(1); bottom: 120px; }
+        #player-pet { left: 100px; transform: scaleX(-1); }
+        #enemy-pet { right: 100px; transform: scaleX(1); }
+
     </style>
 </head>
 <body>
