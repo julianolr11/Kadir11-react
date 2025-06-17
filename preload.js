@@ -22,6 +22,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'learn-move',
             'open-battle-mode-window',
             'open-journey-mode-window',
+            'open-journey-scene-window',
             'resize-journey-window',
             'set-mute-state',
             'get-journey-images',
@@ -38,7 +39,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
         const validChannels = [
             'pet-data',
             'show-battle-error',
-            'pet-created' // Novo canal pra receber a confirmação do pet criado
+            'pet-created', // Novo canal pra receber a confirmação do pet criado
+            'scene-data'
         ];
         if (validChannels.includes(channel)) {
             console.log(`Registrando listener para o canal: ${channel}`);
