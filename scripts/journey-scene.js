@@ -1,5 +1,9 @@
 console.log('journey-scene.js carregado');
 
+function closeWindow() {
+    window.close();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const bg = document.getElementById('scene-bg');
     const player = document.getElementById('player-pet');
@@ -7,6 +11,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerFront = document.getElementById('player-front');
     const enemyFront = document.getElementById('enemy-front');
     const enemyName = document.getElementById('enemy-name');
+
+    document.getElementById('close-journey-scene')?.addEventListener('click', closeWindow);
+    document.getElementById('back-journey-scene')?.addEventListener('click', () => {
+        window.electronAPI.send('open-journey-mode-window');
+        closeWindow();
+    });
 
     window.electronAPI.on('scene-data', (event, data) => {
         if (data.background && bg) bg.src = data.background;

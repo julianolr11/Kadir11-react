@@ -20,6 +20,59 @@
             height: 100%;
             overflow: hidden;
             border-radius: 7px;
+            display: flex;
+            flex-direction: column;
+        }
+        #title-bar {
+            width: 100%;
+            height: 30px;
+            background-color: #3a4450;
+            -webkit-app-region: drag;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5px;
+        }
+        #title-bar-content {
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+        #close-journey-scene {
+            width: 20px;
+            height: 20px;
+            background-color: #ff4444;
+            border-radius: 50%;
+            cursor: pointer;
+            -webkit-app-region: no-drag;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #813a3a;
+            font-family: cursive;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: none;
+        }
+        #title-bar-buttons {
+            display: flex;
+            gap: 5px;
+            -webkit-app-region: no-drag;
+        }
+        #back-journey-scene {
+            width: 20px;
+            height: 20px;
+            background-color: #44aaff;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a435b;
+            font-family: cursive;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: none;
         }
         #scene-bg {
             position: absolute;
@@ -98,6 +151,13 @@
 </head>
 <body>
     <div class="window">
+        <div id="title-bar">
+            <div id="title-bar-content"><span>Cenário da Jornada</span></div>
+            <div id="title-bar-buttons">
+                <div id="back-journey-scene">↩</div>
+                <div id="close-journey-scene">X</div>
+            </div>
+        </div>
         <img id="scene-bg" src="" alt="cenário">
 
         <div id="player-hud" class="hud-container">
