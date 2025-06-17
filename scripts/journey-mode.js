@@ -67,6 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
             tile.dataset.minLevel = mission.minLevel;
             tile.dataset.maxLevel = mission.maxLevel;
 
+            tile.addEventListener('click', () => {
+                const min = parseInt(tile.dataset.minLevel, 10);
+                if (petLevel < min) return;
+                window.electronAPI.send('open-journey-scene-window', { background: imgPath });
+            });
+
             const info = document.createElement('div');
             info.className = 'mission-info';
             info.innerHTML = `<div>${mission.name}</div><div>Nível ${mission.range}</div>`;
