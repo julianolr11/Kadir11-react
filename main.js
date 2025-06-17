@@ -29,6 +29,7 @@ let battleModeWindow = null;
 let journeyModeWindow = null;
 let trainWindow = null;
 let journeyImagesCache = null;
+let journeySceneWindow = null;
 
 app.whenReady().then(() => {
     console.log('Aplicativo iniciado');
@@ -355,6 +356,32 @@ function createJourneyModeWindow() {
     return journeyModeWindow;
 }
 
+function createJourneySceneWindow() {
+    if (journeySceneWindow) return journeySceneWindow;
+
+    const preloadPath = require('path').join(__dirname, 'preload.js');
+
+    journeySceneWindow = new BrowserWindow({
+        width: 1078,
+        height: 719,
+        frame: false,
+        transparent: true,
+        resizable: false,
+        webPreferences: {
+            preload: preloadPath,
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
+    });
+
+    journeySceneWindow.loadFile('journey-scene.html');
+    journeySceneWindow.on('closed', () => {
+        journeySceneWindow = null;
+    });
+
+    return journeySceneWindow;
+}
+
 function createTrainWindow() {
     if (trainWindow) return trainWindow;
 
@@ -394,6 +421,20 @@ ipcMain.on('open-journey-mode-window', () => {
             win.webContents.send('pet-data', currentPet);
         });
     }
+});
+
+ipcMain.on('open-journey-scene-window', async (event, data) => {
+    console.log('Recebido open-journey-scene-window');
+    const win = createJourneySceneWindow();
+    if (!win) return;
+    const enemy = await getRandomEnemyFront(currentPet ? currentPet.statusImage : null);
+    win.webContents.on('did-finish-load', () => {
+        win.webContents.send('scene-data', {
+            background: data.background,
+            playerPet: currentPet ? (currentPet.statusImage || currentPet.image) : null,
+            enemyPet: enemy
+        });
+    });
 });
 
 ipcMain.on('resize-journey-window', (event, size) => {
@@ -452,5 +493,40 @@ ipcMain.handle('get-journey-images', async () => {
         return [];
     }
 });
+
+let frontGifsCache = null;
+
+async function loadFrontGifs() {
+    if (frontGifsCache) return frontGifsCache;
+    const dir = path.join(__dirname, 'Assets', 'Mons');
+    const result = [];
+    async function walk(folder) {
+        const entries = await fs.promises.readdir(folder, { withFileTypes: true });
+        for (const entry of entries) {
+            const full = path.join(folder, entry.name);
+            if (entry.isDirectory()) {
+                await walk(full);
+            } else if (entry.isFile() && entry.name.toLowerCase() === 'front.gif') {
+                result.push(full.replace(/\\/g, '/'));
+            }
+        }
+    }
+    await walk(dir);
+    frontGifsCache = result;
+    return frontGifsCache;
+}
+
+async function getRandomEnemyFront(exclude) {
+    const list = await loadFrontGifs();
+    let filtered = list;
+    if (exclude) {
+        const normalized = exclude.replace(/\\/g, '/');
+        filtered = list.filter(p => !p.endsWith(normalized));
+    }
+    if (filtered.length === 0) filtered = list;
+    if (filtered.length === 0) return null;
+    const choice = filtered[Math.floor(Math.random() * filtered.length)];
+    return path.relative(__dirname, choice).replace(/\\/g, '/');
+}
 
 module.exports = { app, ipcMain, globalShortcut, windowManager, petManager };

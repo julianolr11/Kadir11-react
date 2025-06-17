@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+    <title>Cenário da Jornada</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+        }
+        .window {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 7px;
+        }
+        #scene-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 7px;
+        }
+        .pet {
+            position: absolute;
+            bottom: 20px;
+            width: 200px;
+            image-rendering: pixelated;
+        }
+        #player-pet { left: 50px; }
+        #enemy-pet { right: 50px; transform: scaleX(-1); }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <img id="scene-bg" src="" alt="cenário">
+        <img id="player-pet" class="pet" src="" alt="pet">
+        <img id="enemy-pet" class="pet" src="" alt="inimigo">
+    </div>
+    <script src="scripts/journey-scene.js"></script>
+</body>
+</html>
