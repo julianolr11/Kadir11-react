@@ -3,6 +3,8 @@ console.log('status.js carregado com sucesso');
 
 let pet = {};
 
+let descriptionEl = null;
+
 function setImageWithFallback(imgElement, relativePath) {
     if (!imgElement) return;
     if (!relativePath) {
@@ -141,6 +143,13 @@ function updateStatus() {
         slot.className = 'move-slot';
         if (pet.moves && pet.moves[i]) {
             slot.textContent = pet.moves[i].name;
+            const desc = pet.moves[i].description || '';
+            slot.addEventListener('mouseenter', () => {
+                if (descriptionEl) descriptionEl.textContent = desc;
+            });
+            slot.addEventListener('mouseleave', () => {
+                if (descriptionEl) descriptionEl.textContent = '';
+            });
         } else {
             const btn = document.createElement('button');
             btn.className = 'button add-move-button';
@@ -222,6 +231,8 @@ function updateTabImage(tabId) {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM carregado na janela de status');
+
+    descriptionEl = document.getElementById('move-description');
 
     // Controle das abas
     document.querySelectorAll('.tab-button').forEach(button => {

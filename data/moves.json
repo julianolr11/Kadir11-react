@@ -1,6 +1,7 @@
 [
   {
     "name": "Arranhão",
+    "description": "Ataque básico que causa dano leve ao inimigo.",
     "rarity": "Comum",
     "elements": ["fogo", "agua", "terra", "ar", "puro"],
     "species": ["Draconídeo", "Ave", "Fera"],
@@ -11,6 +12,7 @@
   },
   {
     "name": "Mordida",
+    "description": "Crava os dentes no alvo para causar dano moderado.",
     "rarity": "Comum",
     "elements": ["fogo", "agua", "terra", "ar", "puro"],
     "species": ["Draconídeo", "Fera", "Reptilóide"],
@@ -21,6 +23,7 @@
   },
   {
     "name": "Empurrar",
+    "description": "Empurra o adversário para afastá-lo causando leve dano.",
     "rarity": "Comum",
     "elements": ["fogo", "agua", "terra", "ar", "puro"],
     "species": ["Ave", "Reptilóide", "Monstro"],
@@ -31,6 +34,7 @@
   },
   {
     "name": "Pulso",
+    "description": "Emite um pulso de energia que causa dano padrao.",
     "rarity": "Comum",
     "elements": ["fogo", "agua", "terra", "ar", "puro"],
     "species": ["Criatura Mística", "Criatura Sombria", "Monstro"],
@@ -41,6 +45,7 @@
   },
   {
     "name": "Olhar",
+    "description": "Lanca um olhar intimidador causando dano minimo.",
     "rarity": "Comum",
     "elements": ["fogo", "agua", "terra", "ar", "puro"],
     "species": ["Criatura Mística", "Criatura Sombria"],
@@ -51,6 +56,7 @@
   },
   {
     "name": "Asas de Brasa",
+    "description": "Investida com asas em chamas que pode queimar o alvo.",
     "rarity": "Raro",
     "elements": ["fogo"],
     "species": ["Ave"],
@@ -61,6 +67,7 @@
   },
   {
     "name": "Mordida Sombria",
+    "description": "Mordida impregnada de energia sombria que pode envenenar.",
     "rarity": "Incomum",
     "elements": ["terra"],
     "species": ["Fera", "Monstro", "Criatura Sombria"],
