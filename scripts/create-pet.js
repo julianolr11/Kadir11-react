@@ -231,11 +231,9 @@ function showNameSelection(element) {
         const rarity = generateRarity();
 
         // Definir a imagem e demais caminhos de acordo com a espécie
-        const image = specieImages[specie] || 'eggsy.png';
-
         let race = null;
-        let bioImage = specieBioImages[specie] || null;
         let statusImage = null;
+        let bioImage = `${name}.png`;
         const info = specieData[specie];
         if (info) {
             race = info.race || null;
@@ -244,6 +242,10 @@ function showNameSelection(element) {
                 statusImage = `${base}/front.gif`;
             }
         }
+        if (!statusImage) {
+            statusImage = specieImages[specie] || 'eggsy.png';
+        }
+        const image = statusImage;
 
         const petData = {
             name,
