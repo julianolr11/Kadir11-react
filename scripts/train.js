@@ -2,6 +2,8 @@ console.log('train.js carregado');
 
 let pet = null;
 
+let descriptionEl = null;
+
 function closeWindow() {
     window.close();
 }
@@ -12,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
         window.electronAPI.send('open-status-window');
         closeWindow();
     });
+
+    descriptionEl = document.getElementById('move-description');
 
     window.electronAPI.on('pet-data', (event, data) => {
         pet = data;
@@ -37,7 +41,14 @@ function renderMoves(moves) {
             return;
         }
         const tr = document.createElement('tr');
-        tr.title = move.description;
+ l7plw5-codex/adicionar-tooltip-com-descrição-do-golpe
+        tr.addEventListener('mouseenter', () => {
+            if (descriptionEl) descriptionEl.textContent = move.description || '';
+        });
+        tr.addEventListener('mouseleave', () => {
+            if (descriptionEl) descriptionEl.textContent = '';
+        });
+
         let action = 'Aprender';
         const known = pet.moves && pet.moves.some(m => m.name === move.name);
         if (known) action = 'Reaprender';
