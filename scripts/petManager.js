@@ -42,19 +42,33 @@ async function savePetCounter() {
 }
 
 function ensureStatusImage(pet) {
-    if (pet.statusImage || !pet.image) return;
+    const basePath = pet.statusImage || pet.image;
+    const relativeDir = basePath ? path.posix.dirname(basePath) : null;
 
-    const relativeDir = path.posix.dirname(pet.image);
-    if (!relativeDir || relativeDir === '.') return;
+    if (relativeDir && relativeDir !== '.') {
+        if (!pet.statusImage) {
+            const baseDir = path.join(__dirname, '..', 'Assets', 'Mons', relativeDir);
+            const gifPath = path.join(baseDir, 'front.gif');
+            const pngPath = path.join(baseDir, 'front.png');
 
-    const baseDir = path.join(__dirname, '..', 'Assets', 'Mons', relativeDir);
-    const gifPath = path.join(baseDir, 'front.gif');
-    const pngPath = path.join(baseDir, 'front.png');
+            if (fsSync.existsSync(gifPath)) {
+                pet.statusImage = path.posix.join(relativeDir, 'front.gif');
+            } else if (fsSync.existsSync(pngPath)) {
+                pet.statusImage = path.posix.join(relativeDir, 'front.png');
+            }
+        }
+    }
 
-    if (fsSync.existsSync(gifPath)) {
-        pet.statusImage = path.posix.join(relativeDir, 'front.gif');
-    } else if (fsSync.existsSync(pngPath)) {
-        pet.statusImage = path.posix.join(relativeDir, 'front.png');
+    if (!pet.statusImage && pet.image) {
+        pet.statusImage = pet.image;
+    }
+
+    if (pet.statusImage) {
+        pet.image = pet.statusImage;
+    }
+
+    if (!pet.bioImage) {
+        pet.bioImage = `${pet.name}.png`;
     }
 }
 
