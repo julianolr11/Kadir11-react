@@ -1,4 +1,4 @@
-import { rarityGradients, rarityColors, specieBioImages } from './constants.js';
+import { rarityGradients, rarityColors, specieBioImages, specieDirs } from './constants.js';
 console.log('status.js carregado com sucesso');
 
 let pet = {};
@@ -212,12 +212,16 @@ function updateStatus() {
     }
 
     if (statusBioImage) {
-        const bioPath = pet.bioImage || specieBioImages[pet.specie];
-        if (bioPath) {
-            statusBioImage.src = `Assets/Mons/${bioPath}`;
-        } else {
-            statusBioImage.src = '';
+        let bioPath = null;
+        const dir = specieDirs[pet.specie];
+        if (dir && pet.element && pet.race) {
+            bioPath = `${dir}/${pet.element}/${pet.race}/${pet.race}.png`;
         }
+        if (!bioPath) {
+            const fallback = pet.bioImage || specieBioImages[pet.specie];
+            bioPath = fallback ? fallback : '';
+        }
+        statusBioImage.src = bioPath ? `Assets/Mons/${bioPath}` : '';
         statusBioImage.style.display = 'none';
     }
 
@@ -238,7 +242,15 @@ function updateTabImage(tabId) {
     if (!statusBioImage) return;
 
     if (tabId === 'tab-sobre') {
-        const bioPath = pet.bioImage || specieBioImages[pet.specie];
+        let bioPath = null;
+        const dir = specieDirs[pet.specie];
+        if (dir && pet.element && pet.race) {
+            bioPath = `${dir}/${pet.element}/${pet.race}/${pet.race}.png`;
+        }
+        if (!bioPath) {
+            const fallback = pet.bioImage || specieBioImages[pet.specie];
+            bioPath = fallback ? fallback : '';
+        }
         if (bioPath) {
             statusBioImage.style.display = 'block';
         }
