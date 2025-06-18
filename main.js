@@ -197,6 +197,26 @@ ipcMain.handle('delete-pet', async (event, petId) => {
     return result;
 });
 
+ipcMain.on('rename-pet', async (event, data) => {
+    if (!currentPet || !data || currentPet.petId !== data.petId) {
+        console.error('Pet para renomear não encontrado');
+        return;
+    }
+    const newName = typeof data.newName === 'string' ? data.newName.trim() : '';
+    if (!newName || newName.length > 15) {
+        console.error('Nome inválido para renomear o pet');
+        return;
+    }
+    try {
+        currentPet = await petManager.updatePet(currentPet.petId, { name: newName });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+        });
+    } catch (err) {
+        console.error('Erro ao renomear pet:', err);
+    }
+});
+
 ipcMain.on('open-status-window', () => {
     console.log('Recebido open-status-window');
     if (currentPet) {

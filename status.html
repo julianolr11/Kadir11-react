@@ -53,15 +53,31 @@
             margin-right: 5px;
         }
 
+        #title-bar-pet-name-container {
+            display: flex;
+            align-items: center;
+        }
+
         #title-bar-pet-name {
             color: #ffffff;
             font-family: 'PixelOperator', sans-serif;
             font-size: 14px;
-            margin-right: 10px;
+            margin-right: 4px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 150px;
+            cursor: pointer;
+        }
+
+        #edit-pet-name {
+            display: none;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        #title-bar-pet-name-container:hover #edit-pet-name {
+            display: inline;
         }
 
         #close-status-titlebar {
@@ -428,7 +444,10 @@
         <div id="title-bar">
             <div id="title-bar-content">
                 <img id="title-bar-element" src="Assets/Elements/default.png" alt="Elemento" style="image-rendering: pixelated;">
-                <span id="title-bar-pet-name">Nome do Pet</span>
+                <div id="title-bar-pet-name-container">
+                    <span id="title-bar-pet-name">Nome do Pet</span>
+                    <span id="edit-pet-name" title="Editar nome">✏️</span>
+                </div>
             </div>
             <div id="title-bar-buttons">
                 <div id="back-status-titlebar">↩</div>
