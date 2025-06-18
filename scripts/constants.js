@@ -16,6 +16,17 @@ export const rarityColors = {
     'Lendario': '#FFD700'
 };
 
+// Mapeia o nome da espécie para o nome da pasta correspondente em Assets/Mons
+export const specieDirs = {
+    'Draconídeo': 'Draconideo',
+    'Reptilóide': 'Reptiloide',
+    'Ave': 'Ave',
+    'Criatura Mística': 'CriaturaMistica',
+    'Criatura Sombria': 'CriaturaSombria',
+    'Monstro': 'Monstro',
+    'Fera': 'Fera'
+};
+
 // Caminho da imagem em alta resolução de cada espécie para ser exibida na aba
 // "Sobre". Utilizada como fallback quando o pet não define uma imagem de bio
 // específica.
