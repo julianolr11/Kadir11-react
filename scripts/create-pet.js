@@ -294,4 +294,14 @@ function initQuiz() {
     showQuestion();
 }
 
-document.addEventListener('DOMContentLoaded', loadQuestions);
+document.addEventListener('DOMContentLoaded', () => {
+    const startButton = document.getElementById('start-quiz-button');
+    const introContainer = document.getElementById('intro-container');
+    const quizContainer = document.getElementById('create-pet-container');
+
+    startButton.addEventListener('click', () => {
+        introContainer.style.display = 'none';
+        quizContainer.style.display = 'flex';
+        loadQuestions();
+    });
+});
