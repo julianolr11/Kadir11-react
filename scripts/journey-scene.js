@@ -6,7 +6,8 @@ function closeWindow() {
 
 function assetPath(relative) {
     if (!relative) return '';
-    return relative.startsWith('Assets/') ? relative : `Assets/Mons/${relative}`;
+    const cleaned = relative.replace(/^[Aa]ssets[\/][Mm]ons[\/]/, '');
+    return `Assets/Mons/${cleaned}`;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
