@@ -432,7 +432,7 @@ ipcMain.on('open-journey-scene-window', async (event, data) => {
     win.webContents.on('did-finish-load', () => {
         win.webContents.send('scene-data', {
             background: data.background,
-            playerPet: currentPet ? (currentPet.statusImage || currentPet.image) : null,
+            playerPet: currentPet ? resolveIdleGif(currentPet.statusImage || currentPet.image) : null,
             enemyPet: enemy,
             enemyName
         });
@@ -516,6 +516,23 @@ async function loadIdleGifs() {
     await walk(dir);
     idleGifsCache = result;
     return idleGifsCache;
+}
+
+function resolveIdleGif(relativePath) {
+    if (!relativePath) return null;
+    const cleaned = relativePath
+        .replace(/^[Aa]ssets[\\/][Mm]ons[\\/]/, '')
+        .replace(/\\/g, '/');
+    const baseDir = path.join(__dirname, 'Assets', 'Mons');
+    const direct = cleaned.replace(/front\.(gif|png)$/i, 'idle.gif');
+    if (fs.existsSync(path.join(baseDir, direct))) {
+        return direct;
+    }
+    const alt = path.posix.join(path.posix.dirname(cleaned), 'idle.gif');
+    if (fs.existsSync(path.join(baseDir, alt))) {
+        return alt;
+    }
+    return cleaned;
 }
 
 async function getRandomEnemyIdle(exclude) {
