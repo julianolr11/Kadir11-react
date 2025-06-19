@@ -234,6 +234,13 @@ class WindowManager {
         return this.trayWindow;
     }
 
+    // Fechar a trayWindow
+    closeTrayWindow() {
+        if (this.trayWindow) {
+            this.trayWindow.close();
+        }
+    }
+
     // Criar a janela de status (status.html)
     createStatusWindow() {
         if (this.statusWindow) {
@@ -263,6 +270,13 @@ class WindowManager {
         });
 
         return this.statusWindow;
+    }
+
+    // Fechar a statusWindow
+    closeStatusWindow() {
+        if (this.statusWindow) {
+            this.statusWindow.close();
+        }
     }
 }
 

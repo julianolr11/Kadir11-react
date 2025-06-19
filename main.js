@@ -78,6 +78,7 @@ ipcMain.on('open-create-pet-window', () => {
 
 ipcMain.on('open-load-pet-window', () => {
     console.log('Recebido open-load-pet-window');
+    closeAllGameWindows();
     windowManager.createLoadPetWindow();
 });
 
@@ -162,6 +163,9 @@ ipcMain.on('select-pet', async (event, petId) => {
         } else {
             console.log('Nenhuma startWindow encontrada para fechar ou já está destruída');
         }
+
+        // Garantir que todas as janelas extras estejam fechadas
+        closeAllGameWindows();
 
         // Verificar se já existe uma trayWindow aberta
         const allWindows = BrowserWindow.getAllWindows();
@@ -462,6 +466,41 @@ function createTrainWindow() {
     });
 
     return trainWindow;
+}
+
+function closeBattleModeWindow() {
+    if (battleModeWindow) {
+        battleModeWindow.close();
+    }
+}
+
+function closeJourneyModeWindow() {
+    if (journeyModeWindow) {
+        journeyModeWindow.close();
+    }
+}
+
+function closeJourneySceneWindow() {
+    if (journeySceneWindow) {
+        journeySceneWindow.close();
+    }
+}
+
+function closeTrainWindow() {
+    if (trainWindow) {
+        trainWindow.close();
+    }
+}
+
+function closeAllGameWindows() {
+    windowManager.closeTrayWindow();
+    windowManager.closeStatusWindow();
+    windowManager.closeCreatePetWindow();
+    windowManager.closeStartWindow();
+    closeBattleModeWindow();
+    closeJourneyModeWindow();
+    closeJourneySceneWindow();
+    closeTrainWindow();
 }
 
 ipcMain.on('open-battle-mode-window', () => {
