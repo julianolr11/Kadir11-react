@@ -75,5 +75,38 @@
     "effect": "envenenamento",
     "cost": 10,
     "level": 3
+  },
+  {
+    "name": "Toxina Ácida",
+    "description": "Dispara um jato de veneno corrosivo com chance de envenenar o alvo.",
+    "rarity": "Incomum",
+    "elements": ["fogo", "agua", "terra", "ar", "puro"],
+    "species": ["Reptilóide"],
+    "power": 15,
+    "effect": "envenenamento",
+    "cost": 7,
+    "level": 2
+  },
+  {
+    "name": "Corte Celeste",
+    "description": "Golpe aéreo preciso que pode causar sangramento.",
+    "rarity": "Incomum",
+    "elements": ["ar"],
+    "species": ["Ave"],
+    "power": 15,
+    "effect": "sangramento",
+    "cost": 7,
+    "level": 2
+  },
+  {
+    "name": "Toque da Névoa",
+    "description": "Contato espectral envolto em névoa com chance de paralisar.",
+    "rarity": "Incomum",
+    "elements": ["puro", "ar"],
+    "species": ["Criatura Sombria", "Criatura Mística"],
+    "power": 15,
+    "effect": "paralisia",
+    "cost": 7,
+    "level": 2
   }
 ]
