@@ -341,6 +341,7 @@ function createBattleModeWindow() {
         frame: false,
         transparent: true,
         resizable: false,
+        show: false,
         webPreferences: {
             preload: preloadPath,
             nodeIntegration: false,
@@ -349,6 +350,7 @@ function createBattleModeWindow() {
     });
 
     battleModeWindow.loadFile('battle-mode.html');
+    windowManager.attachFadeHandlers(battleModeWindow);
     battleModeWindow.on('closed', () => {
         console.log('battleModeWindow fechada');
         battleModeWindow = null;
@@ -370,6 +372,7 @@ function createJourneyModeWindow() {
         frame: false,
         transparent: true,
         resizable: false,
+        show: false,
         webPreferences: {
             preload: preloadPath,
             nodeIntegration: false,
@@ -378,6 +381,7 @@ function createJourneyModeWindow() {
     });
 
     journeyModeWindow.loadFile('journey-mode.html');
+    windowManager.attachFadeHandlers(journeyModeWindow);
     journeyModeWindow.on('closed', () => {
         console.log('journeyModeWindow fechada');
         journeyModeWindow = null;
@@ -397,6 +401,7 @@ function createJourneySceneWindow() {
         frame: false,
         transparent: true,
         resizable: false,
+        show: false,
         webPreferences: {
             preload: preloadPath,
             nodeIntegration: false,
@@ -405,6 +410,7 @@ function createJourneySceneWindow() {
     });
 
     journeySceneWindow.loadFile('journey-scene.html');
+    windowManager.attachFadeHandlers(journeySceneWindow);
     journeySceneWindow.on('closed', () => {
         journeySceneWindow = null;
     });
@@ -423,6 +429,7 @@ function createTrainWindow() {
         frame: false,
         transparent: true,
         resizable: false,
+        show: false,
         webPreferences: {
             preload: preloadPath,
             nodeIntegration: false,
@@ -431,6 +438,7 @@ function createTrainWindow() {
     });
 
     trainWindow.loadFile('train.html');
+    windowManager.attachFadeHandlers(trainWindow);
     trainWindow.on('closed', () => {
         trainWindow = null;
     });

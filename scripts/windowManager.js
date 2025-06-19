@@ -1,6 +1,58 @@
 const { BrowserWindow, screen } = require('electron');
 const path = require('path');
 
+function fadeInWindow(win) {
+    if (!win) return;
+    win.setOpacity(0);
+    win.show();
+    let opacity = 0;
+    const step = 0.05;
+    const interval = setInterval(() => {
+        if (win.isDestroyed()) {
+            clearInterval(interval);
+            return;
+        }
+        opacity += step;
+        if (opacity >= 1) {
+            win.setOpacity(1);
+            clearInterval(interval);
+        } else {
+            win.setOpacity(opacity);
+        }
+    }, 16);
+}
+
+function fadeOutAndDestroy(win) {
+    if (!win) return;
+    let opacity = win.getOpacity();
+    const step = 0.05;
+    const interval = setInterval(() => {
+        if (win.isDestroyed()) {
+            clearInterval(interval);
+            return;
+        }
+        opacity -= step;
+        if (opacity <= 0) {
+            clearInterval(interval);
+            win.removeAllListeners('close');
+            win.destroy();
+        } else {
+            win.setOpacity(opacity);
+        }
+    }, 16);
+}
+
+function attachFadeHandlers(win) {
+    if (!win) return;
+    win.once('ready-to-show', () => fadeInWindow(win));
+    win.on('close', (e) => {
+        if (win.__fading) return;
+        e.preventDefault();
+        win.__fading = true;
+        fadeOutAndDestroy(win);
+    });
+}
+
 class WindowManager {
     constructor() {
         this.startWindow = null;
@@ -8,6 +60,10 @@ class WindowManager {
         this.loadPetWindow = null;
         this.trayWindow = null;
         this.statusWindow = null;
+    }
+
+    attachFadeHandlers(win) {
+        attachFadeHandlers(win);
     }
 
     // Criar a janela inicial (start.html)
@@ -24,6 +80,7 @@ class WindowManager {
             frame: false,
             transparent: true,
             resizable: false,
+            show: false,
             webPreferences: {
                 preload: preloadPath,
                 nodeIntegration: false,
@@ -32,6 +89,7 @@ class WindowManager {
         });
 
         this.startWindow.loadFile('start.html');
+        attachFadeHandlers(this.startWindow);
         this.startWindow.on('closed', () => {
             this.startWindow = null;
         });
@@ -48,7 +106,6 @@ class WindowManager {
     closeStartWindow() {
         if (this.startWindow) {
             this.startWindow.close();
-            this.startWindow = null;
         }
     }
 
@@ -66,6 +123,7 @@ class WindowManager {
             frame: false,
             transparent: true,
             resizable: false,
+            show: false,
             webPreferences: {
                 preload: preloadPath,
                 nodeIntegration: false,
@@ -74,6 +132,7 @@ class WindowManager {
         });
 
         this.createPetWindow.loadFile('create-pet.html');
+        attachFadeHandlers(this.createPetWindow);
         this.createPetWindow.on('closed', () => {
             this.createPetWindow = null;
         });
@@ -85,7 +144,6 @@ class WindowManager {
     closeCreatePetWindow() {
         if (this.createPetWindow) {
             this.createPetWindow.close();
-            this.createPetWindow = null;
         }
     }
 
@@ -103,6 +161,7 @@ class WindowManager {
             frame: false,
             transparent: true,
             resizable: false,
+            show: false,
             webPreferences: {
                 preload: preloadPath,
                 nodeIntegration: false,
@@ -111,6 +170,7 @@ class WindowManager {
         });
 
         this.loadPetWindow.loadFile('load-pet.html');
+        attachFadeHandlers(this.loadPetWindow);
         this.loadPetWindow.on('closed', () => {
             this.loadPetWindow = null;
         });
@@ -122,7 +182,6 @@ class WindowManager {
     closeLoadPetWindow() {
         if (this.loadPetWindow) {
             this.loadPetWindow.close();
-            this.loadPetWindow = null;
         }
     }
 
@@ -158,6 +217,7 @@ class WindowManager {
             resizable: false,
             alwaysOnTop: true,
             skipTaskbar: true,
+            show: false,
             webPreferences: {
                 preload: preloadPath,
                 nodeIntegration: false,
@@ -166,6 +226,7 @@ class WindowManager {
         });
 
         this.trayWindow.loadFile('index.html');
+        attachFadeHandlers(this.trayWindow);
         this.trayWindow.on('closed', () => {
             this.trayWindow = null;
         });
@@ -187,6 +248,7 @@ class WindowManager {
             frame: false,
             transparent: true,
             resizable: false,
+            show: false,
             webPreferences: {
                 preload: preloadPath,
                 nodeIntegration: false,
@@ -195,6 +257,7 @@ class WindowManager {
         });
 
         this.statusWindow.loadFile('status.html');
+        attachFadeHandlers(this.statusWindow);
         this.statusWindow.on('closed', () => {
             this.statusWindow = null;
         });
