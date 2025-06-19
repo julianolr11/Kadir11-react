@@ -78,7 +78,8 @@ ipcMain.on('open-create-pet-window', () => {
 
 ipcMain.on('open-load-pet-window', () => {
     console.log('Recebido open-load-pet-window');
-    closeAllGameWindows();
+    // Não fechar todas as janelas para permitir voltar
+    // à tela anterior (start ou index) ao sair da seleção
     windowManager.createLoadPetWindow();
 });
 
