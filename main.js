@@ -28,6 +28,7 @@ let lastUpdate = Date.now();
 let battleModeWindow = null;
 let journeyModeWindow = null;
 let trainWindow = null;
+let itemsWindow = null;
 let journeyImagesCache = null;
 let journeySceneWindow = null;
 
@@ -259,6 +260,20 @@ ipcMain.on('train-pet', async () => {
     }
 });
 
+ipcMain.on('itens-pet', () => {
+    if (currentPet) {
+        console.log('Abrindo janela de itens para:', currentPet.name);
+        const win = createItemsWindow();
+        if (win) {
+            win.webContents.on('did-finish-load', () => {
+                win.webContents.send('pet-data', currentPet);
+            });
+        }
+    } else {
+        console.error('Nenhum pet selecionado para abrir itens');
+    }
+});
+
 ipcMain.on('battle-pet', async () => {
     if (currentPet) {
         if (currentPet.energy < 5) {
@@ -469,6 +484,38 @@ function createTrainWindow() {
     return trainWindow;
 }
 
+function createItemsWindow() {
+    if (itemsWindow) {
+        itemsWindow.show();
+        itemsWindow.focus();
+        return itemsWindow;
+    }
+
+    const preloadPath = require('path').join(__dirname, 'preload.js');
+
+    itemsWindow = new BrowserWindow({
+        width: 300,
+        height: 150,
+        frame: false,
+        transparent: true,
+        resizable: false,
+        show: false,
+        webPreferences: {
+            preload: preloadPath,
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
+    });
+
+    itemsWindow.loadFile('items.html');
+    windowManager.attachFadeHandlers(itemsWindow);
+    itemsWindow.on('closed', () => {
+        itemsWindow = null;
+    });
+
+    return itemsWindow;
+}
+
 function closeBattleModeWindow() {
     if (battleModeWindow) {
         battleModeWindow.close();
@@ -493,6 +540,12 @@ function closeTrainWindow() {
     }
 }
 
+function closeItemsWindow() {
+    if (itemsWindow) {
+        itemsWindow.close();
+    }
+}
+
 function closeAllGameWindows() {
     windowManager.closeTrayWindow();
     windowManager.closeStatusWindow();
@@ -502,6 +555,7 @@ function closeAllGameWindows() {
     closeJourneyModeWindow();
     closeJourneySceneWindow();
     closeTrainWindow();
+    closeItemsWindow();
 }
 
 ipcMain.on('open-battle-mode-window', () => {
