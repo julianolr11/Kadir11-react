@@ -14,6 +14,7 @@ console.log('train.js carregado');
 let pet = null;
 
 let descriptionEl = null;
+let trainAlert = null;
 
 function showDescription(text, evt) {
     if (!descriptionEl) return;
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     descriptionEl = document.getElementById('move-description');
+    trainAlert = document.getElementById('train-alert');
 
     window.electronAPI.on('pet-data', (event, data) => {
         pet = data;
@@ -50,6 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const kpEl = document.getElementById('train-kadir-points-value');
         if (kpEl) kpEl.textContent = pet.kadirPoints ?? 0;
         loadMoves();
+    });
+
+    window.electronAPI.on('show-train-error', (event, message) => {
+        if (trainAlert) {
+            trainAlert.textContent = message || 'Erro desconhecido';
+            trainAlert.style.display = 'block';
+            setTimeout(() => {
+                trainAlert.style.display = 'none';
+            }, 3000);
+        } else {
+            alert(message);
+        }
     });
 });
 
@@ -120,13 +134,18 @@ function renderMoves(moves) {
         const effectIcon = statusIcons[move.effect?.toLowerCase()];
         const effectHtml = effectIcon ? `<img class="status-icon" src="${effectIcon}" alt="${move.effect}">` : move.effect;
 
+        let displayCost = move.cost;
+        if (learned) {
+            displayCost = Math.ceil(move.cost / 2);
+        }
+
         tr.innerHTML = `
             <td>${move.name}</td>
             <td><span style="padding: 5px; background: ${rarityStyle}; border-radius: 5px;">${move.rarity}</span></td>
             <td>${elementIcons}</td>
             <td>${calculateMovePower(move.power, pet.level, pet.maxHealth)}</td>
             <td>${effectHtml}</td>
-            <td><img src="assets/icons/dna-kadir.png" alt="KP" style="height:16px; vertical-align:middle; image-rendering:pixelated;"> ${move.cost}</td>
+            <td><img src="assets/icons/dna-kadir.png" alt="KP" style="height:16px; vertical-align:middle; image-rendering:pixelated;"> ${displayCost}</td>
             <td>${move.level}</td>
             <td><button class="button small-button action-button ${actionClass}">${action}</button></td>
         `;

@@ -505,6 +505,19 @@ ipcMain.on('learn-move', async (event, move) => {
     if (!currentPet) return;
     if (!currentPet.moves) currentPet.moves = [];
     if (!currentPet.knownMoves) currentPet.knownMoves = currentPet.moves.slice();
+
+    const learnedBefore = currentPet.knownMoves.some(m => m.name === move.name);
+    const cost = learnedBefore ? Math.ceil(move.cost / 2) : move.cost;
+
+    if ((currentPet.kadirPoints || 0) < cost) {
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('show-train-error', 'Pontos Kadir insuficientes!');
+        });
+        return;
+    }
+
+    currentPet.kadirPoints = (currentPet.kadirPoints || 0) - cost;
+
     const knownIdx = currentPet.knownMoves.findIndex(m => m.name === move.name);
     if (knownIdx < 0) {
         currentPet.knownMoves.push(move);
@@ -521,7 +534,7 @@ ipcMain.on('learn-move', async (event, move) => {
         currentPet.moves.push(move);
     }
     try {
-        await petManager.updatePet(currentPet.petId, { moves: currentPet.moves, knownMoves: currentPet.knownMoves });
+        await petManager.updatePet(currentPet.petId, { moves: currentPet.moves, knownMoves: currentPet.knownMoves, kadirPoints: currentPet.kadirPoints });
         BrowserWindow.getAllWindows().forEach(w => {
             if (w.webContents) w.webContents.send('pet-data', currentPet);
         });

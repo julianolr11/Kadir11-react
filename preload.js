@@ -41,6 +41,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
         const validChannels = [
             'pet-data',
             'show-battle-error',
+            'show-train-error',
             'pet-created', // Novo canal pra receber a confirmação do pet criado
             'scene-data',
             'fade-out-start-music' // Sinalizar o fade-out da música de start
