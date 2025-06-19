@@ -3,6 +3,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    cursor: default; /* Mantém o cursor padrão para todo o conteúdo */
+    user-select: none; /* Evita seleção de texto globalmente */
 }
 
 /* Definir a fonte principal */
@@ -25,6 +27,14 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: default;
+}
+
+/* Inputs permanecem selecionáveis e utilizam o cursor de texto */
+input,
+textarea {
+    user-select: text;
+    cursor: text;
 }
 
 /* Garantir que todas as imagens sejam exibidas com pixels nítidos */
@@ -33,6 +43,8 @@ img {
     image-rendering: crisp-edges;
     image-rendering: -moz-crisp-edges;
     image-rendering: -webkit-optimize-contrast;
+    -webkit-user-drag: none; /* Impede arrastar imagens */
+    user-select: none; /* Evita seleção sobre imagens */
 }
 
 /* Estilo da janela principal */
