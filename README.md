@@ -37,3 +37,16 @@ pet.
 - `npm install` – instalação das dependências.
 - `npm start` – inicia a aplicação.
 
+
+## Efeitos de Status
+
+Alguns golpes podem aplicar condições especiais durante as batalhas. Os efeitos disponíveis são:
+
+- **Queimadura**: dano de 2% a 3% da vida total por turno durante 2 a 3 turnos.
+- **Envenenamento**: dano de 1% a 2% da vida total por turno durante 3 a 5 turnos.
+- **Sangramento**: dano de 3% da vida atual por turno por 2 turnos.
+- **Dormência**: impede o pet de agir por 1 a 3 turnos; receber dano desperta o pet.
+- **Congelamento**: paralisa o pet por 1 a 3 turnos e só é removido por cura ou calor.
+- **Paralisia**: 50% de chance de não agir por 1 a 2 turnos, reduzindo um pouco a velocidade.
+
+Os ícones desses efeitos estão em `Assets/icons`.

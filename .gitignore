@@ -36,3 +36,4 @@ backups/
 # Git
 .git
 pets/
+Assets/icons/*.png
