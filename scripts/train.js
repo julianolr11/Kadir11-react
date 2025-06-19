@@ -1,4 +1,13 @@
 import { rarityGradients } from './constants.js';
+
+const statusIcons = {
+    'queimado': 'Assets/icons/burning.png',
+    'envenenamento': 'Assets/icons/poison.png',
+    'sangramento': 'Assets/icons/bleed.png',
+    'dormencia': 'Assets/icons/sleep.png',
+    'congelamento': 'Assets/icons/freeze.png',
+    'paralisia': 'Assets/icons/paralyze.png'
+};
 console.log('train.js carregado');
 
 let pet = null;
@@ -105,12 +114,15 @@ function renderMoves(moves) {
         }
 
         const rarityStyle = rarityGradients[move.rarity] || rarityGradients['Comum'];
+        const effectIcon = statusIcons[move.effect?.toLowerCase()];
+        const effectHtml = effectIcon ? `<img class="status-icon" src="${effectIcon}" alt="${move.effect}">` : move.effect;
+
         tr.innerHTML = `
             <td>${move.name}</td>
             <td><span style="padding: 5px; background: ${rarityStyle}; border-radius: 5px;">${move.rarity}</span></td>
             <td>${elementIcons}</td>
             <td>${move.power}</td>
-            <td>${move.effect}</td>
+            <td>${effectHtml}</td>
             <td>${move.cost}</td>
             <td>${move.level}</td>
             <td><button class="button small-button action-button ${actionClass}">${action}</button></td>
