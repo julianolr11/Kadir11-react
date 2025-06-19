@@ -329,7 +329,11 @@ ipcMain.on('battle-pet', async () => {
 });
 
 function createBattleModeWindow() {
-    if (battleModeWindow) return battleModeWindow;
+    if (battleModeWindow) {
+        battleModeWindow.show();
+        battleModeWindow.focus();
+        return battleModeWindow;
+    }
 
     // Usar o diretório atual pois main.js está na raiz do projeto
     const preloadPath = require('path').join(__dirname, 'preload.js');
@@ -360,7 +364,11 @@ function createBattleModeWindow() {
 }
 
 function createJourneyModeWindow() {
-    if (journeyModeWindow) return journeyModeWindow;
+    if (journeyModeWindow) {
+        journeyModeWindow.show();
+        journeyModeWindow.focus();
+        return journeyModeWindow;
+    }
 
     const preloadPath = require('path').join(__dirname, 'preload.js');
     console.log('Caminho do preload.js para journeyModeWindow:', preloadPath);
@@ -391,7 +399,11 @@ function createJourneyModeWindow() {
 }
 
 function createJourneySceneWindow() {
-    if (journeySceneWindow) return journeySceneWindow;
+    if (journeySceneWindow) {
+        journeySceneWindow.show();
+        journeySceneWindow.focus();
+        return journeySceneWindow;
+    }
 
     const preloadPath = require('path').join(__dirname, 'preload.js');
 
@@ -419,7 +431,11 @@ function createJourneySceneWindow() {
 }
 
 function createTrainWindow() {
-    if (trainWindow) return trainWindow;
+    if (trainWindow) {
+        trainWindow.show();
+        trainWindow.focus();
+        return trainWindow;
+    }
 
     const preloadPath = require('path').join(__dirname, 'preload.js');
 
