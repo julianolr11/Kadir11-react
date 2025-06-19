@@ -65,6 +65,9 @@ function formatRarity(rarity) {
 function loadPet(petData) {
     if (petData) {
         pet = petData;
+        if (!pet.knownMoves) {
+            pet.knownMoves = pet.moves ? [...pet.moves] : [];
+        }
         console.log('Pet recebido via IPC na janela de status:', pet);
     } else {
         console.error('Nenhum petData recebido via IPC');

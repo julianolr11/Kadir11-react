@@ -34,6 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.electronAPI.on('pet-data', (event, data) => {
         pet = data;
+        if (!pet.knownMoves) {
+            pet.knownMoves = pet.moves ? [...pet.moves] : [];
+        }
         loadMoves();
     });
 });
@@ -68,9 +71,15 @@ function renderMoves(moves) {
         tr.addEventListener('mouseleave', hideDescription);
 
         let action = 'Aprender';
-        const known = pet.moves && pet.moves.some(m => m.name === move.name);
-        if (known) action = 'Reaprender';
-        if (pet.moves && pet.moves.length >= 4 && !known) action = 'Trocar';
+        const active = pet.moves && pet.moves.some(m => m.name === move.name);
+        const learned = pet.knownMoves && pet.knownMoves.some(m => m.name === move.name);
+        if (active) {
+            action = 'Ativo';
+        } else if (learned) {
+            action = 'Ativar';
+        } else if (pet.moves && pet.moves.length >= 4) {
+            action = 'Trocar';
+        }
         if (pet.level < move.level) action = 'Indisponível';
 
         const elementIcons = move.elements.map(el =>
@@ -82,8 +91,11 @@ function renderMoves(moves) {
             case 'Aprender':
                 actionClass = 'action-aprender';
                 break;
-            case 'Reaprender':
-                actionClass = 'action-reaprender';
+            case 'Ativar':
+                actionClass = 'action-ativar';
+                break;
+            case 'Ativo':
+                actionClass = 'action-ativo';
                 break;
             case 'Trocar':
                 actionClass = 'action-trocar';
@@ -105,7 +117,7 @@ function renderMoves(moves) {
         `;
 
         const btn = tr.querySelector('button');
-        if (action === 'Indisponível') {
+        if (action === 'Indisponível' || action === 'Ativo') {
             btn.disabled = true;
         } else {
             btn.addEventListener('click', () => {

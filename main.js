@@ -478,6 +478,14 @@ ipcMain.on('resize-journey-window', (event, size) => {
 ipcMain.on('learn-move', async (event, move) => {
     if (!currentPet) return;
     if (!currentPet.moves) currentPet.moves = [];
+    if (!currentPet.knownMoves) currentPet.knownMoves = currentPet.moves.slice();
+    const knownIdx = currentPet.knownMoves.findIndex(m => m.name === move.name);
+    if (knownIdx < 0) {
+        currentPet.knownMoves.push(move);
+    } else {
+        currentPet.knownMoves[knownIdx] = move;
+    }
+
     const idx = currentPet.moves.findIndex(m => m.name === move.name);
     if (idx >= 0) {
         currentPet.moves[idx] = move;
@@ -487,7 +495,7 @@ ipcMain.on('learn-move', async (event, move) => {
         currentPet.moves.push(move);
     }
     try {
-        await petManager.updatePet(currentPet.petId, { moves: currentPet.moves });
+        await petManager.updatePet(currentPet.petId, { moves: currentPet.moves, knownMoves: currentPet.knownMoves });
         BrowserWindow.getAllWindows().forEach(w => {
             if (w.webContents) w.webContents.send('pet-data', currentPet);
         });
