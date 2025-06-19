@@ -91,6 +91,11 @@ ipcMain.on('close-load-pet-window', () => {
     windowManager.closeLoadPetWindow();
 });
 
+ipcMain.on('close-start-window', () => {
+    console.log('Recebido close-start-window');
+    windowManager.closeStartWindow();
+});
+
 ipcMain.on('create-pet', async (event, petData) => {
     console.log('Recebido create-pet com dados:', petData);
     try {
@@ -111,6 +116,11 @@ ipcMain.on('create-pet', async (event, petData) => {
 ipcMain.on('animation-finished', () => {
     console.log('Animação finalizada, prosseguindo com o redirecionamento');
     windowManager.closeCreatePetWindow();
+    const startWin = windowManager.getStartWindow();
+    if (startWin && !startWin.isDestroyed()) {
+        console.log('Solicitando fade-out da música da startWindow');
+        startWin.webContents.send('fade-out-start-music');
+    }
     const trayWindow = windowManager.createTrayWindow();
     trayWindow.webContents.on('did-finish-load', () => {
         console.log('Enviando pet-data para trayWindow:', currentPet);

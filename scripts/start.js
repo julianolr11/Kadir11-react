@@ -41,6 +41,24 @@ if (backgroundMusic && muteButton) {
         console.log(`Música ${isMuted ? 'mutada' : 'desmutada'} - Estado enviado via IPC`);
         updateMuteButton();
     });
+
+    function fadeOutAndClose() {
+        let vol = backgroundMusic.volume;
+        const step = vol / 20;
+        const interval = setInterval(() => {
+            vol -= step;
+            if (vol <= 0) {
+                clearInterval(interval);
+                backgroundMusic.volume = 0;
+                backgroundMusic.pause();
+                window.electronAPI.send('close-start-window');
+            } else {
+                backgroundMusic.volume = vol;
+            }
+        }, 100);
+    }
+
+    window.electronAPI.on('fade-out-start-music', fadeOutAndClose);
 } else {
     console.error('Elementos de áudio ou botão de mute não encontrados');
 }

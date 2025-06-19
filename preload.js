@@ -27,7 +27,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'resize-journey-window',
             'set-mute-state',
             'get-journey-images',
-            'animation-finished' // Novo canal pra sinalizar o fim da animação
+            'animation-finished', // Novo canal pra sinalizar o fim da animação
+            'close-start-window'  // Fechar a janela de start
         ];
         if (validChannels.includes(channel)) {
             console.log(`Enviando canal IPC: ${channel}`, data);
@@ -41,7 +42,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'pet-data',
             'show-battle-error',
             'pet-created', // Novo canal pra receber a confirmação do pet criado
-            'scene-data'
+            'scene-data',
+            'fade-out-start-music' // Sinalizar o fade-out da música de start
         ];
         if (validChannels.includes(channel)) {
             console.log(`Registrando listener para o canal: ${channel}`);
