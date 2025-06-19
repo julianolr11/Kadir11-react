@@ -295,6 +295,7 @@ ipcMain.on('battle-pet', async () => {
         while (currentPet.experience >= requiredXp && currentPet.level < 100) {
             currentPet.level += 1;
             currentPet.experience -= requiredXp;
+            currentPet.kadirPoints = (currentPet.kadirPoints || 0) + 1;
             increaseAttributesOnLevelUp(currentPet);
             console.log(`Pet subiu para o nível ${currentPet.level}! XP restante: ${currentPet.experience}`);
             requiredXp = getRequiredXpForNextLevel(currentPet.level);
@@ -307,7 +308,8 @@ ipcMain.on('battle-pet', async () => {
                 attributes: currentPet.attributes,
                 maxHealth: currentPet.maxHealth,
                 currentHealth: currentPet.currentHealth,
-                energy: currentPet.energy
+                energy: currentPet.energy,
+                kadirPoints: currentPet.kadirPoints
             });
         } catch (err) {
             console.error('Erro ao atualizar pet após batalha:', err);

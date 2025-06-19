@@ -91,6 +91,7 @@ function updateStatus() {
     const statusHappinessFill = document.getElementById('status-happiness-fill');
     const statusEnergyFill = document.getElementById('status-energy-fill');
     const statusLevel = document.getElementById('status-level');
+    const statusKadirPoints = document.getElementById('kadir-points-value');
     const statusMoves = document.getElementById('status-moves');
     const statusPetImage = document.getElementById('status-pet-image');
     const statusBioImage = document.getElementById('status-bio-image');
@@ -100,7 +101,7 @@ function updateStatus() {
     const statusPetImageGradient = document.getElementById('status-pet-image-gradient');
 
     // Verificar se todos os elementos estão disponíveis
-    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText) {
+    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusKadirPoints || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText) {
         console.error('Um ou mais elementos do status-container ou title-bar não encontrados', {
             healthContainer: !!healthContainer,
             hungerContainer: !!hungerContainer,
@@ -117,6 +118,7 @@ function updateStatus() {
             statusEnergyFill: !!statusEnergyFill,
             statusLevel: !!statusLevel,
             statusMoves: !!statusMoves,
+            statusKadirPoints: !!statusKadirPoints,
             statusPetImage: !!statusPetImage,
             statusBioImage: !!statusBioImage,
             titleBarElement: !!titleBarElement,
@@ -149,6 +151,7 @@ function updateStatus() {
     statusMagic.textContent = pet.attributes?.magic || 0;
     statusRarityLabel.textContent = formatRarity(pet.rarity).toUpperCase();
     statusLevel.innerHTML = `<strong>Level: ${pet.level || 0}</strong>`;
+    statusKadirPoints.textContent = pet.kadirPoints ?? 0;
 
     // Atualizar a imagem do elemento na barra de título
     const elementImages = {
