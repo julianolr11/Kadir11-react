@@ -1,4 +1,5 @@
 import { rarityGradients } from './constants.js';
+import { calculateMovePower } from './moveEffectiveness.js';
 
 const statusIcons = {
     'queimado': 'Assets/icons/burning.png',
@@ -121,7 +122,7 @@ function renderMoves(moves) {
             <td>${move.name}</td>
             <td><span style="padding: 5px; background: ${rarityStyle}; border-radius: 5px;">${move.rarity}</span></td>
             <td>${elementIcons}</td>
-            <td>${move.power}</td>
+            <td>${calculateMovePower(move.power, pet.level, pet.maxHealth)}</td>
             <td>${effectHtml}</td>
             <td>${move.cost}</td>
             <td>${move.level}</td>
