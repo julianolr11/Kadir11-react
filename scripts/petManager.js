@@ -100,6 +100,7 @@ async function createPet(petData) {
         currentHealth: petData.currentHealth || (petData.attributes?.life || 100),
         maxHealth: petData.maxHealth || (petData.attributes?.life || 100),
         moves: [],
+        knownMoves: [],
         image: petData.image, // A propriedade image será salva aqui
         race: petData.race || null,
         bio: petData.bio || '',
@@ -134,6 +135,9 @@ async function listPets() {
                     const pet = JSON.parse(data);
                     pet.fileName = file; // Garantir que o fileName esteja atualizado
                     ensureStatusImage(pet);
+                    if (!pet.knownMoves) {
+                        pet.knownMoves = pet.moves ? [...pet.moves] : [];
+                    }
                     return pet;
                 } catch (err) {
                     console.error(`Erro ao ler pet do arquivo ${file}:`, err);
@@ -158,6 +162,9 @@ async function loadPet(petId) {
         const data = await fs.readFile(petFilePath, 'utf8');
         const pet = JSON.parse(data);
         ensureStatusImage(pet);
+        if (!pet.knownMoves) {
+            pet.knownMoves = pet.moves ? [...pet.moves] : [];
+        }
         pet.lastAccessed = new Date().toISOString();
         pet.fileName = petFileName; // Garantir que o fileName esteja atualizado
         await fs.writeFile(petFilePath, JSON.stringify(pet, null, 2), 'utf8');
