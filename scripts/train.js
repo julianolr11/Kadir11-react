@@ -47,6 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!pet.knownMoves) {
             pet.knownMoves = pet.moves ? [...pet.moves] : [];
         }
+        const kpEl = document.getElementById('train-kadir-points-value');
+        if (kpEl) kpEl.textContent = pet.kadirPoints ?? 0;
         loadMoves();
     });
 });
@@ -124,7 +126,7 @@ function renderMoves(moves) {
             <td>${elementIcons}</td>
             <td>${calculateMovePower(move.power, pet.level, pet.maxHealth)}</td>
             <td>${effectHtml}</td>
-            <td>${move.cost}</td>
+            <td><img src="assets/icons/dna-kadir.png" alt="KP" style="height:16px; vertical-align:middle; image-rendering:pixelated;"> ${move.cost}</td>
             <td>${move.level}</td>
             <td><button class="button small-button action-button ${actionClass}">${action}</button></td>
         `;

@@ -97,6 +97,7 @@ async function createPet(petData) {
         hunger: petData.hunger || 100,
         happiness: petData.happiness || 100,
         energy: petData.energy || 100,
+        kadirPoints: petData.kadirPoints || 5,
         currentHealth: petData.currentHealth || (petData.attributes?.life || 100),
         maxHealth: petData.maxHealth || (petData.attributes?.life || 100),
         moves: [],
@@ -133,6 +134,9 @@ async function listPets() {
                 try {
                     const data = await fs.readFile(filePath, 'utf8');
                     const pet = JSON.parse(data);
+                    if (pet.kadirPoints === undefined) {
+                        pet.kadirPoints = 5;
+                    }
                     pet.fileName = file; // Garantir que o fileName esteja atualizado
                     ensureStatusImage(pet);
                     if (!pet.knownMoves) {
@@ -161,6 +165,9 @@ async function loadPet(petId) {
     try {
         const data = await fs.readFile(petFilePath, 'utf8');
         const pet = JSON.parse(data);
+        if (pet.kadirPoints === undefined) {
+            pet.kadirPoints = 5;
+        }
         ensureStatusImage(pet);
         if (!pet.knownMoves) {
             pet.knownMoves = pet.moves ? [...pet.moves] : [];
