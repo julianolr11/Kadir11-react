@@ -154,19 +154,22 @@ function showElementSelection() {
 // Exibir a animação final e revelar o pet
 function showFinalAnimation(newPet) {
     const finalAnimation = document.getElementById('final-animation');
-    const finalAnimationGif = document.getElementById('final-animation-gif');
-    
+    const finalAnimationVideo = document.getElementById('final-animation-video');
+
     finalAnimation.style.display = 'flex';
     console.log('Exibindo animação final');
 
-    // Fade-in do GIF
+    // Fade-in do vídeo
     setTimeout(() => {
-        finalAnimationGif.style.opacity = '1';
+        finalAnimationVideo.style.opacity = '1';
+        finalAnimationVideo.play();
     }, 100); // Pequeno delay pra garantir que o display: flex tenha efeito
 
     setTimeout(() => {
         finalAnimation.style.display = 'none';
-        finalAnimationGif.style.opacity = '0'; // Resetar a opacidade pra próxima vez
+        finalAnimationVideo.style.opacity = '0'; // Resetar a opacidade pra próxima vez
+        finalAnimationVideo.pause();
+        finalAnimationVideo.currentTime = 0;
         console.log('Animação final concluída');
 
         // Após o GIF, revelar o pet com fade-in
