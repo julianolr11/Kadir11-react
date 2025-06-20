@@ -179,37 +179,13 @@ ipcMain.on('select-pet', async (event, petId) => {
         // Garantir que todas as janelas extras estejam fechadas
         closeAllGameWindows();
 
-        // Verificar se já existe uma trayWindow aberta
-        const allWindows = BrowserWindow.getAllWindows();
-        const trayWindowExists = allWindows.some(window => {
-            try {
-                const url = window.webContents.getURL();
-                console.log('Verificando janela com URL:', url);
-                return url.includes('index.html');
-            } catch (err) {
-                console.error('Erro ao verificar URL da janela:', err);
-                return false;
-            }
+        // Sempre criar uma nova trayWindow para garantir que a janela
+        // de índice seja exibida com o pet selecionado
+        const trayWindow = windowManager.createTrayWindow();
+        trayWindow.webContents.on('did-finish-load', () => {
+            console.log('TrayWindow carregada, enviando pet-data:', pet);
+            trayWindow.webContents.send('pet-data', pet);
         });
-
-        if (!trayWindowExists) {
-            // Se não existe uma trayWindow, criar uma nova
-            console.log('Nenhuma trayWindow encontrada, criando uma nova');
-            const trayWindow = windowManager.createTrayWindow();
-            trayWindow.webContents.on('did-finish-load', () => {
-                console.log('Nova trayWindow carregada, enviando pet-data:', pet);
-                trayWindow.webContents.send('pet-data', pet);
-            });
-        } else {
-            // Se já existe, enviar os dados pras janelas existentes
-            console.log('TrayWindow já existe, enviando pet-data para janelas existentes');
-            allWindows.forEach(window => {
-                if (window.webContents && !window.isDestroyed()) {
-                    console.log('Enviando pet-data para janela existente:', pet);
-                    window.webContents.send('pet-data', pet);
-                }
-            });
-        }
     } catch (err) {
         console.error('Erro ao selecionar pet no main.js:', err);
         event.reply('select-pet-error', err.message);
