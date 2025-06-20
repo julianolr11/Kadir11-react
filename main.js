@@ -149,6 +149,15 @@ ipcMain.on('select-pet', async (event, petId) => {
         }
         console.log('Pet selecionado:', pet);
 
+        if (!pet.items) {
+            pet.items = {};
+            try {
+                await petManager.updatePet(pet.petId, { items: pet.items });
+            } catch (err) {
+                console.error('Erro ao inicializar inventário do pet:', err);
+            }
+        }
+
         // Definir o pet atual e atualizar os timestamps
         currentPet = pet;
         lastUpdate = Date.now();
@@ -510,7 +519,7 @@ function createItemsWindow() {
 
     itemsWindow = new BrowserWindow({
         width: 300,
-        height: 150,
+        height: 230,
         frame: false,
         transparent: true,
         resizable: false,
@@ -662,6 +671,27 @@ ipcMain.on('buy-item', async (event, item) => {
     }
 
     currentPet.coins -= price;
+    if (!currentPet.items) currentPet.items = {};
+    currentPet.items[item] = (currentPet.items[item] || 0) + 1;
+
+    try {
+        await petManager.updatePet(currentPet.petId, {
+            coins: currentPet.coins,
+            items: currentPet.items
+        });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+        });
+    } catch (err) {
+        console.error('Erro ao comprar item:', err);
+    }
+});
+
+ipcMain.on('use-item', async (event, item) => {
+    if (!currentPet) return;
+    if (!currentPet.items || !currentPet.items[item]) return;
+    if (currentPet.items[item] <= 0) return;
+
     switch (item) {
         case 'healthPotion':
             currentPet.currentHealth = Math.min(currentPet.currentHealth + 20, currentPet.maxHealth);
@@ -674,18 +704,20 @@ ipcMain.on('buy-item', async (event, item) => {
             break;
     }
 
+    currentPet.items[item] -= 1;
+
     try {
         await petManager.updatePet(currentPet.petId, {
-            coins: currentPet.coins,
             currentHealth: currentPet.currentHealth,
             hunger: currentPet.hunger,
-            energy: currentPet.energy
+            energy: currentPet.energy,
+            items: currentPet.items
         });
         BrowserWindow.getAllWindows().forEach(w => {
             if (w.webContents) w.webContents.send('pet-data', currentPet);
         });
     } catch (err) {
-        console.error('Erro ao comprar item:', err);
+        console.error('Erro ao usar item:', err);
     }
 });
 
