@@ -1,4 +1,4 @@
-const { app, ipcMain, globalShortcut, BrowserWindow } = require('electron');
+const { app, ipcMain, globalShortcut, BrowserWindow, screen } = require('electron');
 const windowManager = require('./scripts/windowManager');
 const petManager = require('./scripts/petManager');
 const { getRequiredXpForNextLevel, calculateXpGain, increaseAttributesOnLevelUp } = require('./scripts/petExperience');
@@ -272,7 +272,7 @@ ipcMain.on('itens-pet', () => {
     }
 });
 
-ipcMain.on('store-pet', () => {
+ipcMain.on('store-pet', (event, options) => {
     if (currentPet) {
         console.log('Abrindo janela de loja para:', currentPet.name);
         const win = createStoreWindow();
@@ -280,6 +280,27 @@ ipcMain.on('store-pet', () => {
             win.webContents.on('did-finish-load', () => {
                 win.webContents.send('pet-data', currentPet);
             });
+
+            // Se a loja foi aberta a partir da janela de itens, alinhar as janelas
+            if (options && options.fromItems && itemsWindow) {
+                try {
+                    const display = screen.getPrimaryDisplay();
+                    const screenWidth = display.workAreaSize.width;
+                    const screenHeight = display.workAreaSize.height;
+                    const itemsBounds = itemsWindow.getBounds();
+                    const storeBounds = win.getBounds();
+                    const totalWidth = itemsBounds.width + storeBounds.width;
+                    const maxHeight = Math.max(itemsBounds.height, storeBounds.height);
+
+                    const startX = Math.round((screenWidth - totalWidth) / 2);
+                    const startY = Math.round((screenHeight - maxHeight) / 2);
+
+                    itemsWindow.setPosition(startX, startY);
+                    win.setPosition(startX + itemsBounds.width, startY);
+                } catch (err) {
+                    console.error('Erro ao posicionar janelas:', err);
+                }
+            }
         }
     } else {
         console.error('Nenhum pet selecionado para abrir loja');

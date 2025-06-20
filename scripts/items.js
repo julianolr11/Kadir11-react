@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
         closeWindow();
     });
     document.getElementById('open-store-button')?.addEventListener('click', () => {
-        window.electronAPI.send('store-pet');
+        // Indicar ao processo principal que o comando veio da tela de itens
+        window.electronAPI.send('store-pet', { fromItems: true });
     });
 
     descriptionEl = document.getElementById('item-description');
