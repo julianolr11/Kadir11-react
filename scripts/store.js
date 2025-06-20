@@ -1,4 +1,20 @@
 let pet = null;
+let itemsInfo = {};
+let descriptionEl = null;
+
+function showDescription(text, evt) {
+    if (!descriptionEl) return;
+    descriptionEl.textContent = text;
+    descriptionEl.style.left = `${evt.pageX + 10}px`;
+    descriptionEl.style.top = `${evt.pageY + 10}px`;
+    descriptionEl.style.visibility = 'visible';
+}
+
+function hideDescription() {
+    if (!descriptionEl) return;
+    descriptionEl.textContent = '';
+    descriptionEl.style.visibility = 'hidden';
+}
 
 function closeWindow() {
     window.close();
@@ -10,6 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.electronAPI.send('open-status-window');
         closeWindow();
     });
+
+    descriptionEl = document.getElementById('store-item-description');
+    loadItemsInfo();
 
     document.querySelectorAll('.buy-button').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -35,3 +54,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+async function loadItemsInfo() {
+    try {
+        const response = await fetch('data/items.json');
+        const data = await response.json();
+        itemsInfo = {};
+        data.forEach(it => { itemsInfo[it.id] = it; });
+        setupHover();
+    } catch (err) {
+        console.error('Erro ao carregar itens da loja:', err);
+    }
+}
+
+function setupHover() {
+    const items = document.querySelectorAll('.store-item');
+    items.forEach(div => {
+        const id = div.dataset.item;
+        if (!id || !itemsInfo[id]) return;
+        const text = `${itemsInfo[id].name} - ${itemsInfo[id].description}`;
+        div.addEventListener('mouseenter', (e) => showDescription(text, e));
+        div.addEventListener('mousemove', (e) => {
+            if (descriptionEl && descriptionEl.style.visibility === 'visible') {
+                descriptionEl.style.left = `${e.pageX + 10}px`;
+                descriptionEl.style.top = `${e.pageY + 10}px`;
+            }
+        });
+        div.addEventListener('mouseleave', hideDescription);
+    });
+}
