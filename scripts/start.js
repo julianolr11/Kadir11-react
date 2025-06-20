@@ -84,16 +84,29 @@ document.getElementById('load-button').addEventListener('click', () => {
     }
 });
 
+const exitOverlay = document.getElementById('exit-confirm-overlay');
+const exitYesBtn = document.getElementById('exit-confirm-yes');
+const exitNoBtn = document.getElementById('exit-confirm-no');
+
 document.getElementById('exit-button').addEventListener('click', () => {
     console.log('Botão Sair clicado');
-    if (!confirm('Tem certeza que deseja sair?')) {
-        return;
+    if (exitOverlay) {
+        exitOverlay.style.display = 'flex';
     }
+});
+
+exitYesBtn?.addEventListener('click', () => {
     if (window.electronAPI) {
         console.log('Enviando exit-app');
         window.electronAPI.send('exit-app');
     } else {
         console.error('electronAPI não está disponível para enviar exit-app');
+    }
+});
+
+exitNoBtn?.addEventListener('click', () => {
+    if (exitOverlay) {
+        exitOverlay.style.display = 'none';
     }
 });
 
