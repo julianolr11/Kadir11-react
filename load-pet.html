@@ -165,6 +165,39 @@
         .pet-list::-webkit-scrollbar-track {
             background-color: #101218;
         }
+
+        /* Modal de confirmação de exclusão */
+        #delete-confirm-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+
+        #delete-confirm-box {
+            background-color: #2a323e;
+            border: 2px solid #ffffff;
+            border-radius: 7px;
+            padding: 20px;
+            text-align: center;
+            font-family: 'PixelOperator', sans-serif;
+        }
+
+        #delete-confirm-box p {
+            margin-bottom: 10px;
+        }
+
+        #delete-confirm-box .confirm-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
     </style>
 </head>
 
@@ -177,8 +210,24 @@
         </div>
     </div>
 
+    <div id="delete-confirm-overlay">
+        <div id="delete-confirm-box">
+            <p id="delete-confirm-message"></p>
+            <div class="confirm-buttons">
+                <button class="button small-button" id="delete-confirm-yes">Excluir</button>
+                <button class="button small-button" id="delete-confirm-no">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { rarityGradients } from './scripts/constants.js';
+
+        const deleteOverlay = document.getElementById('delete-confirm-overlay');
+        const deleteMessage = document.getElementById('delete-confirm-message');
+        const confirmDeleteBtn = document.getElementById('delete-confirm-yes');
+        const cancelDeleteBtn = document.getElementById('delete-confirm-no');
+        let petIdToDelete = null;
         // Função para formatar a data
         function formatDate(isoString) {
             const date = new Date(isoString);
@@ -242,11 +291,9 @@
                     const deleteButton = petItem.querySelector('.delete-button');
                     deleteButton.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        if (confirm(`Tem certeza que deseja excluir o pet "${pet.name}"? Essa ação não pode be desfeita.`)) {
-                            window.electronAPI.deletePet(pet.petId).then(() => {
-                                reloadPetList();
-                            });
-                        }
+                        petIdToDelete = pet.petId;
+                        deleteMessage.textContent = `Tem certeza que deseja excluir o pet "${pet.name}"? Essa ação não pode ser desfeita.`;
+                        deleteOverlay.style.display = 'flex';
                     });
                 });
             });
@@ -254,6 +301,23 @@
 
         // Carregar a lista de pets ao iniciar
         reloadPetList();
+
+        // Confirmar exclusão do pet
+        confirmDeleteBtn.addEventListener('click', () => {
+            if (petIdToDelete !== null) {
+                window.electronAPI.deletePet(petIdToDelete).then(() => {
+                    reloadPetList();
+                    deleteOverlay.style.display = 'none';
+                    petIdToDelete = null;
+                });
+            }
+        });
+
+        // Cancelar exclusão
+        cancelDeleteBtn.addEventListener('click', () => {
+            deleteOverlay.style.display = 'none';
+            petIdToDelete = null;
+        });
 
         // Voltar para a janela inicial
         document.getElementById('back-button').addEventListener('click', () => {
