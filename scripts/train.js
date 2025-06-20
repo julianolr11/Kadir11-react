@@ -7,7 +7,8 @@ const statusIcons = {
     'sangramento': 'Assets/icons/bleed.png',
     'dormencia': 'Assets/icons/sleep.png',
     'congelamento': 'Assets/icons/freeze.png',
-    'paralisia': 'Assets/icons/paralyze.png'
+    'paralisia': 'Assets/icons/paralyze.png',
+    'cura': 'Assets/Shop/health-potion.png'
 };
 console.log('train.js carregado');
 
