@@ -197,5 +197,93 @@
     "effect": "nenhum",
     "cost": 15,
     "level": 4
+  },
+  {
+    "name": "Toque Restaurador",
+    "description": "Encanto radiante que restaura parte da vitalidade do usuário.",
+    "rarity": "Incomum",
+    "elements": ["puro"],
+    "species": ["Criatura Mística"],
+    "power": 0,
+    "effect": "cura",
+    "cost": 10,
+    "level": 3
+  },
+  {
+    "name": "Rajada Ígnea",
+    "description": "Jato de chamas intensas que pode queimar o inimigo.",
+    "rarity": "Raro",
+    "elements": ["fogo"],
+    "species": ["Draconídeo", "Ave"],
+    "power": 25,
+    "effect": "queimado",
+    "cost": 20,
+    "level": 5
+  },
+  {
+    "name": "Explosão Magmática",
+    "description": "Ondas de magma que envolvem o adversário causando queimaduras.",
+    "rarity": "Raro",
+    "elements": ["fogo", "terra"],
+    "species": ["Monstro"],
+    "power": 24,
+    "effect": "queimado",
+    "cost": 20,
+    "level": 5
+  },
+  {
+    "name": "Sombra Imobilizante",
+    "description": "Energia sombria que paralisa o alvo temporariamente.",
+    "rarity": "Incomum",
+    "elements": ["puro", "ar"],
+    "species": ["Criatura Sombria"],
+    "power": 18,
+    "effect": "paralisia",
+    "cost": 7,
+    "level": 3
+  },
+  {
+    "name": "Garras Dilacerantes",
+    "description": "Ataque feroz que causa cortes profundos e sangramento.",
+    "rarity": "Incomum",
+    "elements": ["ar", "terra"],
+    "species": ["Ave", "Fera"],
+    "power": 18,
+    "effect": "sangramento",
+    "cost": 10,
+    "level": 3
+  },
+  {
+    "name": "Maré Funesta",
+    "description": "Onda de águas gélidas que congela os inimigos.",
+    "rarity": "Raro",
+    "elements": ["agua"],
+    "species": ["Criatura Sombria"],
+    "power": 22,
+    "effect": "congelamento",
+    "cost": 15,
+    "level": 4
+  },
+  {
+    "name": "Aura Cristalina",
+    "description": "Lâminas de gelo que deixam o alvo parcialmente congelado.",
+    "rarity": "Incomum",
+    "elements": ["agua"],
+    "species": ["Criatura Mística"],
+    "power": 18,
+    "effect": "congelamento",
+    "cost": 10,
+    "level": 3
+  },
+  {
+    "name": "Presa Gélida",
+    "description": "Mordida congelante que inflige cortes e imobiliza o oponente.",
+    "rarity": "Raro",
+    "elements": ["agua"],
+    "species": ["Fera"],
+    "power": 26,
+    "effect": "congelamento e sangramento",
+    "cost": 25,
+    "level": 7
   }
 ]
