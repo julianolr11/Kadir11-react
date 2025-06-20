@@ -102,8 +102,23 @@
             text-align: center;
         }
         #open-store-button {
-            align-self: center;
-            margin-top: 5px;
+            position: absolute;
+            top: 35px;
+            right: 5px;
+            align-self: unset;
+        }
+
+        #item-description {
+            position: fixed;
+            pointer-events: none;
+            visibility: hidden;
+            padding: 4px 8px;
+            background: #2a323e;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 4px;
+            z-index: 1000;
+            white-space: nowrap;
         }
     </style>
 </head>
@@ -120,24 +135,9 @@
             <img id="coin-icon" src="assets/icons/kadircoin.png" alt="Moedas" />
             <span id="coin-count">0</span>
         </div>
-        <div id="items-list">
-            <div class="inventory-item">
-                <img src="Assets/Shop/health-potion.png" alt="Health Potion">
-                <span class="item-qty" id="qty-healthPotion">0</span>
-                <button class="button small-button use-button" data-item="healthPotion">Usar</button>
-            </div>
-            <div class="inventory-item">
-                <img src="Assets/Shop/meat1.png" alt="Meat">
-                <span class="item-qty" id="qty-meat">0</span>
-                <button class="button small-button use-button" data-item="meat">Usar</button>
-            </div>
-            <div class="inventory-item">
-                <img src="Assets/Shop/stamina-potion.png" alt="Stamina Potion">
-                <span class="item-qty" id="qty-staminaPotion">0</span>
-                <button class="button small-button use-button" data-item="staminaPotion">Usar</button>
-            </div>
-        </div>
+        <div id="items-list"></div>
         <button class="button small-button" id="open-store-button">Loja</button>
+        <div id="item-description"></div>
     </div>
     <script type="module" src="scripts/items.js"></script>
 </body>
