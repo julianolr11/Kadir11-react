@@ -1,5 +1,9 @@
 import { rarityGradients } from './constants.js';
 
+const exitOverlay = document.getElementById('exit-confirm-overlay');
+const exitYesBtn = document.getElementById('exit-confirm-yes');
+const exitNoBtn = document.getElementById('exit-confirm-no');
+
 function setImageWithFallback(imgElement, relativePath) {
     if (!imgElement) return;
     if (!relativePath) {
@@ -190,8 +194,8 @@ function setImageWithFallback(imgElement, relativePath) {
     window.electronAPI.send('open-load-pet-window');
     } else if (action === 'exit') {
     console.log('Sair');
-    if (confirm('Tem certeza que deseja sair?')) {
-        window.electronAPI.send('exit-app');
+    if (exitOverlay) {
+        exitOverlay.style.display = 'flex';
     }
     } else if (action === 'train-pet') {
     console.log('Treinar Pet');
@@ -229,6 +233,16 @@ function setImageWithFallback(imgElement, relativePath) {
     }, 3000);
     } else {
     console.error('Elemento #battle-alert não encontrado');
+    }
+    });
+
+    exitYesBtn?.addEventListener('click', () => {
+    window.electronAPI.send('exit-app');
+    });
+
+    exitNoBtn?.addEventListener('click', () => {
+    if (exitOverlay) {
+        exitOverlay.style.display = 'none';
     }
     });
 
