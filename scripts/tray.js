@@ -190,7 +190,9 @@ function setImageWithFallback(imgElement, relativePath) {
     window.electronAPI.send('open-load-pet-window');
     } else if (action === 'exit') {
     console.log('Sair');
-    window.electronAPI.send('exit-app');
+    if (confirm('Tem certeza que deseja sair?')) {
+        window.electronAPI.send('exit-app');
+    }
     } else if (action === 'train-pet') {
     console.log('Treinar Pet');
     window.electronAPI.send('train-pet');
