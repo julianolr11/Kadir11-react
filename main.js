@@ -166,10 +166,16 @@ ipcMain.on('select-pet', async (event, petId) => {
         // Criar a nova trayWindow antes de fechar outras janelas
         // para evitar que o aplicativo encerre ao ficar sem janelas abertas
         const trayWindow = windowManager.createTrayWindow();
-        trayWindow.webContents.on('did-finish-load', () => {
-            console.log('TrayWindow carregada, enviando pet-data:', pet);
+        const sendPetData = () => {
+            console.log('Enviando pet-data:', pet);
             trayWindow.webContents.send('pet-data', pet);
-        });
+        };
+
+        if (trayWindow.webContents.isLoading()) {
+            trayWindow.webContents.once('did-finish-load', sendPetData);
+        } else {
+            sendPetData();
+        }
 
         // Fechar a janela de load-pet
         console.log('Fechando a janela de load-pet');
