@@ -16,67 +16,16 @@
         #back-journey-mode { width: 20px; height: 20px; background-color: #44aaff; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #2a435b; font-family: cursive; font-size: 12px; font-weight: bold; text-shadow: none; }
         #journey-container { padding: 10px; margin: 5px; display: flex; flex-direction: column; width: fit-content; height: fit-content; }
 
-        #loading {
-            color: #ffffff;
-            font-family: 'PixelOperator', sans-serif;
-            text-align: center;
-            margin-bottom: 10px;
-        }
+        /* Novo estilo para o mapa */
+        .map-container { position: relative; width: 1152px; height: 720px; }
+        .mapa { width: 100%; height: 100%; display: block; }
+        .path-point, .path-subpoint { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); }
+        .path-point { width: 16px; height: 16px; background-color: #00ff88; border: 2px solid white; box-shadow: 0 0 6px #00ff88; cursor: pointer; }
+        .path-subpoint { width: 10px; height: 10px; background-color: #ffffff; border: 1px solid #ccc; opacity: 0.9; }
 
-        #missions-grid {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            grid-auto-rows: 1.2fr;
-            gap: 10px;
-            width: fit-content;
-            height: fit-content;
-        }
-        .mission-tile {
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            border: 2px solid #ffffff;
-            border-radius: 7px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            min-height: 130px;
-            min-width: 200px;
-            cursor: pointer;
-        }
-        .mission-tile:hover {
-            cursor: pointer;
-        }
-        .mission-info {
-            background-color: rgba(0,0,0,0.5);
-            width: 100%;
-            text-align: center;
-            color: #ffffff;
-            font-family: 'PixelOperator', sans-serif;
-            padding: 2px 0;
-            position: relative;
-            z-index: 2;
-        }
-        .lock-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.6);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            z-index: 1;
-            cursor: pointer;
-        }
-        .mission-tile.locked .lock-overlay {
-            display: flex;
-        }
-        .mission-tile.locked .mission-info {
-            color: red;
-        }
+        #map-tooltip { position: absolute; display: none; pointer-events: none; border: 2px solid #fff; background: rgba(0,0,0,0.8); border-radius: 4px; color: #fff; font-family: 'PixelOperator', sans-serif; text-align: center; }
+        #map-tooltip img { width: 160px; height: auto; display: block; }
+        #map-tooltip .tooltip-name { padding: 2px 4px; }
     </style>
 </head>
 <body>
@@ -89,10 +38,55 @@
             </div>
         </div>
         <div id="journey-container">
-            <div id="loading">Carregando...</div>
-            <div id="missions-grid"></div>
+            <div class="map-container">
+                <img src="Assets/Modes/mapa.png" alt="Mapa do jogo" class="mapa">
+
+                <!-- Pontos principais -->
+                <div class="path-point" data-image="Assets/Modes/Journeys/forest.png" data-name="Forest" style="top: 600px; left: 390px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/cave_ruin.png" data-name="Cave Ruin" style="top: 640px; left: 170px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/field_ruins.png" data-name="Field Ruins" style="top: 390px; left: 210px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/mountain.png" data-name="Mountain" style="top: 340px; left: 290px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/desert_ruins.png" data-name="Desert Ruins" style="top: 230px; left: 160px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/swamp_ruins.png" data-name="Swamp Ruins" style="top: 130px; left: 360px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/volcano_ruins.png" data-name="Volcano Ruins" style="top: 90px; left: 550px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/abandoned_city.png" data-name="Abandoned City" style="top: 280px; left: 500px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/ancient_library.png" data-name="Ancient Library" style="top: 130px; left: 760px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/forest.png" data-name="Forest" style="top: 300px; left: 870px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/swamp_ruins.png" data-name="Swamp Ruins" style="top: 540px; left: 680px;"></div>
+                <div class="path-point" data-image="Assets/Modes/Journeys/mountain.png" data-name="Mountain" style="top: 450px; left: 760px;"></div>
+
+                <!-- Pontos intermediários -->
+                <div class="path-subpoint" style="top: 617px; left: 396px;"></div>
+                <div class="path-subpoint" style="top: 596px; left: 343px;"></div>
+                <div class="path-subpoint" style="top: 545px; left: 346px;"></div>
+                <div class="path-subpoint" style="top: 490px; left: 279px;"></div>
+                <div class="path-subpoint" style="top: 440px; left: 336px;"></div>
+                <div class="path-subpoint" style="top: 374px; left: 323px;"></div>
+                <div class="path-subpoint" style="top: 299px; left: 293px;"></div>
+                <div class="path-subpoint" style="top: 268px; left: 252px;"></div>
+                <div class="path-subpoint" style="top: 190px; left: 297px;"></div>
+                <div class="path-subpoint" style="top: 155px; left: 363px;"></div>
+                <div class="path-subpoint" style="top: 116px; left: 477px;"></div>
+                <div class="path-subpoint" style="top: 113px; left: 534px;"></div>
+                <div class="path-subpoint" style="top: 187px; left: 439px;"></div>
+                <div class="path-subpoint" style="top: 257px; left: 386px;"></div>
+                <div class="path-subpoint" style="top: 308px; left: 438px;"></div>
+                <div class="path-subpoint" style="top: 373px; left: 492px;"></div>
+                <div class="path-subpoint" style="top: 419px; left: 554px;"></div>
+                <div class="path-subpoint" style="top: 389px; left: 663px;"></div>
+                <div class="path-subpoint" style="top: 303px; left: 742px;"></div>
+                <div class="path-subpoint" style="top: 203px; left: 780px;"></div>
+                <div class="path-subpoint" style="top: 246px; left: 884px;"></div>
+                <div class="path-subpoint" style="top: 483px; left: 539px;"></div>
+                <div class="path-subpoint" style="top: 555px; left: 641px;"></div>
+                <div class="path-subpoint" style="top: 610px; left: 625px;"></div>
+                <div class="path-subpoint" style="top: 516px; left: 753px;"></div>
+                <div class="path-subpoint" style="top: 490px; left: 780px;"></div>
+
+                <div id="map-tooltip"><img src="" alt="preview"><div class="tooltip-name"></div></div>
+            </div>
         </div>
     </div>
-    <script src="scripts/journey-mode.js"></script>
+    <script src="scripts/journey-map.js"></script>
 </body>
 </html>
