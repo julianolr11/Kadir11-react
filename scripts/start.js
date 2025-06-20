@@ -86,6 +86,9 @@ document.getElementById('load-button').addEventListener('click', () => {
 
 document.getElementById('exit-button').addEventListener('click', () => {
     console.log('Botão Sair clicado');
+    if (!confirm('Tem certeza que deseja sair?')) {
+        return;
+    }
     if (window.electronAPI) {
         console.log('Enviando exit-app');
         window.electronAPI.send('exit-app');
