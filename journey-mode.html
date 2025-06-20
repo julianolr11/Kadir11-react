@@ -14,7 +14,10 @@
         #close-journey-mode { width: 20px; height: 20px; background-color: #ff4444; border-radius: 50%; cursor: pointer; -webkit-app-region: no-drag; display: flex; align-items: center; justify-content: center; color: #813a3a; font-family: cursive; font-size: 12px; font-weight: bold; text-shadow: none; }
         /* title-bar-buttons configurado em styles/main.css */
         #back-journey-mode { width: 20px; height: 20px; background-color: #44aaff; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #2a435b; font-family: cursive; font-size: 12px; font-weight: bold; text-shadow: none; }
-        #journey-container { padding: 10px; margin: 5px; display: flex; flex-direction: column; width: fit-content; height: fit-content; }
+        #journey-container { padding: 40px 10px 10px; margin: 5px; display: flex; flex-direction: column; width: fit-content; height: fit-content; }
+
+        /* Sobrepor a barra de título ao mapa */
+        #title-bar { position: absolute; top: 0; left: 0; width: 100%; z-index: 10; }
 
         /* Novo estilo para o mapa */
         .map-container { position: relative; width: 1152px; height: 720px; }
@@ -39,7 +42,7 @@
         </div>
         <div id="journey-container">
             <div class="map-container">
-                <img src="Assets/Modes/mapa.png" alt="Mapa do jogo" class="mapa">
+                <img src="assets/modes/journeys/mapa.png" alt="Mapa do jogo" class="mapa">
 
                 <!-- Pontos principais -->
                 <div class="path-point" data-image="Assets/Modes/Journeys/forest.png" data-name="Forest" style="top: 600px; left: 390px;"></div>
