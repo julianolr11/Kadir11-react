@@ -2,9 +2,9 @@ let pet = null;
 let itemsInfo = {};
 let descriptionEl = null;
 
-function showDescription(text, evt) {
+function showDescription(html, evt) {
     if (!descriptionEl) return;
-    descriptionEl.textContent = text;
+    descriptionEl.innerHTML = html;
     descriptionEl.style.left = `${evt.pageX + 10}px`;
     descriptionEl.style.top = `${evt.pageY + 10}px`;
     descriptionEl.style.visibility = 'visible';
@@ -12,7 +12,7 @@ function showDescription(text, evt) {
 
 function hideDescription() {
     if (!descriptionEl) return;
-    descriptionEl.textContent = '';
+    descriptionEl.innerHTML = '';
     descriptionEl.style.visibility = 'hidden';
 }
 
@@ -72,8 +72,9 @@ function setupHover() {
     items.forEach(div => {
         const id = div.dataset.item;
         if (!id || !itemsInfo[id]) return;
-        const text = `${itemsInfo[id].name} - ${itemsInfo[id].description}`;
-        div.addEventListener('mouseenter', (e) => showDescription(text, e));
+        const effect = itemsInfo[id].effect || itemsInfo[id].description || '';
+        const html = `<strong>${itemsInfo[id].name}</strong><br>${effect}`;
+        div.addEventListener('mouseenter', (e) => showDescription(html, e));
         div.addEventListener('mousemove', (e) => {
             if (descriptionEl && descriptionEl.style.visibility === 'visible') {
                 descriptionEl.style.left = `${e.pageX + 10}px`;
