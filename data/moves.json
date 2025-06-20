@@ -108,5 +108,16 @@
     "effect": "paralisia",
     "cost": 7,
     "level": 2
+  },
+  {
+    "name": "Fôlego Puro",
+    "description": "Sopro de energia purificada que causa grande dano ao inimigo.",
+    "rarity": "Incomum",
+    "elements": ["puro"],
+    "species": ["Ave", "Fera", "Draconídeo"],
+    "power": 18,
+    "effect": "nenhum",
+    "cost": 10,
+    "level": 3
   }
 ]
