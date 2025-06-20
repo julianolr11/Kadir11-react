@@ -544,6 +544,9 @@ function createItemsWindow() {
     windowManager.attachFadeHandlers(itemsWindow);
     itemsWindow.on('closed', () => {
         itemsWindow = null;
+        if (storeWindow) {
+            windowManager.centerWindow(storeWindow);
+        }
     });
 
     return itemsWindow;
@@ -576,6 +579,9 @@ function createStoreWindow() {
     windowManager.attachFadeHandlers(storeWindow);
     storeWindow.on('closed', () => {
         storeWindow = null;
+        if (itemsWindow) {
+            windowManager.centerWindow(itemsWindow);
+        }
     });
 
     return storeWindow;

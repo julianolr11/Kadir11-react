@@ -42,6 +42,30 @@ function fadeOutAndDestroy(win) {
     }, 16);
 }
 
+function animateMove(win, targetX, targetY) {
+    if (!win) return;
+    const { x: startX, y: startY } = win.getBounds();
+    const duration = 300; // ms
+    const frames = Math.max(1, Math.round(duration / 16));
+    let frame = 0;
+    const deltaX = (targetX - startX) / frames;
+    const deltaY = (targetY - startY) / frames;
+    const interval = setInterval(() => {
+        if (win.isDestroyed()) {
+            clearInterval(interval);
+            return;
+        }
+        frame++;
+        const newX = Math.round(startX + deltaX * frame);
+        const newY = Math.round(startY + deltaY * frame);
+        win.setPosition(newX, newY);
+        if (frame >= frames) {
+            win.setPosition(targetX, targetY);
+            clearInterval(interval);
+        }
+    }, 16);
+}
+
 function attachFadeHandlers(win) {
     if (!win) return;
     win.once('ready-to-show', () => fadeInWindow(win));
@@ -51,6 +75,16 @@ function attachFadeHandlers(win) {
         win.__fading = true;
         fadeOutAndDestroy(win);
     });
+}
+
+function centerWindowAnimated(win) {
+    if (!win) return;
+    const display = screen.getPrimaryDisplay();
+    const { width: screenWidth, height: screenHeight } = display.workAreaSize;
+    const bounds = win.getBounds();
+    const targetX = Math.round((screenWidth - bounds.width) / 2);
+    const targetY = Math.round((screenHeight - bounds.height) / 2);
+    animateMove(win, targetX, targetY);
 }
 
 class WindowManager {
@@ -64,6 +98,10 @@ class WindowManager {
 
     attachFadeHandlers(win) {
         attachFadeHandlers(win);
+    }
+
+    centerWindow(win) {
+        centerWindowAnimated(win);
     }
 
     // Criar a janela inicial (start.html)
