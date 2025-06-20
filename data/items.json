@@ -1,0 +1,20 @@
+[
+  {
+    "id": "healthPotion",
+    "name": "Poção de Vida",
+    "icon": "Assets/Shop/health-potion.png",
+    "description": "Recupera 20 pontos de saúde."
+  },
+  {
+    "id": "meat",
+    "name": "Carne",
+    "icon": "Assets/Shop/meat1.png",
+    "description": "Sacia 20 pontos de fome."
+  },
+  {
+    "id": "staminaPotion",
+    "name": "Poção de Energia",
+    "icon": "Assets/Shop/stamina-potion.png",
+    "description": "Recupera 20 pontos de energia."
+  }
+]
