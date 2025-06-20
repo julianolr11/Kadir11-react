@@ -163,6 +163,14 @@ ipcMain.on('select-pet', async (event, petId) => {
         lastUpdate = Date.now();
         resetTimers();
 
+        // Criar a nova trayWindow antes de fechar outras janelas
+        // para evitar que o aplicativo encerre ao ficar sem janelas abertas
+        const trayWindow = windowManager.createTrayWindow();
+        trayWindow.webContents.on('did-finish-load', () => {
+            console.log('TrayWindow carregada, enviando pet-data:', pet);
+            trayWindow.webContents.send('pet-data', pet);
+        });
+
         // Fechar a janela de load-pet
         console.log('Fechando a janela de load-pet');
         windowManager.closeLoadPetWindow();
@@ -176,16 +184,14 @@ ipcMain.on('select-pet', async (event, petId) => {
             console.log('Nenhuma startWindow encontrada para fechar ou já está destruída');
         }
 
-        // Garantir que todas as janelas extras estejam fechadas
-        closeAllGameWindows();
-
-        // Sempre criar uma nova trayWindow para garantir que a janela
-        // de índice seja exibida com o pet selecionado
-        const trayWindow = windowManager.createTrayWindow();
-        trayWindow.webContents.on('did-finish-load', () => {
-            console.log('TrayWindow carregada, enviando pet-data:', pet);
-            trayWindow.webContents.send('pet-data', pet);
-        });
+        // Fechar janelas extras sem afetar a nova trayWindow
+        closeBattleModeWindow();
+        closeJourneyModeWindow();
+        closeJourneySceneWindow();
+        closeTrainWindow();
+        closeItemsWindow();
+        closeStoreWindow();
+        windowManager.closeStatusWindow();
     } catch (err) {
         console.error('Erro ao selecionar pet no main.js:', err);
         event.reply('select-pet-error', err.message);
