@@ -18,6 +18,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'battle-pet',
             'itens-pet',
             'store-pet',
+            'buy-item',
             'train-pet',
             'learn-move',
             'rename-pet',
@@ -42,6 +43,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'pet-data',
             'show-battle-error',
             'show-train-error',
+            'show-store-error',
             'pet-created', // Novo canal pra receber a confirmação do pet criado
             'scene-data',
             'fade-out-start-music' // Sinalizar o fade-out da música de start

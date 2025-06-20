@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self'">
+    <title>Kadir11 - Loja</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        html, body { width:100%; height:100%; margin:0; padding:0; background:transparent; }
+        .window {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            justify-content: flex-start;
+            padding: 0;
+            margin: 0;
+        }
+        #title-bar {
+            position: relative;
+            width: 100%;
+            height: 30px;
+            background: #3a4450;
+            -webkit-app-region: drag;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5px;
+        }
+        #title-bar-content { display:flex; align-items:center; flex-grow:1; }
+        #close-store-window {
+            width: 20px;
+            height: 20px;
+            background-color: #ff4444;
+            border-radius: 50%;
+            cursor: pointer;
+            -webkit-app-region: no-drag;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #813a3a;
+            font-family: cursive;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: none;
+        }
+        #title-bar-buttons {
+            display: flex;
+            gap: 5px;
+            -webkit-app-region: no-drag;
+        }
+        #back-store-window {
+            width: 20px;
+            height: 20px;
+            background-color: #44aaff;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2a435b;
+            font-family: cursive;
+            font-size: 12px;
+            font-weight: bold;
+            text-shadow: none;
+        }
+        #coins-container {
+            padding: 10px;
+            margin: 5px;
+            font-family: 'PixelOperator', sans-serif;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        #store-coin-icon {
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated;
+        }
+        #store-items {
+            flex:1;
+            display:flex;
+            gap:15px;
+            padding:10px;
+            justify-content:center;
+        }
+        .store-item { display:flex; flex-direction:column; align-items:center; }
+        .store-item img { width:32px; height:32px; image-rendering:pixelated; }
+        .item-price { margin:4px 0; }
+        #store-alert {
+            display:none;
+            position:absolute;
+            bottom:5px;
+            left:50%;
+            transform:translateX(-50%);
+            background:rgba(0,0,0,0.8);
+            padding:5px 10px;
+            border-radius:5px;
+            font-family:'PixelOperator', sans-serif;
+            font-size:14px;
+            color:#fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div id="title-bar">
+            <div id="title-bar-content"><span>Loja</span></div>
+            <div id="title-bar-buttons">
+                <div id="back-store-window">↩</div>
+                <div id="close-store-window">X</div>
+            </div>
+        </div>
+        <div id="coins-container">
+            <img id="store-coin-icon" src="assets/icons/kadircoin.png" alt="Moedas" />
+            <span id="store-coin-count">0</span>
+        </div>
+        <div id="store-items">
+            <div class="store-item">
+                <img src="Assets/Shop/health-potion.png" alt="Health Potion">
+                <div class="item-price">10 moedas</div>
+                <button class="button small-button buy-button" data-item="healthPotion">Comprar</button>
+            </div>
+            <div class="store-item">
+                <img src="Assets/Shop/meat1.png" alt="Meat">
+                <div class="item-price">5 moedas</div>
+                <button class="button small-button buy-button" data-item="meat">Comprar</button>
+            </div>
+            <div class="store-item">
+                <img src="Assets/Shop/stamina-potion.png" alt="Stamina Potion">
+                <div class="item-price">8 moedas</div>
+                <button class="button small-button buy-button" data-item="staminaPotion">Comprar</button>
+            </div>
+        </div>
+        <div id="store-alert"></div>
+    </div>
+    <script type="module" src="scripts/store.js"></script>
+</body>
+</html>

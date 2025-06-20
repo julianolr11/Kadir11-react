@@ -29,6 +29,7 @@ let battleModeWindow = null;
 let journeyModeWindow = null;
 let trainWindow = null;
 let itemsWindow = null;
+let storeWindow = null;
 let journeyImagesCache = null;
 let journeySceneWindow = null;
 
@@ -274,6 +275,20 @@ ipcMain.on('itens-pet', () => {
     }
 });
 
+ipcMain.on('store-pet', () => {
+    if (currentPet) {
+        console.log('Abrindo janela de loja para:', currentPet.name);
+        const win = createStoreWindow();
+        if (win) {
+            win.webContents.on('did-finish-load', () => {
+                win.webContents.send('pet-data', currentPet);
+            });
+        }
+    } else {
+        console.error('Nenhum pet selecionado para abrir loja');
+    }
+});
+
 ipcMain.on('battle-pet', async () => {
     if (currentPet) {
         if (currentPet.energy < 5) {
@@ -516,6 +531,38 @@ function createItemsWindow() {
     return itemsWindow;
 }
 
+function createStoreWindow() {
+    if (storeWindow) {
+        storeWindow.show();
+        storeWindow.focus();
+        return storeWindow;
+    }
+
+    const preloadPath = require('path').join(__dirname, 'preload.js');
+
+    storeWindow = new BrowserWindow({
+        width: 300,
+        height: 200,
+        frame: false,
+        transparent: true,
+        resizable: false,
+        show: false,
+        webPreferences: {
+            preload: preloadPath,
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
+    });
+
+    storeWindow.loadFile('store.html');
+    windowManager.attachFadeHandlers(storeWindow);
+    storeWindow.on('closed', () => {
+        storeWindow = null;
+    });
+
+    return storeWindow;
+}
+
 function closeBattleModeWindow() {
     if (battleModeWindow) {
         battleModeWindow.close();
@@ -546,6 +593,12 @@ function closeItemsWindow() {
     }
 }
 
+function closeStoreWindow() {
+    if (storeWindow) {
+        storeWindow.close();
+    }
+}
+
 function closeAllGameWindows() {
     windowManager.closeTrayWindow();
     windowManager.closeStatusWindow();
@@ -556,6 +609,7 @@ function closeAllGameWindows() {
     closeJourneySceneWindow();
     closeTrainWindow();
     closeItemsWindow();
+    closeStoreWindow();
 }
 
 ipcMain.on('open-battle-mode-window', () => {
@@ -592,6 +646,46 @@ ipcMain.on('open-journey-scene-window', async (event, data) => {
 ipcMain.on('resize-journey-window', (event, size) => {
     if (journeyModeWindow && size && size.width && size.height) {
         journeyModeWindow.setSize(Math.round(size.width), Math.round(size.height));
+    }
+});
+
+ipcMain.on('buy-item', async (event, item) => {
+    if (!currentPet) return;
+    const prices = { healthPotion: 10, meat: 5, staminaPotion: 8 };
+    const price = prices[item];
+    if (price === undefined) return;
+    if ((currentPet.coins || 0) < price) {
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('show-store-error', 'Moedas insuficientes!');
+        });
+        return;
+    }
+
+    currentPet.coins -= price;
+    switch (item) {
+        case 'healthPotion':
+            currentPet.currentHealth = Math.min(currentPet.currentHealth + 20, currentPet.maxHealth);
+            break;
+        case 'meat':
+            currentPet.hunger = Math.min((currentPet.hunger || 0) + 20, 100);
+            break;
+        case 'staminaPotion':
+            currentPet.energy = Math.min((currentPet.energy || 0) + 20, 100);
+            break;
+    }
+
+    try {
+        await petManager.updatePet(currentPet.petId, {
+            coins: currentPet.coins,
+            currentHealth: currentPet.currentHealth,
+            hunger: currentPet.hunger,
+            energy: currentPet.energy
+        });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+        });
+    } catch (err) {
+        console.error('Erro ao comprar item:', err);
     }
 });
 
