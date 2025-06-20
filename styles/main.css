@@ -117,7 +117,9 @@ img {
 #title-bar {
     position: relative;
     width: 100%;
-    height: 30px;
+    height: 30px !important;
+    min-height: 30px;
+    line-height: 30px;
     background: #3a4450;
     -webkit-app-region: drag;
     display: flex;
