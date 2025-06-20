@@ -91,6 +91,18 @@
         .store-item { display:flex; flex-direction:column; align-items:center; }
         .store-item img { width:32px; height:32px; image-rendering:pixelated; }
         .item-price { margin:4px 0; }
+        #store-item-description {
+            position: fixed;
+            pointer-events: none;
+            visibility: hidden;
+            padding: 4px 8px;
+            background: #2a323e;
+            color: #fff;
+            font-size: 14px;
+            border-radius: 4px;
+            z-index: 1000;
+            white-space: nowrap;
+        }
         #store-alert {
             display:none;
             position:absolute;
@@ -120,23 +132,24 @@
             <span id="store-coin-count">0</span>
         </div>
         <div id="store-items">
-            <div class="store-item">
+            <div class="store-item" data-item="healthPotion">
                 <img src="Assets/Shop/health-potion.png" alt="Health Potion">
                 <div class="item-price">10 moedas</div>
                 <button class="button small-button buy-button" data-item="healthPotion">Comprar</button>
             </div>
-            <div class="store-item">
+            <div class="store-item" data-item="meat">
                 <img src="Assets/Shop/meat1.png" alt="Meat">
                 <div class="item-price">5 moedas</div>
                 <button class="button small-button buy-button" data-item="meat">Comprar</button>
             </div>
-            <div class="store-item">
+            <div class="store-item" data-item="staminaPotion">
                 <img src="Assets/Shop/stamina-potion.png" alt="Stamina Potion">
                 <div class="item-price">8 moedas</div>
                 <button class="button small-button buy-button" data-item="staminaPotion">Comprar</button>
             </div>
         </div>
         <div id="store-alert"></div>
+        <div id="store-item-description"></div>
     </div>
     <script type="module" src="scripts/store.js"></script>
 </body>
