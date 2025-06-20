@@ -120,4 +120,82 @@
     "cost": 10,
     "level": 3
   }
+,
+  {
+    "name": "Bruma Sonífera",
+    "description": "Libera névoa adormecedora que pode deixar o inimigo sonolento.",
+    "rarity": "Incomum",
+    "elements": ["fogo", "agua", "terra", "ar", "puro"],
+    "species": ["Reptilóide", "Criatura Mística", "Criatura Sombria"],
+    "power": 18,
+    "effect": "dormencia",
+    "cost": 10,
+    "level": 3
+  },
+  {
+    "name": "Corte Profundo",
+    "description": "Ataque feroz que rasga a carne do alvo causando sangramento.",
+    "rarity": "Raro",
+    "elements": ["fogo", "agua", "terra", "ar", "puro"],
+    "species": ["Monstro", "Fera"],
+    "power": 22,
+    "effect": "sangramento",
+    "cost": 15,
+    "level": 4
+  },
+  {
+    "name": "Explosão Ígnea",
+    "description": "Uma grande labareda que atinge todos à frente.",
+    "rarity": "Raro",
+    "elements": ["fogo"],
+    "species": ["Draconídeo", "Reptilóide", "Ave", "Criatura Mística", "Criatura Sombria", "Monstro", "Fera"],
+    "power": 22,
+    "effect": "nenhum",
+    "cost": 15,
+    "level": 4
+  },
+  {
+    "name": "Terremoto",
+    "description": "Sacode o solo violentamente atingindo todos ao redor.",
+    "rarity": "Raro",
+    "elements": ["terra"],
+    "species": ["Draconídeo", "Reptilóide", "Ave", "Criatura Mística", "Criatura Sombria", "Monstro", "Fera"],
+    "power": 25,
+    "effect": "nenhum",
+    "cost": 20,
+    "level": 5
+  },
+  {
+    "name": "Torrente Furiosa",
+    "description": "Inunda o campo de batalha com uma onda devastadora.",
+    "rarity": "Raro",
+    "elements": ["agua"],
+    "species": ["Draconídeo", "Reptilóide", "Ave", "Criatura Mística", "Criatura Sombria", "Monstro", "Fera"],
+    "power": 22,
+    "effect": "nenhum",
+    "cost": 15,
+    "level": 4
+  },
+  {
+    "name": "Furacão Devastador",
+    "description": "Rajadas de vento formam um ciclone que varre os inimigos.",
+    "rarity": "Raro",
+    "elements": ["ar"],
+    "species": ["Draconídeo", "Reptilóide", "Ave", "Criatura Mística", "Criatura Sombria", "Monstro", "Fera"],
+    "power": 25,
+    "effect": "nenhum",
+    "cost": 20,
+    "level": 5
+  },
+  {
+    "name": "Luz Purificadora",
+    "description": "Raio de energia pura que fere adversários com grande intensidade.",
+    "rarity": "Raro",
+    "elements": ["puro"],
+    "species": ["Draconídeo", "Reptilóide", "Ave", "Criatura Mística", "Criatura Sombria", "Monstro", "Fera"],
+    "power": 22,
+    "effect": "nenhum",
+    "cost": 15,
+    "level": 4
+  }
 ]
