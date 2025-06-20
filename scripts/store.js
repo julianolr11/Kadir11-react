@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
     descriptionEl = document.getElementById('store-item-description');
     loadItemsInfo();
 
+    document.getElementById('open-items-button')?.addEventListener('click', () => {
+        window.electronAPI.send('itens-pet', { fromStore: true });
+    });
+
     document.querySelectorAll('.buy-button').forEach(btn => {
         btn.addEventListener('click', () => {
             const item = btn.dataset.item;

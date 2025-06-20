@@ -66,6 +66,12 @@
             height: 32px;
             image-rendering: pixelated;
         }
+        #open-items-button {
+            position: absolute;
+            top: 35px;
+            right: 5px;
+            align-self: unset;
+        }
         #store-items {
             flex:1;
             display:flex;
@@ -116,6 +122,7 @@
             <img id="store-coin-icon" src="assets/icons/kadircoin.png" alt="Moedas" />
             <span id="store-coin-count">0</span>
         </div>
+        <button class="button small-button" id="open-items-button">Itens</button>
         <div id="store-items">
             <div class="store-item" data-item="healthPotion">
                 <img src="Assets/Shop/health-potion.png" alt="Health Potion">

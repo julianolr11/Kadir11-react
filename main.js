@@ -258,7 +258,7 @@ ipcMain.on('train-pet', async () => {
     }
 });
 
-ipcMain.on('itens-pet', () => {
+ipcMain.on('itens-pet', (event, options) => {
     if (currentPet) {
         console.log('Abrindo janela de itens para:', currentPet.name);
         const win = createItemsWindow();
@@ -266,6 +266,27 @@ ipcMain.on('itens-pet', () => {
             win.webContents.on('did-finish-load', () => {
                 win.webContents.send('pet-data', currentPet);
             });
+
+            // Se os itens foram abertos a partir da janela de loja, alinhar as janelas
+            if (options && options.fromStore && storeWindow) {
+                try {
+                    const display = screen.getPrimaryDisplay();
+                    const screenWidth = display.workAreaSize.width;
+                    const screenHeight = display.workAreaSize.height;
+                    const storeBounds = storeWindow.getBounds();
+                    const itemsBounds = win.getBounds();
+                    const totalWidth = storeBounds.width + itemsBounds.width;
+                    const maxHeight = Math.max(storeBounds.height, itemsBounds.height);
+
+                    const startX = Math.round((screenWidth - totalWidth) / 2);
+                    const startY = Math.round((screenHeight - maxHeight) / 2);
+
+                    win.setPosition(startX, startY);
+                    storeWindow.setPosition(startX + itemsBounds.width, startY);
+                } catch (err) {
+                    console.error('Erro ao posicionar janelas:', err);
+                }
+            }
         }
     } else {
         console.error('Nenhum pet selecionado para abrir itens');
