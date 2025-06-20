@@ -74,21 +74,32 @@ function updateItems() {
             }
         });
         div.addEventListener('mouseleave', hideDescription);
-        div.addEventListener('click', () => {
-            window.electronAPI.send('use-item', id);
-        });
 
         const img = document.createElement('img');
         img.src = info.icon;
         img.alt = info.name;
         img.style.imageRendering = 'pixelated';
 
-        const span = document.createElement('span');
-        span.className = 'item-qty';
-        span.textContent = qty;
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'item-name';
+        nameSpan.textContent = info.name;
+
+        const qtySpan = document.createElement('span');
+        qtySpan.className = 'item-qty';
+        qtySpan.textContent = `x ${qty}`;
+
+        const useBtn = document.createElement('button');
+        useBtn.className = 'button small-button use-button';
+        useBtn.textContent = 'Usar';
+        useBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.electronAPI.send('use-item', id);
+        });
 
         div.appendChild(img);
-        div.appendChild(span);
+        div.appendChild(nameSpan);
+        div.appendChild(qtySpan);
+        div.appendChild(useBtn);
         listEl.appendChild(div);
     });
 }

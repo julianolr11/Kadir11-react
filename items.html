@@ -91,15 +91,25 @@
             display: flex;
             align-items: center;
             gap: 5px;
+            padding: 5px 0;
+            border-bottom: 1px solid #2a323e;
+        }
+        .inventory-item:last-child {
+            border-bottom: none;
         }
         .inventory-item img {
             width: 32px;
             height: 32px;
             image-rendering: pixelated;
         }
+        .item-name {
+            flex-grow: 1;
+        }
         .item-qty {
-            width: 20px;
-            text-align: center;
+            margin-right: 4px;
+        }
+        .use-button {
+            width: 60px;
         }
         #open-store-button {
             position: absolute;
