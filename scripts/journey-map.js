@@ -123,6 +123,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     route.forEach((point, idx) => {
+        let nextBackground = '';
+        for (let j = idx + 1; j < route.length; j++) {
+            if (route[j].classList.contains('path-point')) {
+                nextBackground = route[j].dataset.image || '';
+                break;
+            }
+        }
         if (point.classList.contains('path-point')) {
             point.addEventListener('mouseenter', event => {
                 const img = point.dataset.image;
@@ -150,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     handleBossFight(img);
                 }
             } else {
-                handleRandomEvent('');
+                handleRandomEvent(nextBackground);
             }
             advancePoint();
         });

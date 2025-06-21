@@ -778,6 +778,19 @@ ipcMain.on('use-move', async (event, move) => {
     }
 });
 
+ipcMain.on('update-health', async (event, newHealth) => {
+    if (!currentPet) return;
+    currentPet.currentHealth = Math.max(0, Math.min(currentPet.maxHealth, newHealth));
+    try {
+        await petManager.updatePet(currentPet.petId, { currentHealth: currentPet.currentHealth });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+        });
+    } catch (err) {
+        console.error('Erro ao atualizar vida do pet:', err);
+    }
+});
+
 ipcMain.on('reward-pet', async (event, reward) => {
     if (!currentPet || !reward) return;
     if (reward.item) {

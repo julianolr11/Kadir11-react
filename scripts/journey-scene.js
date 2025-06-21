@@ -190,6 +190,7 @@ function applyStatusEffects() {
         playerHealth = Math.max(0, playerHealth - dmg);
     }
     updateHealthBars();
+    window.electronAPI.send('update-health', playerHealth);
 }
 
 function generateReward() {
@@ -296,6 +297,7 @@ function enemyAction() {
     playAttackAnimation(enemyImg, enemyIdleSrc, enemyAttackSrc, () => {
         playerHealth = Math.max(0, playerHealth - 8);
         updateHealthBars();
+        window.electronAPI.send('update-health', playerHealth);
         if (playerHealth <= 0) {
             concludeBattle(false);
         } else {
