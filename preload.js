@@ -29,6 +29,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'resize-journey-window',
             'set-mute-state',
             'get-journey-images',
+            'reward-pet',
             'animation-finished', // Novo canal pra sinalizar o fim da animação
             'close-start-window'  // Fechar a janela de start
         ];
