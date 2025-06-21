@@ -30,11 +30,23 @@ function hideDescription() {
     descriptionEl.style.visibility = 'hidden';
 }
 
-function renamePet() {
-    if (!pet || !pet.petId) return;
-    const newName = prompt('Digite o novo nome do pet:', pet.name);
-    if (!newName) return;
-    const trimmed = newName.trim();
+let renameModal = null;
+let renameInput = null;
+
+function openRenameModal() {
+    if (!renameModal || !renameInput || !pet || !pet.petId) return;
+    renameInput.value = pet.name || '';
+    renameModal.style.display = 'flex';
+    renameInput.focus();
+}
+
+function closeRenameModal() {
+    if (renameModal) renameModal.style.display = 'none';
+}
+
+function confirmRename() {
+    if (!renameInput || !pet || !pet.petId) return;
+    const trimmed = renameInput.value.trim();
     if (!trimmed) return;
     if (trimmed.length > 15) {
         alert('O nome do pet deve ter no m\u00e1ximo 15 caracteres!');
@@ -43,6 +55,7 @@ function renamePet() {
     pet.name = trimmed;
     window.electronAPI.send('rename-pet', { petId: pet.petId, newName: trimmed });
     updateStatus();
+    closeRenameModal();
 }
 
 function setImageWithFallback(imgElement, relativePath) {
@@ -327,8 +340,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const nameSpan = document.getElementById('title-bar-pet-name');
     const editIcon = document.getElementById('edit-pet-name');
-    if (nameSpan) nameSpan.addEventListener('click', renamePet);
-    if (editIcon) editIcon.addEventListener('click', renamePet);
+    renameModal = document.getElementById('rename-modal');
+    renameInput = document.getElementById('rename-input');
+    const renameOk = document.getElementById('rename-ok');
+    const renameCancel = document.getElementById('rename-cancel');
+    if (nameSpan) nameSpan.addEventListener('click', openRenameModal);
+    if (editIcon) editIcon.addEventListener('click', openRenameModal);
+    renameOk?.addEventListener('click', confirmRename);
+    renameCancel?.addEventListener('click', closeRenameModal);
 
     // Controle das abas
     document.querySelectorAll('.tab-button').forEach(button => {
