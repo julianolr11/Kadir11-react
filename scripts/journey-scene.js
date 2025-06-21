@@ -17,6 +17,11 @@ let playerStatusEffects = [];
 let playerHealth = 100;
 let playerMaxHealth = 100;
 let enemyHealth = 100;
+let currentTurn = 'player';
+let playerIdleSrc = '';
+let playerAttackSrc = '';
+let enemyIdleSrc = '';
+let enemyAttackSrc = '';
 
 async function loadItemsInfo() {
     try {
@@ -68,6 +73,9 @@ function updateMoves() {
         const btn = document.createElement('button');
         btn.className = 'button small-button';
         btn.textContent = move.name;
+        btn.addEventListener('click', () => {
+            performPlayerMove(move);
+        });
         menu.appendChild(btn);
     });
 }
@@ -87,8 +95,8 @@ function updateItems() {
         if (qty <= 0) return;
         const info = itemsInfo[id] || { name: id };
         const btn = document.createElement('button');
-        btn.className = 'button small-button';
-        btn.textContent = `${info.name} x${qty}`;
+        btn.className = 'button small-button item-button';
+        btn.innerHTML = `<img src="${info.icon}" alt="${info.name}"><span>${info.name} x${qty}</span>`;
         btn.addEventListener('click', () => {
             window.electronAPI.send('use-item', id);
         });
@@ -126,6 +134,81 @@ function attemptFlee() {
     } else {
         showMessage('Fuga falhou!');
     }
+}
+
+function updateHealthBars() {
+    const playerFill = document.getElementById('player-health-fill');
+    if (playerFill) {
+        const percent = (playerHealth / playerMaxHealth) * 100;
+        playerFill.style.width = `${percent}%`;
+    }
+    const enemyFill = document.getElementById('enemy-health-fill');
+    if (enemyFill) {
+        const percent = (enemyHealth / 100) * 100;
+        enemyFill.style.width = `${percent}%`;
+    }
+}
+
+function playAttackAnimation(img, idle, attack, cb) {
+    if (!img) { if (cb) cb(); return; }
+    img.src = attack;
+    setTimeout(() => {
+        img.src = idle;
+        if (cb) cb();
+    }, 1000);
+}
+
+function applyStatusEffects() {
+    if (playerStatusEffects.includes('poison')) {
+        const dmg = Math.ceil(playerMaxHealth * (Math.random() * 0.01 + 0.01));
+        playerHealth = Math.max(0, playerHealth - dmg);
+    }
+    if (playerStatusEffects.includes('burn')) {
+        const dmg = Math.ceil(playerMaxHealth * (Math.random() * 0.01 + 0.02));
+        playerHealth = Math.max(0, playerHealth - dmg);
+    }
+    if (playerStatusEffects.includes('bleed')) {
+        const dmg = Math.ceil(playerHealth * 0.03);
+        playerHealth = Math.max(0, playerHealth - dmg);
+    }
+    updateHealthBars();
+}
+
+function endPlayerTurn() {
+    applyStatusEffects();
+    currentTurn = 'enemy';
+    setTimeout(enemyAction, 800);
+}
+
+function performPlayerMove(move) {
+    if (currentTurn !== 'player') return;
+    if (playerStatusEffects.includes('paralyze') && Math.random() < 0.5) {
+        showMessage('Paralisado!');
+        endPlayerTurn();
+        return;
+    }
+    if (playerStatusEffects.includes('sleep') || playerStatusEffects.includes('freeze')) {
+        showMessage('Incapaz de agir!');
+        endPlayerTurn();
+        return;
+    }
+    hideMenus();
+    const playerImg = document.getElementById('player-pet');
+    playAttackAnimation(playerImg, playerIdleSrc, playerAttackSrc, () => {
+        enemyHealth = Math.max(0, enemyHealth - 10);
+        updateHealthBars();
+        endPlayerTurn();
+    });
+}
+
+function enemyAction() {
+    const enemyImg = document.getElementById('enemy-pet');
+    playAttackAnimation(enemyImg, enemyIdleSrc, enemyAttackSrc, () => {
+        playerHealth = Math.max(0, playerHealth - 8);
+        updateHealthBars();
+        currentTurn = 'player';
+        applyStatusEffects();
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -176,8 +259,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.electronAPI.on('scene-data', (event, data) => {
         if (data.background && bg) bg.src = data.background;
-        if (data.playerPet && player) player.src = assetPath(data.playerPet);
-        if (data.enemyPet && enemy) enemy.src = assetPath(data.enemyPet);
+        if (data.playerPet && player) {
+            playerIdleSrc = assetPath(data.playerPet);
+            playerAttackSrc = assetPath(data.playerPet.replace(/idle\.gif$/i, 'attack.gif'));
+            player.src = playerIdleSrc;
+        }
+        if (data.enemyPet && enemy) {
+            enemyIdleSrc = assetPath(data.enemyPet);
+            enemyAttackSrc = assetPath(data.enemyPet.replace(/idle\.gif$/i, 'attack.gif'));
+            enemy.src = enemyIdleSrc;
+        }
 
         if (data.playerPet && playerFront) {
             const frontPath = data.playerPet.replace(/idle\.gif$/i, 'front.gif');
@@ -192,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.enemyName && enemyName) enemyName.textContent = data.enemyName;
         playerStatusEffects = Array.isArray(data.statusEffects) ? data.statusEffects : [];
         updateStatusIcons();
+        updateHealthBars();
     });
 
     window.electronAPI.on('pet-data', (event, data) => {
@@ -209,6 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const percent = (data.energy || 0);
             energyFill.style.width = `${percent}%`;
         }
+        updateHealthBars();
         if (Array.isArray(data.statusEffects)) {
             playerStatusEffects = data.statusEffects;
             updateStatusIcons();
