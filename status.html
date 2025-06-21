@@ -41,6 +41,7 @@
         #title-bar-pet-name-container {
             display: flex;
             align-items: center;
+            -webkit-app-region: no-drag;
         }
 
         #title-bar-pet-name {
@@ -53,12 +54,14 @@
             text-overflow: ellipsis;
             max-width: 150px;
             cursor: pointer;
+            -webkit-app-region: no-drag;
         }
 
         #edit-pet-name {
             display: none;
             font-size: 12px;
             cursor: pointer;
+            -webkit-app-region: no-drag;
         }
 
         #title-bar-pet-name-container:hover #edit-pet-name {
