@@ -90,10 +90,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const pathPoints = Array.from(document.querySelectorAll('.path-point'));
     const subPoints = Array.from(document.querySelectorAll('.path-subpoint'));
 
-    let currentIndex = parseInt(localStorage.getItem('journeyPoint') || '0', 10);
-    if (currentIndex >= pathPoints.length) currentIndex = pathPoints.length - 1;
+    const route = [
+        pathPoints[0], subPoints[0], subPoints[1],
+        pathPoints[1], subPoints[2], subPoints[3], subPoints[4], subPoints[5],
+        pathPoints[2], subPoints[6], subPoints[7],
+        pathPoints[3], subPoints[8], subPoints[9],
+        pathPoints[4], subPoints[10], subPoints[11],
+        pathPoints[5], subPoints[12], subPoints[13], subPoints[14], subPoints[15], subPoints[16],
+        pathPoints[6], subPoints[17], subPoints[18], subPoints[19], subPoints[20],
+        pathPoints[7], subPoints[21], subPoints[22], subPoints[23],
+        pathPoints[8], subPoints[24], subPoints[25],
+        pathPoints[9], pathPoints[10], pathPoints[11]
+    ];
 
-    let currentPoint = pathPoints[currentIndex];
+    let currentIndex = parseInt(localStorage.getItem('journeyStep') || '0', 10);
+    if (currentIndex >= route.length) currentIndex = route.length - 1;
+
+    let currentPoint = route[currentIndex];
     if (currentPoint) currentPoint.classList.add('current');
 
     function setCurrent(point) {
@@ -103,10 +116,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function advancePoint() {
-        if (currentIndex < pathPoints.length - 1) {
+        if (currentIndex < route.length - 1) {
             currentIndex++;
-            localStorage.setItem('journeyPoint', String(currentIndex));
-            setCurrent(pathPoints[currentIndex]);
+            localStorage.setItem('journeyStep', String(currentIndex));
+            setCurrent(route[currentIndex]);
         }
     }
 
@@ -114,34 +127,37 @@ document.addEventListener('DOMContentLoaded', () => {
         window.electronAPI?.send('open-journey-scene-window', { background: img });
     }
 
-    pathPoints.forEach((point, idx) => {
-        point.addEventListener('mouseenter', event => {
-            const img = point.dataset.image;
-            if (!img) return;
-            tooltipImg.src = img;
-            tooltipName.textContent = point.dataset.name || '';
-            tooltip.style.display = 'block';
-            positionTooltip(event);
-        });
-        point.addEventListener('mousemove', event => {
-            if (tooltip.style.display !== 'block') return;
-            positionTooltip(event);
-        });
-        point.addEventListener('mouseleave', () => {
-            tooltip.style.display = 'none';
-            tooltipName.textContent = '';
-        });
+    route.forEach((point, idx) => {
+        if (point.classList.contains('path-point')) {
+            point.addEventListener('mouseenter', event => {
+                const img = point.dataset.image;
+                if (!img) return;
+                tooltipImg.src = img;
+                tooltipName.textContent = point.dataset.name || '';
+                tooltip.style.display = 'block';
+                positionTooltip(event);
+            });
+            point.addEventListener('mousemove', event => {
+                if (tooltip.style.display !== 'block') return;
+                positionTooltip(event);
+            });
+            point.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+                tooltipName.textContent = '';
+            });
+        }
+
         point.addEventListener('click', () => {
             if (idx !== currentIndex) return;
-            const img = point.dataset.image;
-            if (img) {
-                handleBossFight(img);
-                advancePoint();
+            if (point.classList.contains('path-point')) {
+                const img = point.dataset.image;
+                if (img) {
+                    handleBossFight(img);
+                }
+            } else {
+                handleRandomEvent('');
             }
+            advancePoint();
         });
-    });
-
-    subPoints.forEach(sp => {
-        sp.addEventListener('click', () => handleRandomEvent(''));
     });
 });
