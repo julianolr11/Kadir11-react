@@ -43,7 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleRandomEvent(img) {
         const roll = Math.random() * 100;
         if (roll < 70) {
+            localStorage.setItem('journeyPendingAdvance', '1');
             window.electronAPI?.send('open-journey-scene-window', { background: img });
+            return true;
         } else if (roll < 85) {
             if (itemsData.length) {
                 const item = itemsData[Math.floor(Math.random() * itemsData.length)];
@@ -58,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.electronAPI?.send('reward-pet', { kadirPoints: 1 });
             showEventModal('Você encontrou 1 DNA Kadir!', 'assets/icons/dna-kadir.png');
         }
+        return false;
     }
 
     function positionTooltip(event) {
@@ -100,6 +103,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentIndex = parseInt(localStorage.getItem('journeyStep') || '0', 10);
     if (currentIndex >= route.length) currentIndex = route.length - 1;
+
+    const pending = localStorage.getItem('journeyPendingAdvance');
+    const won = localStorage.getItem('journeyBattleWin');
+    if (pending && won === '1') {
+        currentIndex = Math.min(currentIndex + 1, route.length - 1);
+        localStorage.setItem('journeyStep', String(currentIndex));
+    }
+    if (pending) localStorage.removeItem('journeyPendingAdvance');
+    if (won) localStorage.removeItem('journeyBattleWin');
 
     let currentPoint = route[currentIndex];
     if (currentPoint) currentPoint.classList.add('current');
@@ -154,12 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
             if (point.classList.contains('path-point')) {
                 const img = point.dataset.image;
                 if (img) {
+                    localStorage.setItem('journeyPendingAdvance', '1');
                     handleBossFight(img);
                 }
             } else {
-                handleRandomEvent(nextBackground);
+                const startedBattle = handleRandomEvent(nextBackground);
+                if (!startedBattle) {
+                    advancePoint();
+                }
             }
-            advancePoint();
         });
     });
 });
