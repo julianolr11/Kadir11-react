@@ -78,6 +78,8 @@
             gap:15px;
             padding:10px;
             justify-content:center;
+            flex-wrap:wrap;
+            overflow-y:auto;
         }
         .store-item { display:flex; flex-direction:column; align-items:center; }
         .store-item img { width:32px; height:32px; image-rendering:pixelated; }
@@ -123,7 +125,7 @@
             <span id="store-coin-count">0</span>
         </div>
         <button class="button small-button" id="open-items-button">Itens</button>
-        <div id="store-items">
+        <div id="store-items" class="scroll-container">
             <div class="store-item" data-item="healthPotion">
                 <img src="Assets/Shop/health-potion.png" alt="Health Potion">
                 <div class="item-price">10 moedas</div>

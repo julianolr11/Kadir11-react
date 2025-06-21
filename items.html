@@ -71,6 +71,8 @@
             flex-direction: column;
             gap: 5px;
             padding: 0 10px;
+            flex: 1;
+            overflow-y: auto;
         }
         .inventory-item {
             display: flex;
@@ -130,7 +132,7 @@
             <img id="coin-icon" src="assets/icons/kadircoin.png" alt="Moedas" />
             <span id="coin-count">0</span>
         </div>
-        <div id="items-list"></div>
+        <div id="items-list" class="scroll-container"></div>
         <button class="button small-button" id="open-store-button">Loja</button>
         <div id="item-description"></div>
     </div>

@@ -548,8 +548,8 @@ function createItemsWindow() {
     const preloadPath = require('path').join(__dirname, 'preload.js');
 
     itemsWindow = new BrowserWindow({
-        width: 300,
-        height: 230,
+        width: 350,
+        height: 300,
         frame: false,
         transparent: true,
         resizable: false,
@@ -583,8 +583,8 @@ function createStoreWindow() {
     const preloadPath = require('path').join(__dirname, 'preload.js');
 
     storeWindow = new BrowserWindow({
-        width: 300,
-        height: 200,
+        width: 350,
+        height: 300,
         frame: false,
         transparent: true,
         resizable: false,
