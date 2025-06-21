@@ -377,6 +377,19 @@
             gap: 10px;
         }
 
+        #bio-container {
+            max-height: 157px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        #xp-bar-fill {
+            background-color: #32cd32;
+        }
+
         #status-moves {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -526,7 +539,18 @@
                         <div id="move-description"></div>
                     </div>
                     <div id="tab-sobre" class="tab-content-item">
-                        <p id="bio-text" style="text-align:center;"></p>
+                        <div id="bio-container" class="scroll-container">
+                            <div id="xp-bar-container" class="status-item" style="background: none;">
+                                <label>XP</label>
+                                <div class="status-bar">
+                                    <div id="xp-bar-fill" class="status-bar-fill"></div>
+                                </div>
+                                <div id="xp-text">0/0</div>
+                            </div>
+                            <div id="specie-text"></div>
+                            <div id="element-text"></div>
+                            <p id="bio-text" style="text-align:center;"></p>
+                        </div>
                     </div>
                 </div>
             </div>

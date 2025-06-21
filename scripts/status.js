@@ -1,4 +1,10 @@
 import { rarityGradients, rarityColors, specieBioImages, specieDirs } from './constants.js';
+
+function getRequiredXpForNextLevel(level) {
+    const baseXp = 100;
+    const scale = 1.2;
+    return Math.round(baseXp * Math.pow(level, 1.5) * scale);
+}
 console.log('status.js carregado com sucesso');
 
 let pet = {};
@@ -96,12 +102,16 @@ function updateStatus() {
     const statusPetImage = document.getElementById('status-pet-image');
     const statusBioImage = document.getElementById('status-bio-image');
     const bioText = document.getElementById('bio-text');
+    const xpBarFill = document.getElementById('xp-bar-fill');
+    const xpText = document.getElementById('xp-text');
+    const specieText = document.getElementById('specie-text');
+    const elementText = document.getElementById('element-text');
     const titleBarElement = document.getElementById('title-bar-element');
     const titleBarPetName = document.getElementById('title-bar-pet-name');
     const statusPetImageGradient = document.getElementById('status-pet-image-gradient');
 
     // Verificar se todos os elementos estão disponíveis
-    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusKadirPoints || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText) {
+    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusKadirPoints || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText || !xpBarFill || !xpText || !specieText || !elementText) {
         console.error('Um ou mais elementos do status-container ou title-bar não encontrados', {
             healthContainer: !!healthContainer,
             hungerContainer: !!hungerContainer,
@@ -123,7 +133,11 @@ function updateStatus() {
             statusBioImage: !!statusBioImage,
             titleBarElement: !!titleBarElement,
             titleBarPetName: !!titleBarPetName,
-            statusPetImageGradient: !!statusPetImageGradient
+            statusPetImageGradient: !!statusPetImageGradient,
+            xpBarFill: !!xpBarFill,
+            xpText: !!xpText,
+            specieText: !!specieText,
+            elementText: !!elementText
         });
         return;
     }
@@ -205,6 +219,19 @@ function updateStatus() {
     // Atualizar bio
     if (bioText) {
         bioText.textContent = pet.bio || '';
+    }
+
+    if (xpBarFill && xpText) {
+        const requiredXp = getRequiredXpForNextLevel(pet.level || 1);
+        const percentage = Math.min((pet.experience || 0) / requiredXp * 100, 100);
+        xpBarFill.style.width = `${percentage}%`;
+        xpText.textContent = `${pet.experience || 0}/${requiredXp}`;
+    }
+    if (specieText) {
+        specieText.textContent = `Espécie: ${pet.specie || 'Desconhecida'}`;
+    }
+    if (elementText) {
+        elementText.textContent = `Elemento: ${pet.element || 'Desconhecido'}`;
     }
 
     const healthPercentage = (pet.currentHealth || 0) / (pet.maxHealth || 1) * 100;
