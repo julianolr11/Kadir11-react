@@ -774,12 +774,29 @@ ipcMain.on('reward-pet', async (event, reward) => {
     if (reward.kadirPoints) {
         currentPet.kadirPoints = (currentPet.kadirPoints || 0) + reward.kadirPoints;
     }
+    if (reward.experience) {
+        currentPet.experience = (currentPet.experience || 0) + reward.experience;
+        let requiredXp = getRequiredXpForNextLevel(currentPet.level);
+        while (currentPet.experience >= requiredXp && currentPet.level < 100) {
+            currentPet.level += 1;
+            currentPet.experience -= requiredXp;
+            currentPet.kadirPoints = (currentPet.kadirPoints || 0) + 1;
+            increaseAttributesOnLevelUp(currentPet);
+            requiredXp = getRequiredXpForNextLevel(currentPet.level);
+        }
+    }
 
     try {
         await petManager.updatePet(currentPet.petId, {
             items: currentPet.items,
             coins: currentPet.coins,
-            kadirPoints: currentPet.kadirPoints
+            kadirPoints: currentPet.kadirPoints,
+            level: currentPet.level,
+            experience: currentPet.experience,
+            attributes: currentPet.attributes,
+            maxHealth: currentPet.maxHealth,
+            currentHealth: currentPet.currentHealth,
+            energy: currentPet.energy
         });
         BrowserWindow.getAllWindows().forEach(w => {
             if (w.webContents) w.webContents.send('pet-data', currentPet);
