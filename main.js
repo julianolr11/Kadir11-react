@@ -795,6 +795,28 @@ ipcMain.on('update-health', async (event, newHealth) => {
     }
 });
 
+ipcMain.on('kadirfull', async () => {
+    if (!currentPet) return;
+    currentPet.currentHealth = currentPet.maxHealth;
+    currentPet.hunger = 100;
+    currentPet.happiness = 100;
+    currentPet.energy = 100;
+
+    try {
+        await petManager.updatePet(currentPet.petId, {
+            currentHealth: currentPet.currentHealth,
+            hunger: currentPet.hunger,
+            happiness: currentPet.happiness,
+            energy: currentPet.energy
+        });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+        });
+    } catch (err) {
+        console.error('Erro ao aplicar kadirfull:', err);
+    }
+});
+
 ipcMain.on('reward-pet', async (event, reward) => {
     if (!currentPet || !reward) return;
     if (reward.item) {

@@ -32,6 +32,17 @@ function hideDescription() {
 
 let renameModal = null;
 let renameInput = null;
+let cheatBuffer = '';
+
+function activateKadirFull() {
+    if (!pet || !pet.petId) return;
+    pet.currentHealth = pet.maxHealth;
+    pet.hunger = 100;
+    pet.happiness = 100;
+    pet.energy = 100;
+    updateStatus();
+    window.electronAPI.send('kadirfull');
+}
 
 function openRenameModal() {
     if (!renameModal || !renameInput || !pet || !pet.petId) return;
@@ -387,6 +398,18 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         console.warn('train-moves-button element not found');
     }
+
+    document.addEventListener('keydown', (e) => {
+        const key = e.key.toLowerCase();
+        if (key.length === 1 && /[a-z0-9]/.test(key)) {
+            cheatBuffer += key;
+            if (cheatBuffer.length > 9) cheatBuffer = cheatBuffer.slice(-9);
+            if (cheatBuffer === 'kadirfull') {
+                cheatBuffer = '';
+                activateKadirFull();
+            }
+        }
+    });
 
     // Registrar o listener para o evento pet-data dentro do DOMContentLoaded
     window.electronAPI.on('pet-data', (event, petData) => {
