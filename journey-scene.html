@@ -279,6 +279,13 @@
         <div id="moves-menu" class="sub-menu"></div>
         <div id="items-menu" class="sub-menu"></div>
         <div id="message-box" class="message-box"></div>
+        <div id="victory-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; z-index:1000;">
+            <div style="background:#2a323e; border:2px solid #fff; padding:10px; border-radius:8px; text-align:center;">
+                <div id="victory-text" style="margin-bottom:8px;">Parabéns! Você venceu!</div>
+                <div id="victory-reward" style="margin-bottom:8px;"></div>
+                <button id="victory-close" class="button small-button">OK</button>
+            </div>
+        </div>
     </div>
     <script src="scripts/journey-scene.js"></script>
 </body>

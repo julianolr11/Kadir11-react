@@ -191,10 +191,68 @@ function applyStatusEffects() {
     updateHealthBars();
 }
 
+function generateReward() {
+    const types = ['experience', 'kadirPoints', 'coins', 'item'];
+    const choice = types[Math.floor(Math.random() * types.length)];
+    if (choice === 'experience') {
+        return { experience: Math.floor(Math.random() * 10) + 5 };
+    }
+    if (choice === 'kadirPoints') {
+        return { kadirPoints: 1 };
+    }
+    if (choice === 'coins') {
+        return { coins: Math.floor(Math.random() * 5) + 1 };
+    }
+    const ids = Object.keys(itemsInfo);
+    if (ids.length === 0) return { coins: 1 };
+    const id = ids[Math.floor(Math.random() * ids.length)];
+    return { item: id, qty: 1 };
+}
+
+function showVictoryModal(reward) {
+    const modal = document.getElementById('victory-modal');
+    const rewardBox = document.getElementById('victory-reward');
+    const closeBtn = document.getElementById('victory-close');
+    if (!modal || !rewardBox || !closeBtn) return;
+
+    let text = '';
+    if (reward.experience) text = `Você recebeu ${reward.experience} XP!`;
+    else if (reward.kadirPoints) text = `Você recebeu ${reward.kadirPoints} DNA Kadir!`;
+    else if (reward.coins) text = `Você recebeu ${reward.coins} moedas!`;
+    else if (reward.item) {
+        const info = itemsInfo[reward.item] || { name: reward.item };
+        text = `Você recebeu 1 ${info.name}!`;
+    }
+    rewardBox.textContent = text;
+    modal.style.display = 'flex';
+    closeBtn.onclick = () => {
+        modal.style.display = 'none';
+        window.electronAPI.send('open-journey-mode-window');
+        closeWindow();
+    };
+}
+
+function concludeBattle(playerWon) {
+    currentTurn = 'ended';
+    hideMenus();
+    if (playerWon) {
+        const reward = generateReward();
+        window.electronAPI.send('reward-pet', reward);
+        showVictoryModal(reward);
+    } else {
+        showMessage('Você perdeu!');
+        setTimeout(() => { window.electronAPI.send('open-journey-mode-window'); closeWindow(); }, 2000);
+    }
+}
+
 function endPlayerTurn() {
     applyStatusEffects();
-    currentTurn = 'enemy';
-    setTimeout(enemyAction, 800);
+    if (playerHealth <= 0) {
+        concludeBattle(false);
+    } else {
+        currentTurn = 'enemy';
+        setTimeout(enemyAction, 800);
+    }
 }
 
 function performPlayerMove(move) {
@@ -214,7 +272,11 @@ function performPlayerMove(move) {
     playAttackAnimation(playerImg, playerIdleSrc, playerAttackSrc, () => {
         enemyHealth = Math.max(0, enemyHealth - 10);
         updateHealthBars();
-        endPlayerTurn();
+        if (enemyHealth <= 0) {
+            concludeBattle(true);
+        } else {
+            endPlayerTurn();
+        }
     });
 }
 
@@ -223,8 +285,12 @@ function enemyAction() {
     playAttackAnimation(enemyImg, enemyIdleSrc, enemyAttackSrc, () => {
         playerHealth = Math.max(0, playerHealth - 8);
         updateHealthBars();
-        currentTurn = 'player';
-        applyStatusEffects();
+        if (playerHealth <= 0) {
+            concludeBattle(false);
+        } else {
+            currentTurn = 'player';
+            applyStatusEffects();
+        }
     });
 }
 
