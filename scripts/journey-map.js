@@ -43,11 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleRandomEvent(img) {
         const roll = Math.random() * 100;
         if (roll < 70) {
-            if (img) {
-                window.electronAPI?.send('open-journey-scene-window', { background: img });
-                return;
-            }
-        } else if (roll < 90) {
+            window.electronAPI?.send('open-journey-scene-window', { background: img });
+        } else if (roll < 85) {
             if (itemsData.length) {
                 const item = itemsData[Math.floor(Math.random() * itemsData.length)];
                 window.electronAPI?.send('reward-pet', { item: item.id, qty: 1 });
@@ -57,11 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const coins = Math.floor(Math.random() * 5) + 1;
             window.electronAPI?.send('reward-pet', { coins });
             showEventModal(`Você encontrou ${coins} moedas!`, 'assets/icons/kadircoin.png');
-        } else if (roll < 97) {
+        } else {
             window.electronAPI?.send('reward-pet', { kadirPoints: 1 });
             showEventModal('Você encontrou 1 DNA Kadir!', 'assets/icons/dna-kadir.png');
-        } else {
-            showEventModal('Nada encontrado...', null);
         }
     }
 
