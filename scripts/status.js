@@ -242,7 +242,9 @@ function updateStatus() {
         raceText.textContent = raceName ? `Raça: ${raceName}` : '';
     }
     if (elementText) {
-        elementText.textContent = `Elemento: ${pet.element || 'Desconhecido'}`;
+        const imgSrc = elementImages[pet.element?.toLowerCase()] || './Assets/Elements/default.png';
+        const elementName = pet.element || 'Desconhecido';
+        elementText.innerHTML = `<img src="${imgSrc}" alt="${elementName}" style="height: 16px; vertical-align: middle; image-rendering: pixelated;"> ${elementName}`;
     }
 
     const healthPercentage = (pet.currentHealth || 0) / (pet.maxHealth || 1) * 100;
