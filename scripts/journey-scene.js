@@ -12,6 +12,8 @@ function assetPath(relative) {
 
 let pet = null;
 let itemsInfo = {};
+let statusEffectsInfo = {};
+let playerStatusEffects = [];
 let playerHealth = 100;
 let playerMaxHealth = 100;
 let enemyHealth = 100;
@@ -24,6 +26,17 @@ async function loadItemsInfo() {
         data.forEach(it => { itemsInfo[it.id] = it; });
     } catch (err) {
         console.error('Erro ao carregar info dos itens:', err);
+    }
+}
+
+async function loadStatusEffectsInfo() {
+    try {
+        const resp = await fetch('data/status-effects.json');
+        const data = await resp.json();
+        statusEffectsInfo = {};
+        data.forEach(se => { statusEffectsInfo[se.id] = se; });
+    } catch (err) {
+        console.error('Erro ao carregar info dos status effects:', err);
     }
 }
 
@@ -72,6 +85,26 @@ function updateItems() {
     });
 }
 
+function updateStatusIcons() {
+    const container = document.getElementById('player-status-icons');
+    if (!container) return;
+    container.innerHTML = '';
+    if (!Array.isArray(playerStatusEffects) || playerStatusEffects.length === 0) {
+        container.style.display = 'none';
+        return;
+    }
+    playerStatusEffects.forEach(id => {
+        const info = statusEffectsInfo[id];
+        if (!info) return;
+        const img = document.createElement('img');
+        img.src = info.icon;
+        img.alt = info.name;
+        img.title = info.name;
+        container.appendChild(img);
+    });
+    container.style.display = 'flex';
+}
+
 function attemptFlee() {
     let chance = 0.5;
     if (playerHealth >= enemyHealth) chance += 0.25; else chance -= 0.25;
@@ -92,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const enemyFront = document.getElementById('enemy-front');
     const enemyName = document.getElementById('enemy-name');
     loadItemsInfo();
+    loadStatusEffectsInfo().then(updateStatusIcons);
 
     document.getElementById('close-journey-scene')?.addEventListener('click', closeWindow);
     document.getElementById('back-journey-scene')?.addEventListener('click', () => {
@@ -145,6 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (data.enemyName && enemyName) enemyName.textContent = data.enemyName;
+        playerStatusEffects = Array.isArray(data.statusEffects) ? data.statusEffects : [];
+        updateStatusIcons();
     });
 
     window.electronAPI.on('pet-data', (event, data) => {
@@ -161,6 +197,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (energyFill) {
             const percent = (data.energy || 0);
             energyFill.style.width = `${percent}%`;
+        }
+        if (Array.isArray(data.statusEffects)) {
+            playerStatusEffects = data.statusEffects;
+            updateStatusIcons();
         }
         updateMoves();
         updateItems();
