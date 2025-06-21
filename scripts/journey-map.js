@@ -37,7 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltip.style.top = `${top}px`;
     }
 
-    document.querySelectorAll('.path-point').forEach(point => {
+    const pathPoints = document.querySelectorAll('.path-point');
+    let currentPoint = document.querySelector('.path-point[data-name="Village"]');
+    if (currentPoint) {
+        currentPoint.classList.add('current');
+    }
+
+    function setCurrent(point) {
+        if (currentPoint) currentPoint.classList.remove('current');
+        currentPoint = point;
+        currentPoint.classList.add('current');
+    }
+
+    pathPoints.forEach(point => {
         point.addEventListener('mouseenter', event => {
             const img = point.dataset.image;
             if (!img) return;
@@ -57,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         point.addEventListener('click', () => {
             const img = point.dataset.image;
             if (img) {
+                setCurrent(point);
                 window.electronAPI?.send('open-journey-scene-window', { background: img });
             }
         });
