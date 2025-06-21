@@ -24,6 +24,7 @@ async function loadItemsInfo() {
         const data = await resp.json();
         itemsInfo = {};
         data.forEach(it => { itemsInfo[it.id] = it; });
+        updateItems();
     } catch (err) {
         console.error('Erro ao carregar info dos itens:', err);
     }
@@ -57,7 +58,12 @@ function updateMoves() {
     const menu = document.getElementById('moves-menu');
     if (!menu) return;
     menu.innerHTML = '';
-    if (!pet || !Array.isArray(pet.moves)) return;
+    if (!pet || !Array.isArray(pet.moves) || pet.moves.length === 0) {
+        const span = document.createElement('span');
+        span.textContent = 'Sem golpes';
+        menu.appendChild(span);
+        return;
+    }
     pet.moves.forEach(move => {
         const btn = document.createElement('button');
         btn.className = 'button small-button';
@@ -70,7 +76,12 @@ function updateItems() {
     const menu = document.getElementById('items-menu');
     if (!menu) return;
     menu.innerHTML = '';
-    if (!pet || !pet.items) return;
+    if (!pet || !pet.items || Object.keys(pet.items).length === 0) {
+        const span = document.createElement('span');
+        span.textContent = 'Sem itens';
+        menu.appendChild(span);
+        return;
+    }
     Object.keys(pet.items).forEach(id => {
         const qty = pet.items[id];
         if (qty <= 0) return;
