@@ -108,7 +108,8 @@ async function createPet(petData) {
         bio: petData.bio || '',
         bioImage: petData.bioImage || null,
         statusImage: petData.statusImage || null,
-        items: {}
+        items: {},
+        statusEffects: []
     };
 
     ensureStatusImage(newPet);
@@ -144,6 +145,9 @@ async function listPets() {
                     }
                     if (pet.items === undefined) {
                         pet.items = {};
+                    }
+                    if (pet.statusEffects === undefined) {
+                        pet.statusEffects = [];
                     }
                     pet.fileName = file; // Garantir que o fileName esteja atualizado
                     ensureStatusImage(pet);
@@ -181,6 +185,9 @@ async function loadPet(petId) {
         }
         if (pet.items === undefined) {
             pet.items = {};
+        }
+        if (pet.statusEffects === undefined) {
+            pet.statusEffects = [];
         }
         ensureStatusImage(pet);
         if (!pet.knownMoves) {

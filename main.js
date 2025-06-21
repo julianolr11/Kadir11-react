@@ -683,8 +683,12 @@ ipcMain.on('open-journey-scene-window', async (event, data) => {
             background: data.background,
             playerPet: currentPet ? resolveIdleGif(currentPet.statusImage || currentPet.image) : null,
             enemyPet: enemy,
-            enemyName
+            enemyName,
+            statusEffects: currentPet ? currentPet.statusEffects || [] : []
         });
+        if (currentPet) {
+            win.webContents.send('pet-data', currentPet);
+        }
     });
 });
 

@@ -160,6 +160,17 @@
         .energy-bar .bar {
             background-image: linear-gradient(to bottom, #00d2ff, #0083ff);
         }
+        .status-icons {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin-top: 2px;
+        }
+        .status-icons img {
+            width: 24px;
+            height: 24px;
+            image-rendering: pixelated;
+        }
 
         /* Menu de ações na parte inferior */
         #action-menu {
@@ -224,6 +235,7 @@
                 <div class="energy-bar">
                     <div class="bar" id="player-energy-fill" style="width:100%"></div>
                 </div>
+                <div class="status-icons" id="player-status-icons" style="display:none"></div>
             </div>
         </div>
 
