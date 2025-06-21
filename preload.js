@@ -31,6 +31,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'get-journey-images',
             'reward-pet',
             'use-move',
+            'update-health',
             'battle-result',
             'animation-finished', // Novo canal pra sinalizar o fim da animação
             'close-start-window'  // Fechar a janela de start
