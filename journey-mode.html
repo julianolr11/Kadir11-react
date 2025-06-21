@@ -34,7 +34,19 @@
         .mapa { width: 100%; height: 100%; display: block; }
         .path-point, .path-subpoint { position: absolute; border-radius: 50%; transform: translate(-50%, -50%); }
         .path-point { width: 16px; height: 16px; background-color: #00ff88; border: 2px solid white; box-shadow: 0 0 6px #00ff88; cursor: pointer; }
-        .path-subpoint { width: 10px; height: 10px; background-color: #ffffff; border: 1px solid #ccc; opacity: 0.9; }
+        .path-subpoint {
+            width: 14px;
+            height: 14px;
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            font-weight: bold;
+            color: #333;
+        }
 
         #map-tooltip { position: absolute; display: none; pointer-events: none; border: 2px solid #fff; background: rgba(0,0,0,0.8); border-radius: 4px; color: #fff; font-family: 'PixelOperator', sans-serif; text-align: center; }
         #map-tooltip img { width: 160px; height: auto; display: block; }
@@ -69,32 +81,32 @@
                 <div class="path-point" data-image="Assets/Modes/Journeys/abandoned_city.png" data-name="Abandoned City" style="top: 450px;left: 910px;"></div>
 
                 <!-- Pontos intermediários -->
-                <div class="path-subpoint" style="top: 620px;left: 411px;"></div>
-                <div class="path-subpoint" style="top: 596px;left: 352px;"></div>
-                <div class="path-subpoint" style="top: 545px;left: 355px;"></div>
-                <div class="path-subpoint" style="top: 490px;left: 277px;"></div>
-                <div class="path-subpoint" style="top: 440px;left: 343px;"></div>
-                <div class="path-subpoint" style="top: 374px;left: 330px;"></div>
-                <div class="path-subpoint" style="top: 299px; left: 293px;"></div>
-                <div class="path-subpoint" style="top: 268px; left: 252px;"></div>
-                <div class="path-subpoint" style="top: 190px; left: 297px;"></div>
-                <div class="path-subpoint" style="top: 155px; left: 363px;"></div>
-                <div class="path-subpoint" style="top: 141px;left: 509px;"></div>
-                <div class="path-subpoint" style="top: 113px;left: 584px;"></div>
-                <div class="path-subpoint" style="top: 187px;left: 469px;"></div>
-                <div class="path-subpoint" style="top: 257px;left: 404px;"></div>
-                <div class="path-subpoint" style="top: 308px;left: 465px;"></div>
-                <div class="path-subpoint" style="top: 373px;left: 530px;"></div>
-                <div class="path-subpoint" style="top: 419px;left: 606px;"></div>
-                <div class="path-subpoint" style="top: 389px;left: 733px;"></div>
-                <div class="path-subpoint" style="top: 303px;left: 832px;"></div>
-                <div class="path-subpoint" style="top: 203px;left: 880px;"></div>
-                <div class="path-subpoint" style="top: 246px;left: 984px;"></div>
-                <div class="path-subpoint" style="top: 483px;left: 589px;"></div>
-                <div class="path-subpoint" style="top: 555px;left: 714px;"></div>
-                <div class="path-subpoint" style="top: 590px;left: 695px;"></div>
-                <div class="path-subpoint" style="top: 496px;left: 843px;"></div>
-                <div class="path-subpoint" style="top: 485px;left: 887px;"></div>
+                <div class="path-subpoint" style="top: 620px;left: 411px;">1</div>
+                <div class="path-subpoint" style="top: 596px;left: 352px;">2</div>
+                <div class="path-subpoint" style="top: 545px;left: 355px;">3</div>
+                <div class="path-subpoint" style="top: 490px;left: 277px;">4</div>
+                <div class="path-subpoint" style="top: 440px;left: 343px;">5</div>
+                <div class="path-subpoint" style="top: 374px;left: 330px;">6</div>
+                <div class="path-subpoint" style="top: 299px; left: 293px;">7</div>
+                <div class="path-subpoint" style="top: 268px; left: 252px;">8</div>
+                <div class="path-subpoint" style="top: 190px; left: 297px;">9</div>
+                <div class="path-subpoint" style="top: 155px; left: 363px;">10</div>
+                <div class="path-subpoint" style="top: 141px;left: 509px;">11</div>
+                <div class="path-subpoint" style="top: 113px;left: 584px;">12</div>
+                <div class="path-subpoint" style="top: 187px;left: 469px;">13</div>
+                <div class="path-subpoint" style="top: 257px;left: 404px;">14</div>
+                <div class="path-subpoint" style="top: 308px;left: 465px;">15</div>
+                <div class="path-subpoint" style="top: 373px;left: 530px;">16</div>
+                <div class="path-subpoint" style="top: 419px;left: 606px;">17</div>
+                <div class="path-subpoint" style="top: 389px;left: 733px;">18</div>
+                <div class="path-subpoint" style="top: 303px;left: 832px;">19</div>
+                <div class="path-subpoint" style="top: 203px;left: 880px;">20</div>
+                <div class="path-subpoint" style="top: 246px;left: 984px;">21</div>
+                <div class="path-subpoint" style="top: 483px;left: 589px;">22</div>
+                <div class="path-subpoint" style="top: 555px;left: 714px;">23</div>
+                <div class="path-subpoint" style="top: 590px;left: 695px;">24</div>
+                <div class="path-subpoint" style="top: 496px;left: 843px;">25</div>
+                <div class="path-subpoint" style="top: 485px;left: 887px;">26</div>
 
                 <div id="map-tooltip" style="display: none; left: 900px; top: 170px;"><img src="Assets/Modes/Journeys/cave_ruin.png" alt="preview"><div class="tooltip-name"></div></div>
             </div>
