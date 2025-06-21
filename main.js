@@ -738,6 +738,9 @@ ipcMain.on('use-item', async (event, item) => {
             break;
         case 'meat':
             currentPet.hunger = Math.min((currentPet.hunger || 0) + 20, 100);
+            currentPet.happiness = Math.min((currentPet.happiness || 0) + 10, 100);
+            const healAmount = Math.round(currentPet.maxHealth * 0.05);
+            currentPet.currentHealth = Math.min(currentPet.currentHealth + healAmount, currentPet.maxHealth);
             break;
         case 'staminaPotion':
             currentPet.energy = Math.min((currentPet.energy || 0) + 20, 100);
@@ -750,6 +753,7 @@ ipcMain.on('use-item', async (event, item) => {
         await petManager.updatePet(currentPet.petId, {
             currentHealth: currentPet.currentHealth,
             hunger: currentPet.hunger,
+            happiness: currentPet.happiness,
             energy: currentPet.energy,
             items: currentPet.items
         });
