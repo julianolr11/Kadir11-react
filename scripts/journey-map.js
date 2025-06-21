@@ -43,8 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function handleRandomEvent(img) {
         const roll = Math.random() * 100;
         if (roll < 70) {
-            window.electronAPI?.send('open-journey-scene-window', { background: img });
-            return;
+            if (img) {
+                window.electronAPI?.send('open-journey-scene-window', { background: img });
+                return;
+            }
         } else if (roll < 90) {
             if (itemsData.length) {
                 const item = itemsData[Math.floor(Math.random() * itemsData.length)];
@@ -85,19 +87,34 @@ document.addEventListener('DOMContentLoaded', () => {
         tooltip.style.top = `${top}px`;
     }
 
-    const pathPoints = document.querySelectorAll('.path-point');
-    let currentPoint = document.querySelector('.path-point[data-name="Village"]');
-    if (currentPoint) {
-        currentPoint.classList.add('current');
-    }
+    const pathPoints = Array.from(document.querySelectorAll('.path-point'));
+    const subPoints = Array.from(document.querySelectorAll('.path-subpoint'));
+
+    let currentIndex = parseInt(localStorage.getItem('journeyPoint') || '0', 10);
+    if (currentIndex >= pathPoints.length) currentIndex = pathPoints.length - 1;
+
+    let currentPoint = pathPoints[currentIndex];
+    if (currentPoint) currentPoint.classList.add('current');
 
     function setCurrent(point) {
         if (currentPoint) currentPoint.classList.remove('current');
         currentPoint = point;
-        currentPoint.classList.add('current');
+        if (currentPoint) currentPoint.classList.add('current');
     }
 
-    pathPoints.forEach(point => {
+    function advancePoint() {
+        if (currentIndex < pathPoints.length - 1) {
+            currentIndex++;
+            localStorage.setItem('journeyPoint', String(currentIndex));
+            setCurrent(pathPoints[currentIndex]);
+        }
+    }
+
+    function handleBossFight(img) {
+        window.electronAPI?.send('open-journey-scene-window', { background: img });
+    }
+
+    pathPoints.forEach((point, idx) => {
         point.addEventListener('mouseenter', event => {
             const img = point.dataset.image;
             if (!img) return;
@@ -115,11 +132,16 @@ document.addEventListener('DOMContentLoaded', () => {
             tooltipName.textContent = '';
         });
         point.addEventListener('click', () => {
+            if (idx !== currentIndex) return;
             const img = point.dataset.image;
             if (img) {
-                setCurrent(point);
-                handleRandomEvent(img);
+                handleBossFight(img);
+                advancePoint();
             }
         });
+    });
+
+    subPoints.forEach(sp => {
+        sp.addEventListener('click', () => handleRandomEvent(''));
     });
 });
