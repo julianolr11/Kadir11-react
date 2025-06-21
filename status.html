@@ -221,11 +221,16 @@
         }
 
         .status-bar {
-            width: 270px;
+            width: 100%;
             height: 10px;
             background-color: #2a323e;
             border-radius: 5px;
             position: relative;
+        }
+
+        /* Barra de XP para próximo nível */
+        #xp-bar {
+            width: 100%;
         }
 
         .status-bar-fill {
@@ -382,8 +387,15 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             gap: 5px;
+        }
+
+        #specie-text,
+        #race-text,
+        #element-text {
+            align-self: flex-start;
+            text-align: left;
         }
 
         .xp-row {
@@ -549,7 +561,7 @@
                             <div id="xp-bar-container" class="status-item" style="background: none;">
                                 <div class="xp-row">
                                     <label>XP</label>
-                                    <div class="status-bar">
+                                    <div id="xp-bar" class="status-bar">
                                         <div id="xp-bar-fill" class="status-bar-fill"></div>
                                     </div>
                                     <div id="xp-text">0/0</div>
