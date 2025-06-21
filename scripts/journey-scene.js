@@ -65,7 +65,7 @@ function updateMoves() {
     menu.innerHTML = '';
     if (!pet || !Array.isArray(pet.moves) || pet.moves.length === 0) {
         const span = document.createElement('span');
-        span.textContent = 'Sem golpes';
+        span.textContent = 'Você não aprendeu nenhum movimento! Tente fugir!';
         menu.appendChild(span);
         return;
     }
@@ -86,7 +86,7 @@ function updateItems() {
     menu.innerHTML = '';
     if (!pet || !pet.items || Object.keys(pet.items).length === 0) {
         const span = document.createElement('span');
-        span.textContent = 'Sem itens';
+        span.textContent = 'Você não tem itens! Tente fugir!';
         menu.appendChild(span);
         return;
     }
@@ -108,7 +108,10 @@ function updateItems() {
         btn.appendChild(label);
 
         btn.addEventListener('click', () => {
+            if (currentTurn !== 'player') return;
+            hideMenus();
             window.electronAPI.send('use-item', id);
+            endPlayerTurn();
         });
 
         menu.appendChild(btn);
@@ -136,6 +139,8 @@ function updateStatusIcons() {
 }
 
 function attemptFlee() {
+    if (currentTurn !== 'player') return;
+    hideMenus();
     let chance = 0.5;
     if (playerHealth >= enemyHealth) chance += 0.25; else chance -= 0.25;
     chance = Math.max(0.1, Math.min(0.9, chance));
@@ -144,6 +149,7 @@ function attemptFlee() {
         setTimeout(closeWindow, 1500);
     } else {
         showMessage('Fuga falhou!');
+        endPlayerTurn();
     }
 }
 
@@ -245,6 +251,10 @@ document.addEventListener('DOMContentLoaded', () => {
     fightBtn?.addEventListener('click', () => {
         const menu = document.getElementById('moves-menu');
         if (!menu) return;
+        if (!pet || !Array.isArray(pet.moves) || pet.moves.length === 0) {
+            showMessage('Você não aprendeu nenhum movimento! Tente fugir!');
+            return;
+        }
         if (menu.style.display === 'none' || menu.style.display === '') {
             hideMenus();
             updateMoves();
@@ -257,6 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
     itemsBtn?.addEventListener('click', () => {
         const menu = document.getElementById('items-menu');
         if (!menu) return;
+        if (!pet || !pet.items || !Object.values(pet.items).some(qty => qty > 0)) {
+            showMessage('Você não tem itens! Tente fugir!');
+            return;
+        }
         if (menu.style.display === 'none' || menu.style.display === '') {
             hideMenus();
             updateItems();
