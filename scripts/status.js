@@ -1,5 +1,10 @@
 import { rarityGradients, rarityColors, specieBioImages, specieDirs } from './constants.js';
 
+const raceNames = {
+    viborom: 'Viborom',
+    draak: 'Draak Olhos de Esmeralda'
+};
+
 function getRequiredXpForNextLevel(level) {
     const baseXp = 100;
     const scale = 1.2;
@@ -105,13 +110,14 @@ function updateStatus() {
     const xpBarFill = document.getElementById('xp-bar-fill');
     const xpText = document.getElementById('xp-text');
     const specieText = document.getElementById('specie-text');
+    const raceText = document.getElementById('race-text');
     const elementText = document.getElementById('element-text');
     const titleBarElement = document.getElementById('title-bar-element');
     const titleBarPetName = document.getElementById('title-bar-pet-name');
     const statusPetImageGradient = document.getElementById('status-pet-image-gradient');
 
     // Verificar se todos os elementos estão disponíveis
-    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusKadirPoints || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText || !xpBarFill || !xpText || !specieText || !elementText) {
+    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusKadirPoints || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText || !xpBarFill || !xpText || !specieText || !raceText || !elementText) {
         console.error('Um ou mais elementos do status-container ou title-bar não encontrados', {
             healthContainer: !!healthContainer,
             hungerContainer: !!hungerContainer,
@@ -137,6 +143,7 @@ function updateStatus() {
             xpBarFill: !!xpBarFill,
             xpText: !!xpText,
             specieText: !!specieText,
+            raceText: !!raceText,
             elementText: !!elementText
         });
         return;
@@ -229,6 +236,10 @@ function updateStatus() {
     }
     if (specieText) {
         specieText.textContent = `Espécie: ${pet.specie || 'Desconhecida'}`;
+    }
+    if (raceText) {
+        const raceName = raceNames[pet.race] || pet.race || '';
+        raceText.textContent = raceName ? `Raça: ${raceName}` : '';
     }
     if (elementText) {
         elementText.textContent = `Elemento: ${pet.element || 'Desconhecido'}`;
