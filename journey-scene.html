@@ -161,6 +161,47 @@
             background-image: linear-gradient(to bottom, #00d2ff, #0083ff);
         }
 
+        /* Menu de ações na parte inferior */
+        #action-menu {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 2;
+        }
+
+        .sub-menu {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2a323e;
+            border: 2px solid #ffffff;
+            border-radius: 7px;
+            padding: 8px;
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 2;
+        }
+
+        .message-box {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2a323e;
+            border: 2px solid #ffffff;
+            border-radius: 7px;
+            padding: 6px 12px;
+            display: none;
+            z-index: 2;
+            font-family: 'PixelOperator', sans-serif;
+            color: #ffffff;
+        }
+
     </style>
 </head>
 <body>
@@ -203,6 +244,16 @@
 
         <img id="player-pet" class="pet" src="" alt="pet">
         <img id="enemy-pet" class="pet" src="" alt="inimigo">
+
+        <div id="action-menu">
+            <button id="fight-btn" class="button small-button">Lutar</button>
+            <button id="items-btn" class="button small-button">Itens</button>
+            <button id="run-btn" class="button small-button">Fugir</button>
+        </div>
+
+        <div id="moves-menu" class="sub-menu"></div>
+        <div id="items-menu" class="sub-menu"></div>
+        <div id="message-box" class="message-box"></div>
     </div>
     <script src="scripts/journey-scene.js"></script>
 </body>
