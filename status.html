@@ -221,7 +221,7 @@
         }
 
         .status-bar {
-            width: 100%;
+            width: 270px;
             height: 10px;
             background-color: #2a323e;
             border-radius: 5px;
@@ -386,6 +386,12 @@
             gap: 5px;
         }
 
+        .xp-row {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
         #xp-bar-fill {
             background-color: #32cd32;
         }
@@ -541,13 +547,16 @@
                     <div id="tab-sobre" class="tab-content-item">
                         <div id="bio-container" class="scroll-container">
                             <div id="xp-bar-container" class="status-item" style="background: none;">
-                                <label>XP</label>
-                                <div class="status-bar">
-                                    <div id="xp-bar-fill" class="status-bar-fill"></div>
+                                <div class="xp-row">
+                                    <label>XP</label>
+                                    <div class="status-bar">
+                                        <div id="xp-bar-fill" class="status-bar-fill"></div>
+                                    </div>
+                                    <div id="xp-text">0/0</div>
                                 </div>
-                                <div id="xp-text">0/0</div>
                             </div>
                             <div id="specie-text"></div>
+                            <div id="race-text"></div>
                             <div id="element-text"></div>
                             <p id="bio-text" style="text-align:center;"></p>
                         </div>
