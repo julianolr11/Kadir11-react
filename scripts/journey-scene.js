@@ -96,10 +96,21 @@ function updateItems() {
         const info = itemsInfo[id] || { name: id };
         const btn = document.createElement('button');
         btn.className = 'button small-button item-button';
-        btn.innerHTML = `<img src="${info.icon}" alt="${info.name}"><span>${info.name} x${qty}</span>`;
+
+        const img = document.createElement('img');
+        img.src = info.icon;
+        img.alt = info.name;
+
+        const label = document.createElement('span');
+        label.textContent = `${info.name} x ${qty}`;
+
+        btn.appendChild(img);
+        btn.appendChild(label);
+
         btn.addEventListener('click', () => {
             window.electronAPI.send('use-item', id);
         });
+
         menu.appendChild(btn);
     });
 }
