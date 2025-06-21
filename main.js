@@ -757,6 +757,34 @@ ipcMain.on('use-item', async (event, item) => {
     }
 });
 
+ipcMain.on('reward-pet', async (event, reward) => {
+    if (!currentPet || !reward) return;
+    if (reward.item) {
+        if (!currentPet.items) currentPet.items = {};
+        const qty = reward.qty || 1;
+        currentPet.items[reward.item] = (currentPet.items[reward.item] || 0) + qty;
+    }
+    if (reward.coins) {
+        currentPet.coins = (currentPet.coins || 0) + reward.coins;
+    }
+    if (reward.kadirPoints) {
+        currentPet.kadirPoints = (currentPet.kadirPoints || 0) + reward.kadirPoints;
+    }
+
+    try {
+        await petManager.updatePet(currentPet.petId, {
+            items: currentPet.items,
+            coins: currentPet.coins,
+            kadirPoints: currentPet.kadirPoints
+        });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+        });
+    } catch (err) {
+        console.error('Erro ao aplicar recompensa:', err);
+    }
+});
+
 ipcMain.on('learn-move', async (event, move) => {
     if (!currentPet) return;
     if (!currentPet.moves) currentPet.moves = [];

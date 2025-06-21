@@ -15,6 +15,54 @@ document.addEventListener('DOMContentLoaded', () => {
     const tooltipImg = tooltip.querySelector('img');
     const tooltipName = tooltip.querySelector('.tooltip-name');
 
+    const eventModal = document.getElementById('event-modal');
+    const eventModalIcon = document.getElementById('event-modal-icon');
+    const eventModalText = document.getElementById('event-modal-text');
+    const eventModalClose = document.getElementById('event-modal-close');
+    eventModalClose?.addEventListener('click', () => {
+        if (eventModal) eventModal.style.display = 'none';
+    });
+
+    let itemsData = [];
+    fetch('data/items.json').then(r => r.json()).then(d => { itemsData = d; }).catch(() => {});
+
+    function showEventModal(text, icon) {
+        if (!eventModal) return;
+        if (eventModalIcon) {
+            if (icon) {
+                eventModalIcon.src = icon;
+                eventModalIcon.style.display = 'block';
+            } else {
+                eventModalIcon.style.display = 'none';
+            }
+        }
+        if (eventModalText) eventModalText.textContent = text;
+        eventModal.style.display = 'flex';
+    }
+
+    function handleRandomEvent(img) {
+        const roll = Math.random() * 100;
+        if (roll < 70) {
+            window.electronAPI?.send('open-journey-scene-window', { background: img });
+            return;
+        } else if (roll < 90) {
+            if (itemsData.length) {
+                const item = itemsData[Math.floor(Math.random() * itemsData.length)];
+                window.electronAPI?.send('reward-pet', { item: item.id, qty: 1 });
+                showEventModal(`Você encontrou 1 ${item.name}!`, item.icon);
+            }
+        } else if (roll < 95) {
+            const coins = Math.floor(Math.random() * 5) + 1;
+            window.electronAPI?.send('reward-pet', { coins });
+            showEventModal(`Você encontrou ${coins} moedas!`, 'assets/icons/kadircoin.png');
+        } else if (roll < 97) {
+            window.electronAPI?.send('reward-pet', { kadirPoints: 1 });
+            showEventModal('Você encontrou 1 DNA Kadir!', 'assets/icons/dna-kadir.png');
+        } else {
+            showEventModal('Nada encontrado...', null);
+        }
+    }
+
     function positionTooltip(event) {
         let left = event.pageX + 10;
         let top = event.pageY - tooltip.offsetHeight - 10;
@@ -70,7 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const img = point.dataset.image;
             if (img) {
                 setCurrent(point);
-                window.electronAPI?.send('open-journey-scene-window', { background: img });
+                handleRandomEvent(img);
             }
         });
     });
