@@ -1,6 +1,8 @@
 const fs = require('fs').promises;
 const fsSync = require('fs');
 const path = require('path');
+const Store = require('electron-store');
+const store = new Store();
 
 const petsDir = path.join(__dirname, '..', 'pets');
 let petCounter = 0;
@@ -77,11 +79,14 @@ async function createPet(petData) {
     await ensurePetsDir();
     await loadPetCounter();
 
-    // Verificar limite máximo de pets (10)
+    // Verificar limite máximo de pets baseado no tamanho do cercado
     const files = await fs.readdir(petsDir);
     const petFiles = files.filter(file => file.startsWith('pet_') && file.endsWith('.json'));
-    if (petFiles.length >= 10) {
-        throw new Error('Limite de 10 pets atingido');
+    const size = store.get('penSize', 'small');
+    const limits = { small: 3, medium: 6, large: 10 };
+    const maxPets = limits[size] || 3;
+    if (petFiles.length >= maxPets) {
+        throw new Error(`Limite de ${maxPets} pets atingido`);
     }
 
     petCounter++;

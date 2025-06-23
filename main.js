@@ -33,6 +33,20 @@ let storeWindow = null;
 let journeyImagesCache = null;
 let journeySceneWindow = null;
 
+const penLimits = { small: 3, medium: 6, large: 10 };
+
+function getPenInfo() {
+    const size = store.get('penSize', 'small');
+    return { size, maxPets: penLimits[size] || 3 };
+}
+
+function broadcastPenUpdate() {
+    const info = getPenInfo();
+    BrowserWindow.getAllWindows().forEach(w => {
+        if (w.webContents) w.webContents.send('pen-updated', info);
+    });
+}
+
 app.whenReady().then(() => {
     console.log('Aplicativo iniciado');
     windowManager.createStartWindow();
@@ -700,7 +714,13 @@ ipcMain.on('resize-journey-window', (event, size) => {
 
 ipcMain.on('buy-item', async (event, item) => {
     if (!currentPet) return;
-    const prices = { healthPotion: 10, meat: 5, staminaPotion: 8 };
+    const prices = {
+        healthPotion: 10,
+        meat: 5,
+        staminaPotion: 8,
+        terrainMedium: 100,
+        terrainLarge: 200
+    };
     const price = prices[item];
     if (price === undefined) return;
     if ((currentPet.coins || 0) < price) {
@@ -711,8 +731,20 @@ ipcMain.on('buy-item', async (event, item) => {
     }
 
     currentPet.coins -= price;
-    if (!currentPet.items) currentPet.items = {};
-    currentPet.items[item] = (currentPet.items[item] || 0) + 1;
+
+    if (item === 'terrainMedium' || item === 'terrainLarge') {
+        const current = store.get('penSize', 'small');
+        if (item === 'terrainMedium' && current === 'small') {
+            store.set('penSize', 'medium');
+            broadcastPenUpdate();
+        } else if (item === 'terrainLarge' && current !== 'large') {
+            store.set('penSize', 'large');
+            broadcastPenUpdate();
+        }
+    } else {
+        if (!currentPet.items) currentPet.items = {};
+        currentPet.items[item] = (currentPet.items[item] || 0) + 1;
+    }
 
     try {
         await petManager.updatePet(currentPet.petId, {
@@ -947,6 +979,10 @@ ipcMain.handle('get-mute-state', async () => {
     const isMuted = store.get('isMuted', false);
     console.log('Estado de mute retornado:', isMuted);
     return isMuted;
+});
+
+ipcMain.handle('get-pen-info', async () => {
+    return getPenInfo();
 });
 
 ipcMain.on('set-mute-state', (event, isMuted) => {
