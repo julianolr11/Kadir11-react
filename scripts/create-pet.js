@@ -286,8 +286,9 @@ function showNameSelection(element) {
         // Lidar com erro de criação
         window.electronAPI.on('create-pet-error', (event, error) => {
             console.error('Erro ao criar o pet:', error);
-            if (typeof error === 'string' && error.includes('Limite de 10 pets')) {
-                alert('Você já possui 10 pets. Exclua um pet para criar outro.');
+            const match = /Limite de (\d+) pets/.exec(error);
+            if (match) {
+                alert(`Você já possui ${match[1]} pets. Exclua um pet para criar outro.`);
             } else {
                 alert('Erro ao criar o pet. Tente novamente.');
             }

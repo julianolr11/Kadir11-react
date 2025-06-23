@@ -19,5 +19,19 @@
     "icon": "Assets/Shop/stamina-potion.png",
     "description": "Recupera 20 pontos de energia.",
     "effect": "Recupera 20 pontos de energia."
+  },
+  {
+    "id": "terrainMedium",
+    "name": "Terreno Médio",
+    "icon": "assets/tileset/tileset.png",
+    "description": "Expande o cercado para 5x4 tiles internos (até 6 pets).",
+    "effect": "Expande o cercado para 5x4 tiles internos"
+  },
+  {
+    "id": "terrainLarge",
+    "name": "Terreno Grande",
+    "icon": "assets/tileset/tileset.png",
+    "description": "Expande o cercado para 7x5 tiles internos (até 10 pets).",
+    "effect": "Expande o cercado para 7x5 tiles internos"
   }
 ]

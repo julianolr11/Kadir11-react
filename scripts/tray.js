@@ -54,6 +54,43 @@ function setImageWithFallback(imgElement, relativePath) {
     const hungerWarning = document.getElementById('hunger-warning');
     const happinessWarning = document.getElementById('happiness-warning');
     const battleAlert = document.getElementById('battle-alert');
+    const penCanvas = document.getElementById('pen-canvas');
+    const penCtx = penCanvas ? penCanvas.getContext('2d') : null;
+    const tileset = new Image();
+    tileset.src = 'assets/tileset/tileset.png';
+    let penInfo = { size: 'small', maxPets: 3 };
+    const sizeMap = { small: { w: 4, h: 3 }, medium: { w: 5, h: 4 }, large: { w: 7, h: 5 } };
+
+    function drawPen() {
+        if (!penCtx || !tileset.complete) return;
+        const dims = sizeMap[penInfo.size] || sizeMap.small;
+        const w = (dims.w + 2) * 32;
+        const h = (dims.h + 2) * 32;
+        penCanvas.width = w;
+        penCanvas.height = h;
+        penCtx.clearRect(0,0,w,h);
+        for (let y=0; y<dims.h+2; y++) {
+            for (let x=0; x<dims.w+2; x++) {
+                let sx=32, sy=32;
+                if (x===0 && y===0) { sx=0; sy=0; }
+                else if (x===dims.w+1 && y===0) { sx=64; sy=0; }
+                else if (x===0 && y===dims.h+1) { sx=0; sy=64; }
+                else if (x===dims.w+1 && y===dims.h+1) { sx=64; sy=64; }
+                else if (y===0) { sx=32; sy=0; }
+                else if (y===dims.h+1) { sx=32; sy=64; }
+                else if (x===0) { sx=0; sy=32; }
+                else if (x===dims.w+1) { sx=64; sy=32; }
+                penCtx.drawImage(tileset, sx, sy, 32, 32, x*32, y*32, 32, 32);
+            }
+        }
+    }
+
+    tileset.onload = drawPen;
+
+    if (window.electronAPI && window.electronAPI.getPenInfo) {
+        window.electronAPI.getPenInfo().then(info => { penInfo = info; drawPen(); });
+        window.electronAPI.on('pen-updated', (e, info) => { penInfo = info; drawPen(); });
+    }
     
     // Verificar se os elementos de alerta existem
     if (!hungerWarning || !happinessWarning || !battleAlert) {

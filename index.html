@@ -39,6 +39,15 @@
             justify-content: end;
         }
 
+        #pen-canvas {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            image-rendering: pixelated;
+            z-index: 0;
+        }
+
         .pet-image-container {
             position: relative;
             width: 160px;
@@ -323,6 +332,7 @@
         <div class="toggle-container">
             <div class="toggle-switch"></div>
         </div>
+        <canvas id="pen-canvas" width="192" height="160"></canvas>
         <div class="pet-image-container">
             <div class="pet-image-background"></div>
             <div class="pet-image-texture"></div>
