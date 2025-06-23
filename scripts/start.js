@@ -64,14 +64,29 @@ if (backgroundMusic && muteButton) {
 }
 
 // Eventos dos botões
+const limitOverlay = document.getElementById('limit-overlay');
+const limitOkBtn = document.getElementById('limit-ok');
+
 document.getElementById('start-button').addEventListener('click', () => {
     console.log('Botão Iniciar clicado');
     if (window.electronAPI) {
-        console.log('Enviando open-create-pet-window');
-        window.electronAPI.send('open-create-pet-window');
+        window.electronAPI.listPets().then(pets => {
+            if (pets.length >= 10) {
+                if (limitOverlay) limitOverlay.style.display = 'flex';
+            } else {
+                console.log('Enviando open-create-pet-window');
+                window.electronAPI.send('open-create-pet-window');
+            }
+        }).catch(err => {
+            console.error('Erro ao listar pets:', err);
+        });
     } else {
         console.error('electronAPI não está disponível para enviar open-create-pet-window');
     }
+});
+
+limitOkBtn?.addEventListener('click', () => {
+    if (limitOverlay) limitOverlay.style.display = 'none';
 });
 
 document.getElementById('load-button').addEventListener('click', () => {

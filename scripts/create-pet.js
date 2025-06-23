@@ -286,7 +286,11 @@ function showNameSelection(element) {
         // Lidar com erro de criação
         window.electronAPI.on('create-pet-error', (event, error) => {
             console.error('Erro ao criar o pet:', error);
-            alert('Erro ao criar o pet. Tente novamente.');
+            if (typeof error === 'string' && error.includes('Limite de 10 pets')) {
+                alert('Você já possui 10 pets. Exclua um pet para criar outro.');
+            } else {
+                alert('Erro ao criar o pet. Tente novamente.');
+            }
             document.getElementById('create-pet-button').disabled = false;
             document.getElementById('name-selection').style.display = 'block';
         });
