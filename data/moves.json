@@ -285,5 +285,16 @@
     "effect": "congelamento e sangramento",
     "cost": 25,
     "level": 7
+  },
+  {
+    "name": "Chamas da Fênix",
+    "description": "Explosão de fogo renascente típica das aves de fogo que deixa o inimigo queimado.",
+    "rarity": "Raro",
+    "elements": ["fogo"],
+    "species": ["Ave"],
+    "power": 26,
+    "effect": "queimado",
+    "cost": 20,
+    "level": 5
   }
 ]
