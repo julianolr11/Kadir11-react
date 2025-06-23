@@ -20,11 +20,22 @@
             align-items: center;
         }
 
-        .pet-list {
+        .list-pen-wrapper {
             width: 100%;
+            height: 100%;
+            display: flex;
+            gap: 10px;
+        }
+
+        .pet-list {
+            flex: 1;
             overflow-y: scroll;
             padding: 0px 7px;
             height: -webkit-fill-available;
+        }
+
+        #pen-canvas {
+            image-rendering: pixelated;
         }
 
         .pet-item {
@@ -234,7 +245,10 @@
     <div class="window">
         <div class="load-pet-container">
             <h2>Selecione um Pet</h2>
-            <div class="pet-list" id="pet-list"></div>
+            <div class="list-pen-wrapper">
+                <div class="pet-list" id="pet-list"></div>
+                <canvas id="pen-canvas" width="192" height="160"></canvas>
+            </div>
             <button class="button" id="back-button">Voltar</button>
         </div>
     </div>
@@ -251,7 +265,7 @@
 
     <div id="limit-overlay">
         <div id="limit-box">
-            <p>Você atingiu o limite de 10 pets. Exclua um pet para criar outro.</p>
+            <p id="limit-message">Você atingiu o limite de 3 pets. Exclua um pet para criar outro.</p>
             <div class="confirm-buttons">
                 <button class="button small-button" id="limit-ok">OK</button>
             </div>
@@ -268,6 +282,55 @@
         const limitOverlay = document.getElementById('limit-overlay');
         const limitOkBtn = document.getElementById('limit-ok');
         let petIdToDelete = null;
+        let petLimit = 3;
+
+        const penCanvas = document.getElementById('pen-canvas');
+        const penCtx = penCanvas ? penCanvas.getContext('2d') : null;
+        const tileset = new Image();
+        tileset.src = 'assets/tileset/tileset.png';
+        let penInfo = { size: 'small', maxPets: 3 };
+        const sizeMap = { small: { w: 4, h: 3 }, medium: { w: 5, h: 4 }, large: { w: 7, h: 5 } };
+
+        function drawPen() {
+            if (!penCtx || !tileset.complete) return;
+            const dims = sizeMap[penInfo.size] || sizeMap.small;
+            const w = (dims.w + 2) * 32;
+            const h = (dims.h + 2) * 32;
+            penCanvas.width = w;
+            penCanvas.height = h;
+            penCtx.clearRect(0,0,w,h);
+            for (let y=0; y<dims.h+2; y++) {
+                for (let x=0; x<dims.w+2; x++) {
+                    let sx=32, sy=32;
+                    if (x===0 && y===0) { sx=0; sy=0; }
+                    else if (x===dims.w+1 && y===0) { sx=64; sy=0; }
+                    else if (x===0 && y===dims.h+1) { sx=0; sy=64; }
+                    else if (x===dims.w+1 && y===dims.h+1) { sx=64; sy=64; }
+                    else if (y===0) { sx=32; sy=0; }
+                    else if (y===dims.h+1) { sx=32; sy=64; }
+                    else if (x===0) { sx=0; sy=32; }
+                    else if (x===dims.w+1) { sx=64; sy=32; }
+                    penCtx.drawImage(tileset, sx, sy, 32, 32, x*32, y*32, 32, 32);
+                }
+            }
+        }
+
+        tileset.onload = drawPen;
+
+        if (window.electronAPI && window.electronAPI.getPenInfo) {
+            window.electronAPI.getPenInfo().then(info => {
+                penInfo = info;
+                petLimit = info.maxPets;
+                const msg = document.getElementById('limit-message');
+                if (msg) msg.textContent = `Você atingiu o limite de ${petLimit} pets. Exclua um pet para criar outro.`;
+                drawPen();
+            });
+            window.electronAPI.on('pen-updated', (e, info) => {
+                penInfo = info;
+                petLimit = info.maxPets;
+                drawPen();
+            });
+        }
         // Função para formatar a data
         function formatDate(isoString) {
             const date = new Date(isoString);
@@ -297,7 +360,7 @@
             petList.innerHTML = ''; // Limpar a lista atual
             window.electronAPI.listPets().then(pets => {
                 if (limitOverlay) {
-                    if (pets.length >= 10) {
+                    if (pets.length >= petLimit) {
                         limitOverlay.style.display = 'flex';
                     } else {
                         limitOverlay.style.display = 'none';
