@@ -25,6 +25,7 @@
             height: 100%;
             display: flex;
             gap: 10px;
+            align-items: flex-start;
         }
 
         .pet-list {
@@ -36,6 +37,9 @@
 
         #pen-canvas {
             image-rendering: pixelated;
+            max-width: 45%;
+            height: auto;
+            flex-shrink: 0;
         }
 
         .pet-item {
