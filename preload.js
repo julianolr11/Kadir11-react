@@ -52,7 +52,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'show-store-error',
             'pet-created', // Novo canal pra receber a confirmação do pet criado
             'scene-data',
-            'fade-out-start-music' // Sinalizar o fade-out da música de start
+            'fade-out-start-music', // Sinalizar o fade-out da música de start
+            'pen-updated'
         ];
         if (validChannels.includes(channel)) {
             console.log(`Registrando listener para o canal: ${channel}`);
@@ -96,6 +97,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getJourneyImages: () => {
         console.log('Enviando get-journey-images');
         return ipcRenderer.invoke('get-journey-images');
+    },
+    getPenInfo: () => {
+        console.log('Enviando get-pen-info');
+        return ipcRenderer.invoke('get-pen-info');
     }
 });
 
