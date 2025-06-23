@@ -198,6 +198,35 @@
             justify-content: center;
             gap: 10px;
         }
+
+        /* Modal de limite de pets */
+        #limit-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+
+        #limit-box {
+            background-color: #2a323e;
+            border: 2px solid #ffffff;
+            border-radius: 7px;
+            padding: 20px;
+            text-align: center;
+            font-family: 'PixelOperator', sans-serif;
+        }
+
+        #limit-box .confirm-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
     </style>
 </head>
 
@@ -220,6 +249,15 @@
         </div>
     </div>
 
+    <div id="limit-overlay">
+        <div id="limit-box">
+            <p>Você atingiu o limite de 10 pets. Exclua um pet para criar outro.</p>
+            <div class="confirm-buttons">
+                <button class="button small-button" id="limit-ok">OK</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { rarityGradients } from './scripts/constants.js';
 
@@ -227,6 +265,8 @@
         const deleteMessage = document.getElementById('delete-confirm-message');
         const confirmDeleteBtn = document.getElementById('delete-confirm-yes');
         const cancelDeleteBtn = document.getElementById('delete-confirm-no');
+        const limitOverlay = document.getElementById('limit-overlay');
+        const limitOkBtn = document.getElementById('limit-ok');
         let petIdToDelete = null;
         // Função para formatar a data
         function formatDate(isoString) {
@@ -256,6 +296,13 @@
             const petList = document.getElementById('pet-list');
             petList.innerHTML = ''; // Limpar a lista atual
             window.electronAPI.listPets().then(pets => {
+                if (limitOverlay) {
+                    if (pets.length >= 10) {
+                        limitOverlay.style.display = 'flex';
+                    } else {
+                        limitOverlay.style.display = 'none';
+                    }
+                }
                 pets.forEach(pet => {
                     const petItem = document.createElement('div');
                     petItem.className = 'pet-item';
@@ -311,6 +358,10 @@
                     petIdToDelete = null;
                 });
             }
+        });
+
+        limitOkBtn?.addEventListener('click', () => {
+            if (limitOverlay) limitOverlay.style.display = 'none';
         });
 
         // Cancelar exclusão

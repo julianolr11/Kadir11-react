@@ -77,6 +77,13 @@ async function createPet(petData) {
     await ensurePetsDir();
     await loadPetCounter();
 
+    // Verificar limite máximo de pets (10)
+    const files = await fs.readdir(petsDir);
+    const petFiles = files.filter(file => file.startsWith('pet_') && file.endsWith('.json'));
+    if (petFiles.length >= 10) {
+        throw new Error('Limite de 10 pets atingido');
+    }
+
     petCounter++;
     const petId = petCounter.toString().padStart(6, '0');
     const petFileName = `pet_${petId}.json`;
