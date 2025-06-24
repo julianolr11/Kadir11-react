@@ -227,7 +227,7 @@ function setImageWithFallback(imgElement, relativePath) {
     console.log('Abrir Status');
     window.electronAPI.send('open-status-window');
     } else if (action === 'load-pet') {
-    console.log('Mudar de Pet');
+    console.log('Abrir Pets');
     window.electronAPI.send('open-load-pet-window');
     } else if (action === 'exit') {
     console.log('Sair');
