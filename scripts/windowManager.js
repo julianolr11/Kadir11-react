@@ -213,7 +213,7 @@ class WindowManager {
         const preloadPath = path.join(__dirname, '..', 'preload.js');
         this.loadPetWindow = new BrowserWindow({
             width: 600,
-            height: 600,
+            height: 430,
             frame: false,
             transparent: true,
             resizable: false,
