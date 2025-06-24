@@ -66,14 +66,9 @@ if (backgroundMusic && muteButton) {
 // Eventos dos botões
 const limitOverlay = document.getElementById('limit-overlay');
 const limitOkBtn = document.getElementById('limit-ok');
-let petLimit = 3;
-if (window.electronAPI && window.electronAPI.getPenInfo) {
-    window.electronAPI.getPenInfo().then(info => {
-        petLimit = info.maxPets;
-        const msg = document.getElementById('limit-message');
-        if (msg) msg.textContent = `Você atingiu o limite de ${petLimit} pets. Exclua um pet para criar outro.`;
-    });
-}
+const petLimit = 1;
+const msg = document.getElementById('limit-message');
+if (msg) msg.textContent = 'Você já possui um pet. Exclua-o para criar outro.';
 
 document.getElementById('start-button').addEventListener('click', () => {
     console.log('Botão Iniciar clicado');
