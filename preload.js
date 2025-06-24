@@ -56,7 +56,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'pet-created', // Novo canal pra receber a confirmação do pet criado
             'scene-data',
             'fade-out-start-music', // Sinalizar o fade-out da música de start
-            'pen-updated'
+            'pen-updated',
+            'nest-updated'
         ];
         if (validChannels.includes(channel)) {
             console.log(`Registrando listener para o canal: ${channel}`);
@@ -108,6 +109,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getPenInfo: () => {
         console.log('Enviando get-pen-info');
         return ipcRenderer.invoke('get-pen-info');
+    },
+    getNestCount: () => {
+        console.log('Enviando get-nest-count');
+        return ipcRenderer.invoke('get-nest-count');
+    },
+    getNestPrice: () => {
+        console.log('Enviando get-nest-price');
+        return ipcRenderer.invoke('get-nest-price');
     }
 });
 
