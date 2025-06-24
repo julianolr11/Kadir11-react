@@ -23,6 +23,28 @@ document.addEventListener('DOMContentLoaded', () => {
         if (eventModal) eventModal.style.display = 'none';
     });
 
+    const petMarker = document.getElementById('pet-thumbnail');
+    let currentPet = null;
+
+    function setImageWithFallback(imgElement, relativePath) {
+        if (!imgElement) return;
+        if (!relativePath) {
+            imgElement.src = 'Assets/Mons/eggsy.png';
+            return;
+        }
+        const gifSrc = relativePath.endsWith('.gif') ? `Assets/Mons/${relativePath}` : null;
+        const pngSrc = gifSrc ? gifSrc.replace(/\.gif$/i, '.png') : `Assets/Mons/${relativePath}`;
+        imgElement.onerror = () => {
+            if (gifSrc && imgElement.src.endsWith('.gif')) {
+                imgElement.src = pngSrc;
+            } else if (!imgElement.src.endsWith('eggsy.png')) {
+                imgElement.onerror = null;
+                imgElement.src = 'Assets/Mons/eggsy.png';
+            }
+        };
+        imgElement.src = gifSrc || pngSrc;
+    }
+
     let itemsData = [];
     fetch('data/items.json').then(r => r.json()).then(d => { itemsData = d; }).catch(() => {});
 
@@ -116,10 +138,20 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPoint = route[currentIndex];
     if (currentPoint) currentPoint.classList.add('current');
 
+    function positionPetMarker() {
+        if (!petMarker || !currentPoint) return;
+        const x = parseInt(currentPoint.style.left, 10) || 0;
+        const y = parseInt(currentPoint.style.top, 10) || 0;
+        petMarker.style.left = `${x + 18}px`;
+        petMarker.style.top = `${y - 18}px`;
+    }
+    positionPetMarker();
+
     function setCurrent(point) {
         if (currentPoint) currentPoint.classList.remove('current');
         currentPoint = point;
         if (currentPoint) currentPoint.classList.add('current');
+        positionPetMarker();
     }
 
     function advancePoint() {
@@ -176,5 +208,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+    });
+
+    window.electronAPI?.on('pet-data', (event, data) => {
+        if (!data) return;
+        currentPet = data;
+        if (petMarker) {
+            setImageWithFallback(petMarker, currentPet.statusImage || currentPet.image);
+            petMarker.style.display = 'block';
+            positionPetMarker();
+        }
     });
 });
