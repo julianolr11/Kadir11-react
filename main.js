@@ -96,7 +96,13 @@ ipcMain.on('open-load-pet-window', () => {
     console.log('Recebido open-load-pet-window');
     // Não fechar todas as janelas para permitir voltar
     // à tela anterior (start ou index) ao sair da seleção
-    windowManager.createLoadPetWindow();
+    const loadWin = windowManager.createLoadPetWindow();
+    const penWin = windowManager.penWindow;
+    if (loadWin && penWin) {
+        windowManager.centerWindowsSideBySide(loadWin, penWin);
+    } else if (loadWin) {
+        windowManager.centerWindow(loadWin);
+    }
 });
 
 ipcMain.on("open-pen-window", () => {
