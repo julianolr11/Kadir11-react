@@ -10,6 +10,21 @@ function assetPath(relative) {
     return `Assets/Mons/${cleaned}`;
 }
 
+function imageExists(src) {
+    return new Promise(resolve => {
+        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
+        img.src = src;
+    });
+}
+
+async function computeAttackSrc(idleRelative) {
+    if (!idleRelative) return '';
+    const candidate = assetPath(idleRelative.replace(/idle\.gif$/i, 'attack.gif'));
+    return (await imageExists(candidate)) ? candidate : assetPath(idleRelative);
+}
+
 let pet = null;
 let itemsInfo = {};
 let statusEffectsInfo = {};
@@ -362,16 +377,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     runBtn?.addEventListener('click', attemptFlee);
 
-    window.electronAPI.on('scene-data', (event, data) => {
+    window.electronAPI.on('scene-data', async (event, data) => {
         if (data.background && bg) bg.src = data.background;
         if (data.playerPet && player) {
             playerIdleSrc = assetPath(data.playerPet);
-            playerAttackSrc = assetPath(data.playerPet.replace(/idle\.gif$/i, 'attack.gif'));
+            playerAttackSrc = await computeAttackSrc(data.playerPet);
             player.src = playerIdleSrc;
         }
         if (data.enemyPet && enemy) {
             enemyIdleSrc = assetPath(data.enemyPet);
-            enemyAttackSrc = assetPath(data.enemyPet.replace(/idle\.gif$/i, 'attack.gif'));
+            enemyAttackSrc = await computeAttackSrc(data.enemyPet);
             enemy.src = enemyIdleSrc;
         }
 
