@@ -37,7 +37,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'kadirfull',
             'battle-result',
             'animation-finished', // Novo canal pra sinalizar o fim da animação
-            'close-start-window'  // Fechar a janela de start
+            'close-start-window',  // Fechar a janela de start
+            'open-start-window'   // Abrir a janela de start
         ];
         if (validChannels.includes(channel)) {
             console.log(`Enviando canal IPC: ${channel}`, data);
@@ -91,6 +92,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     closeCreatePetWindow: () => {
         console.log('Enviando close-create-pet-window');
         ipcRenderer.send('close-create-pet-window');
+    },
+    openStartWindow: () => {
+        console.log('Enviando open-start-window');
+        ipcRenderer.send('open-start-window');
     },
     getMuteState: () => {
         console.log('Enviando get-mute-state');

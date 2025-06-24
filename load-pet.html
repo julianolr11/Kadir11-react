@@ -433,9 +433,16 @@
         confirmDeleteBtn.addEventListener('click', () => {
             if (petIdToDelete !== null) {
                 window.electronAPI.deletePet(petIdToDelete).then(() => {
-                    reloadPetList();
-                    deleteOverlay.style.display = 'none';
-                    petIdToDelete = null;
+                    window.electronAPI.listPets().then(pets => {
+                        deleteOverlay.style.display = 'none';
+                        petIdToDelete = null;
+                        if (pets.length === 0) {
+                            window.electronAPI.send('close-load-pet-window');
+                            window.electronAPI.openStartWindow();
+                        } else {
+                            reloadPetList();
+                        }
+                    });
                 });
             }
         });
