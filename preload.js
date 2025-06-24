@@ -9,6 +9,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'exit-app',
             'open-create-pet-window',
             'open-load-pet-window',
+            'open-pen-window',
+            'close-pen-window',
             'close-create-pet-window',
             'close-load-pet-window',
             'create-pet',
