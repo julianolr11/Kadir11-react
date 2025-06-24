@@ -11,6 +11,24 @@
             height: 100%;
             margin: 0;
         }
+
+        #pets-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform: scale(1.5);
+            transform-origin: top left;
+            pointer-events: none;
+        }
+
+        .pet-sprite {
+            position: absolute;
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated;
+        }
         .pen-container {
             position: relative;
             width: 100%;
@@ -55,6 +73,7 @@
     <div class="pen-container">
         <div id="back-pen-window">↩</div>
         <canvas id="pen-canvas" width="192" height="160"></canvas>
+        <div id="pets-layer"></div>
     </div>
     <script type="module" src="scripts/pen.js"></script>
 </body>

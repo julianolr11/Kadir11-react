@@ -1,4 +1,5 @@
 const penCanvas = document.getElementById('pen-canvas');
+const petsLayer = document.getElementById('pets-layer');
 const penCtx = penCanvas ? penCanvas.getContext('2d') : null;
 const tileset = new Image();
 tileset.src = 'assets/tileset/tileset.png';
@@ -71,8 +72,8 @@ function render() {
     if (!penCtx) return;
     drawPen();
     sprites.forEach(sp => {
-        if (sp.img.complete)
-            penCtx.drawImage(sp.img, sp.x, sp.y, 32, 32);
+        sp.img.style.left = sp.x + 'px';
+        sp.img.style.top = sp.y + 'px';
     });
 }
 
@@ -85,16 +86,19 @@ function animate(timestamp) {
 }
 
 function drawPets(pets) {
-    if (!penCtx) return;
+    if (!penCtx || !petsLayer) return;
     const dims = sizeMap[penInfo.size] || sizeMap.small;
     sprites = [];
+    petsLayer.innerHTML = '';
     if (animationId) cancelAnimationFrame(animationId);
     pets.forEach((pet) => {
-        const img = new Image();
+        const img = document.createElement('img');
         const src = pet.idleImage ? `Assets/Mons/${pet.idleImage}` :
             (pet.statusImage ? `Assets/Mons/${pet.statusImage}` :
                 (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png'));
         img.src = src;
+        img.className = 'pet-sprite';
+        petsLayer.appendChild(img);
         const col = Math.floor(Math.random() * dims.w);
         const row = Math.floor(Math.random() * dims.h);
         const x = (col + 1) * 32;
