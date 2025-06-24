@@ -62,4 +62,9 @@ function loadPen() {
 }
 
 window.electronAPI?.on('pen-updated', () => loadPen());
-window.addEventListener('DOMContentLoaded', loadPen);
+window.addEventListener('DOMContentLoaded', () => {
+    loadPen();
+    document.getElementById('back-pen-window')?.addEventListener('click', () => {
+        window.electronAPI?.send('close-pen-window');
+    });
+});
