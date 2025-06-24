@@ -172,6 +172,10 @@ ipcMain.on('animation-finished', () => {
 ipcMain.handle('list-pets', async () => {
     console.log('Recebido list-pets');
     const pets = await petManager.listPets();
+    pets.forEach(pet => {
+        const basePath = pet.statusImage || pet.image;
+        pet.idleImage = resolveIdleGif(basePath);
+    });
     console.log('Pets retornados:', pets);
     return pets;
 });

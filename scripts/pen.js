@@ -91,7 +91,9 @@ function drawPets(pets) {
     if (animationId) cancelAnimationFrame(animationId);
     pets.forEach((pet) => {
         const img = new Image();
-        const src = pet.statusImage ? `Assets/Mons/${pet.statusImage}` : (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png');
+        const src = pet.idleImage ? `Assets/Mons/${pet.idleImage}` :
+            (pet.statusImage ? `Assets/Mons/${pet.statusImage}` :
+                (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png'));
         img.src = src;
         const col = Math.floor(Math.random() * dims.w);
         const row = Math.floor(Math.random() * dims.h);
