@@ -1,6 +1,7 @@
 let pet = null;
 let itemsInfo = {};
 let descriptionEl = null;
+let nestPriceEl = null;
 
 function showDescription(html, evt) {
     if (!descriptionEl) return;
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     descriptionEl = document.getElementById('store-item-description');
+    nestPriceEl = document.querySelector('.store-item[data-item="nest"] .item-price');
     loadItemsInfo();
 
     document.getElementById('open-items-button')?.addEventListener('click', () => {
@@ -57,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
             alert(message);
         }
     });
+
+    updateNestPrice();
+    window.electronAPI.on('nest-updated', updateNestPrice);
 });
 
 async function loadItemsInfo() {
@@ -86,5 +91,12 @@ function setupHover() {
             }
         });
         div.addEventListener('mouseleave', hideDescription);
+    });
+}
+
+function updateNestPrice() {
+    if (!nestPriceEl || !window.electronAPI.getNestPrice) return;
+    window.electronAPI.getNestPrice().then(price => {
+        nestPriceEl.textContent = `${price} moedas`;
     });
 }

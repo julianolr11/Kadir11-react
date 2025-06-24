@@ -1,5 +1,6 @@
 const penCanvas = document.getElementById('pen-canvas');
 const petsLayer = document.getElementById('pets-layer');
+const nestsContainer = document.getElementById('nests-container');
 const penCtx = penCanvas ? penCanvas.getContext('2d') : null;
 const tileset = new Image();
 tileset.src = 'assets/tileset/tileset.png';
@@ -36,6 +37,18 @@ function drawPen() {
 }
 
 tileset.onload = drawPen;
+
+function drawNests(count) {
+    if (!nestsContainer) return;
+    nestsContainer.innerHTML = '';
+    const n = Math.min(3, count || 0);
+    for (let i = 0; i < n; i++) {
+        const img = document.createElement('img');
+        img.src = 'Assets/tileset/nest.png';
+        img.className = 'nest-image';
+        nestsContainer.appendChild(img);
+    }
+}
 
 function updateSprites(dt) {
     const dims = sizeMap[penInfo.size] || sizeMap.small;
@@ -122,9 +135,17 @@ function loadPen() {
     }
 }
 
+function loadNests() {
+    if (window.electronAPI && window.electronAPI.getNestCount) {
+        window.electronAPI.getNestCount().then(drawNests);
+    }
+}
+
 window.electronAPI?.on('pen-updated', () => loadPen());
+window.electronAPI?.on('nest-updated', (e, count) => drawNests(count));
 window.addEventListener('DOMContentLoaded', () => {
     loadPen();
+    loadNests();
     document.getElementById('back-pen-window')?.addEventListener('click', () => {
         window.electronAPI?.send('close-pen-window');
     });

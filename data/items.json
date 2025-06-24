@@ -33,5 +33,12 @@
     "icon": "assets/tileset/tileset.png",
     "description": "Expande o cercado para 7x5 tiles internos (até 10 pets).",
     "effect": "Expande o cercado para 7x5 tiles internos"
+  },
+  {
+    "id": "nest",
+    "name": "Ninho",
+    "icon": "Assets/tileset/nest.png",
+    "description": "Adiciona um ninho ao cercado (máx. 3).",
+    "effect": "Permite chocar ovos"
   }
 ]

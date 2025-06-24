@@ -47,6 +47,21 @@ function broadcastPenUpdate() {
     });
 }
 
+function getNestCount() {
+    return store.get('nestCount', 0);
+}
+
+function getNestPrice() {
+    return 50 * Math.pow(2, getNestCount());
+}
+
+function broadcastNestUpdate() {
+    const count = getNestCount();
+    BrowserWindow.getAllWindows().forEach(w => {
+        if (w.webContents) w.webContents.send('nest-updated', count);
+    });
+}
+
 app.whenReady().then(() => {
     console.log('Aplicativo iniciado');
     windowManager.createStartWindow();
@@ -753,13 +768,26 @@ ipcMain.on('buy-item', async (event, item) => {
         terrainMedium: 100,
         terrainLarge: 200
     };
-    const price = prices[item];
+    let price = prices[item];
+    if (item === 'nest') {
+        price = getNestPrice();
+    }
     if (price === undefined) return;
     if ((currentPet.coins || 0) < price) {
         BrowserWindow.getAllWindows().forEach(w => {
             if (w.webContents) w.webContents.send('show-store-error', 'Moedas insuficientes!');
         });
         return;
+    }
+
+    if (item === 'nest') {
+        const count = getNestCount();
+        if (count >= 3) {
+            BrowserWindow.getAllWindows().forEach(w => {
+                if (w.webContents) w.webContents.send('show-store-error', 'Limite de ninhos atingido!');
+            });
+            return;
+        }
     }
 
     currentPet.coins -= price;
@@ -773,6 +801,9 @@ ipcMain.on('buy-item', async (event, item) => {
             store.set('penSize', 'large');
             broadcastPenUpdate();
         }
+    } else if (item === 'nest') {
+        store.set('nestCount', getNestCount() + 1);
+        broadcastNestUpdate();
     } else {
         if (!currentPet.items) currentPet.items = {};
         currentPet.items[item] = (currentPet.items[item] || 0) + 1;
@@ -1015,6 +1046,14 @@ ipcMain.handle('get-mute-state', async () => {
 
 ipcMain.handle('get-pen-info', async () => {
     return getPenInfo();
+});
+
+ipcMain.handle('get-nest-count', async () => {
+    return getNestCount();
+});
+
+ipcMain.handle('get-nest-price', async () => {
+    return getNestPrice();
 });
 
 ipcMain.on('set-mute-state', (event, isMuted) => {
