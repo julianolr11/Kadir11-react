@@ -99,14 +99,31 @@ ipcMain.on('open-load-pet-window', () => {
     windowManager.createLoadPetWindow();
 });
 
+ipcMain.on("open-pen-window", () => {
+    console.log("Recebido open-pen-window");
+    const penWin = windowManager.createPenWindow();
+    const loadWin = windowManager.loadPetWindow;
+    if (penWin && loadWin) {
+        windowManager.centerWindowsSideBySide(loadWin, penWin);
+    } else if (penWin) {
+        windowManager.centerWindow(penWin);
+    }
+});
+
 ipcMain.on('close-create-pet-window', () => {
     console.log('Recebido close-create-pet-window');
     windowManager.closeCreatePetWindow();
 });
 
-ipcMain.on('close-load-pet-window', () => {
-    console.log('Recebido close-load-pet-window');
+ipcMain.on("close-load-pet-window", () => {
+    console.log("Recebido close-load-pet-window");
     windowManager.closeLoadPetWindow();
+    windowManager.closePenWindow();
+});
+
+ipcMain.on("close-pen-window", () => {
+    console.log("Recebido close-pen-window");
+    windowManager.closePenWindow();
 });
 
 ipcMain.on('close-start-window', () => {

@@ -86,6 +86,19 @@ function centerWindowAnimated(win) {
     const targetY = Math.round((screenHeight - bounds.height) / 2);
     animateMove(win, targetX, targetY);
 }
+function centerSideBySide(winLeft, winRight) {
+    if (!winLeft || !winRight) return;
+    const display = screen.getPrimaryDisplay();
+    const { width: screenWidth, height: screenHeight } = display.workAreaSize;
+    const b1 = winLeft.getBounds();
+    const b2 = winRight.getBounds();
+    const totalW = b1.width + b2.width;
+    const startX = Math.round((screenWidth - totalW) / 2);
+    const startY = Math.round((screenHeight - Math.max(b1.height, b2.height)) / 2);
+    animateMove(winLeft, startX, startY);
+    animateMove(winRight, startX + b1.width, startY);
+}
+
 
 class WindowManager {
     constructor() {
@@ -94,6 +107,7 @@ class WindowManager {
         this.loadPetWindow = null;
         this.trayWindow = null;
         this.statusWindow = null;
+        this.penWindow = null;
     }
 
     attachFadeHandlers(win) {
@@ -102,6 +116,10 @@ class WindowManager {
 
     centerWindow(win) {
         centerWindowAnimated(win);
+    }
+
+    centerWindowsSideBySide(winLeft, winRight) {
+        centerSideBySide(winLeft, winRight);
     }
 
     // Criar a janela inicial (start.html)
@@ -309,6 +327,44 @@ class WindowManager {
 
         return this.statusWindow;
     }
+    // Criar a janela do cercado (pen.html)
+    createPenWindow() {
+        if (this.penWindow) {
+            this.penWindow.focus();
+            return this.penWindow;
+        }
+
+        const preloadPath = path.join(__dirname, "..", "preload.js");
+        this.penWindow = new BrowserWindow({
+            width: 300,
+            height: 300,
+            frame: false,
+            transparent: true,
+            resizable: false,
+            show: false,
+            webPreferences: {
+                preload: preloadPath,
+                nodeIntegration: false,
+                contextIsolation: true,
+            },
+        });
+
+        this.penWindow.loadFile("pen.html");
+        attachFadeHandlers(this.penWindow);
+        this.penWindow.on("closed", () => {
+            this.penWindow = null;
+        });
+
+        return this.penWindow;
+    }
+
+    // Fechar a penWindow
+    closePenWindow() {
+        if (this.penWindow) {
+            this.penWindow.close();
+        }
+    }
+
 
     // Fechar a statusWindow
     closeStatusWindow() {
