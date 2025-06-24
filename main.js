@@ -137,6 +137,11 @@ ipcMain.on('close-start-window', () => {
     windowManager.closeStartWindow();
 });
 
+ipcMain.on('open-start-window', () => {
+    console.log('Recebido open-start-window');
+    windowManager.createStartWindow();
+});
+
 ipcMain.on('create-pet', async (event, petData) => {
     console.log('Recebido create-pet com dados:', petData);
     try {
