@@ -12,17 +12,24 @@ let lastTime = 0;
 let animationId = null;
 const MOVE_SPEED = 16; // pixels per second
 
+function getScale(size) {
+    // Pens larger than medium should be displayed slightly smaller
+    return size === 'large' ? 1.2 : 1.5;
+}
+
 function drawPen() {
     if (!penCtx || !tileset.complete) return;
     const dims = sizeMap[penInfo.size] || sizeMap.small;
     const w = (dims.w + 2) * 32;
     const h = (dims.h + 2) * 32;
+    const scale = getScale(penInfo.size);
     penCanvas.width = w;
     penCanvas.height = h;
-    const rect = penCanvas.getBoundingClientRect();
+    penCanvas.style.transform = `scale(${scale})`;
+    if (petsLayer) petsLayer.style.transform = `scale(${scale})`;
     const size = {
-        width: Math.round(rect.width) + 10,
-        height: Math.round(rect.height) + 10
+        width: Math.round(w * scale) + 10,
+        height: Math.round(h * scale) + 10
     };
     window.electronAPI?.send('resize-pen-window', size);
     penCtx.clearRect(0,0,w,h);
