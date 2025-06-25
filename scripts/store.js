@@ -2,6 +2,8 @@ let pet = null;
 let itemsInfo = {};
 let descriptionEl = null;
 let nestPriceEl = null;
+let terrainMediumEl = null;
+let terrainLargeEl = null;
 
 function showDescription(html, evt) {
     if (!descriptionEl) return;
@@ -30,7 +32,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     descriptionEl = document.getElementById('store-item-description');
     nestPriceEl = document.querySelector('.store-item[data-item="nest"] .item-price');
+    terrainMediumEl = document.querySelector('.store-item[data-item="terrainMedium"]');
+    terrainLargeEl = document.querySelector('.store-item[data-item="terrainLarge"]');
     loadItemsInfo();
+
+    updateTerrainVisibility();
+
+    window.electronAPI?.on('pen-updated', (e, info) => {
+        updateTerrainVisibility(info);
+    });
 
     document.getElementById('open-items-button')?.addEventListener('click', () => {
         window.electronAPI.send('itens-pet', { fromStore: true });
@@ -99,4 +109,28 @@ function updateNestPrice() {
     window.electronAPI.getNestPrice().then(price => {
         nestPriceEl.textContent = `${price} moedas`;
     });
+}
+
+function updateTerrainVisibility(info) {
+    if (!terrainMediumEl || !terrainLargeEl) return;
+    const apply = (penSize) => {
+        if (penSize === 'small') {
+            terrainMediumEl.style.display = 'block';
+            terrainLargeEl.style.display = 'none';
+        } else if (penSize === 'medium') {
+            terrainMediumEl.style.display = 'none';
+            terrainLargeEl.style.display = 'block';
+        } else {
+            terrainMediumEl.style.display = 'none';
+            terrainLargeEl.style.display = 'none';
+        }
+    };
+
+    if (info && info.size) {
+        apply(info.size);
+    } else if (window.electronAPI?.getPenInfo) {
+        window.electronAPI.getPenInfo().then(pen => {
+            apply(pen.size);
+        });
+    }
 }
