@@ -1,6 +1,7 @@
 let pet = null;
 let itemsInfo = {};
 let descriptionEl = null;
+let cheatBuffer = '';
 
 function showDescription(text, evt) {
     if (!descriptionEl) return;
@@ -39,6 +40,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const countEl = document.getElementById('coin-count');
         if (countEl) countEl.textContent = pet.coins ?? 0;
         updateItems();
+    });
+
+    document.addEventListener('keydown', (e) => {
+        const key = e.key.toLowerCase();
+        if (key.length === 1 && /[a-z0-9]/.test(key)) {
+            cheatBuffer += key;
+            if (cheatBuffer.length > 7) cheatBuffer = cheatBuffer.slice(-7);
+            if (cheatBuffer === 'kadir11') {
+                cheatBuffer = '';
+                window.electronAPI.send('reward-pet', { coins: 100, kadirPoints: 100 });
+            }
+        }
     });
 });
 
