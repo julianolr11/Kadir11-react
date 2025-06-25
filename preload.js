@@ -29,6 +29,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'open-journey-mode-window',
             'open-journey-scene-window',
             'resize-journey-window',
+            'resize-pen-window',
             'set-mute-state',
             'get-journey-images',
             'reward-pet',

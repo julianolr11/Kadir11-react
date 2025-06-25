@@ -19,6 +19,8 @@ function drawPen() {
     const h = (dims.h + 2) * 32;
     penCanvas.width = w;
     penCanvas.height = h;
+    const displayWidth = penCanvas.getBoundingClientRect().width;
+    window.electronAPI?.send('resize-pen-window', { width: displayWidth });
     penCtx.clearRect(0,0,w,h);
     for (let y=0; y<dims.h+2; y++) {
         for (let x=0; x<dims.w+2; x++) {
