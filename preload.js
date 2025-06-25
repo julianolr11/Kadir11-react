@@ -33,6 +33,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'set-mute-state',
             'get-journey-images',
             'reward-pet',
+            'journey-complete',
+            'place-egg-in-nest',
             'use-move',
             'update-health',
             'kadirfull',
@@ -58,7 +60,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'scene-data',
             'fade-out-start-music', // Sinalizar o fade-out da música de start
             'pen-updated',
-            'nest-updated'
+            'nest-updated',
+            'nests-data-updated'
         ];
         if (validChannels.includes(channel)) {
             console.log(`Registrando listener para o canal: ${channel}`);
@@ -118,6 +121,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getNestPrice: () => {
         console.log('Enviando get-nest-price');
         return ipcRenderer.invoke('get-nest-price');
+    },
+    getNestsData: () => {
+        console.log('Enviando get-nests-data');
+        return ipcRenderer.invoke('get-nests-data');
     }
 });
 

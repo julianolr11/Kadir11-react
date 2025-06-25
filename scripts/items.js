@@ -104,11 +104,19 @@ function updateItems() {
 
         const useBtn = document.createElement('button');
         useBtn.className = 'button small-button use-button';
-        useBtn.textContent = 'Usar';
-        useBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            window.electronAPI.send('use-item', id);
-        });
+        if (id.startsWith('egg')) {
+            useBtn.textContent = 'Chocar';
+            useBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.electronAPI.send('place-egg-in-nest', id);
+            });
+        } else {
+            useBtn.textContent = 'Usar';
+            useBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.electronAPI.send('use-item', id);
+            });
+        }
 
         div.appendChild(img);
         div.appendChild(nameSpan);
