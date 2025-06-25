@@ -32,6 +32,7 @@ let itemsWindow = null;
 let storeWindow = null;
 let journeyImagesCache = null;
 let journeySceneWindow = null;
+let nestsWindow = null;
 
 const penLimits = { small: 3, medium: 6, large: 10 };
 
@@ -123,11 +124,16 @@ ipcMain.on('open-load-pet-window', () => {
 ipcMain.on("open-pen-window", () => {
     console.log("Recebido open-pen-window");
     const penWin = windowManager.createPenWindow();
+    const nestsWin = createNestsWindow();
     const loadWin = windowManager.loadPetWindow;
     if (penWin && loadWin) {
         windowManager.centerWindowsSideBySide(loadWin, penWin);
-    } else if (penWin) {
-        windowManager.centerWindow(penWin);
+        if (nestsWin) {
+            const bounds = penWin.getBounds();
+            nestsWin.setPosition(bounds.x, bounds.y + bounds.height);
+        }
+    } else if (penWin && nestsWin) {
+        windowManager.centerWindowsVertically(penWin, nestsWin);
     }
 });
 
@@ -140,11 +146,13 @@ ipcMain.on("close-load-pet-window", () => {
     console.log("Recebido close-load-pet-window");
     windowManager.closeLoadPetWindow();
     windowManager.closePenWindow();
+    closeNestsWindow();
 });
 
 ipcMain.on("close-pen-window", () => {
     console.log("Recebido close-pen-window");
     windowManager.closePenWindow();
+    closeNestsWindow();
 });
 
 ipcMain.on('close-start-window', () => {
@@ -669,6 +677,38 @@ function createStoreWindow() {
     return storeWindow;
 }
 
+function createNestsWindow() {
+    if (nestsWindow) {
+        nestsWindow.show();
+        nestsWindow.focus();
+        return nestsWindow;
+    }
+
+    const preloadPath = require('path').join(__dirname, 'preload.js');
+
+    nestsWindow = new BrowserWindow({
+        width: 350,
+        height: 100,
+        frame: false,
+        transparent: true,
+        resizable: false,
+        show: false,
+        webPreferences: {
+            preload: preloadPath,
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
+    });
+
+    nestsWindow.loadFile('nests.html');
+    windowManager.attachFadeHandlers(nestsWindow);
+    nestsWindow.on('closed', () => {
+        nestsWindow = null;
+    });
+
+    return nestsWindow;
+}
+
 function closeBattleModeWindow() {
     if (battleModeWindow) {
         battleModeWindow.close();
@@ -705,6 +745,12 @@ function closeStoreWindow() {
     }
 }
 
+function closeNestsWindow() {
+    if (nestsWindow) {
+        nestsWindow.close();
+    }
+}
+
 function closeAllGameWindows() {
     windowManager.closeTrayWindow();
     windowManager.closeStatusWindow();
@@ -716,6 +762,7 @@ function closeAllGameWindows() {
     closeTrainWindow();
     closeItemsWindow();
     closeStoreWindow();
+    closeNestsWindow();
 }
 
 ipcMain.on('open-battle-mode-window', () => {
@@ -763,6 +810,10 @@ ipcMain.on('resize-pen-window', (event, data) => {
     if (windowManager.penWindow && data && data.width) {
         const [, height] = windowManager.penWindow.getSize();
         windowManager.penWindow.setSize(Math.round(data.width), height);
+        if (nestsWindow) {
+            const bounds = windowManager.penWindow.getBounds();
+            nestsWindow.setPosition(bounds.x, bounds.y + bounds.height);
+        }
     }
 });
 
