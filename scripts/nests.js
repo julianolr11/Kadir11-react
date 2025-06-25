@@ -14,6 +14,8 @@ const eggIds = Object.keys(eggIcons);
 let nestsData = [];
 let pet = null;
 let cheatBuffer = '';
+const HATCH_DURATION = 10 * 60 * 1000; // 10 minutos
+let progressInterval = null;
 
 function hasEggInInventory() {
     if (!pet || !pet.items) return false;
@@ -26,6 +28,7 @@ function drawNests(count) {
     const n = Math.min(3, count || 0);
     for (let i = 0; i < n; i++) {
         const slot = document.createElement('div');
+        slot.className = 'nest-slot';
         slot.style.position = 'relative';
         const baseImg = document.createElement('img');
         const egg = nestsData[i];
@@ -39,14 +42,23 @@ function drawNests(count) {
         if (egg) {
             const eggImg = document.createElement('img');
             eggImg.src = eggIcons[egg.eggId] || '';
-            eggImg.className = 'nest-image';
+            eggImg.className = 'egg-image';
             eggImg.style.position = 'absolute';
-            eggImg.style.left = '0';
-            eggImg.style.top = '0';
+            eggImg.style.left = '50%';
+            eggImg.style.top = '50%';
+            eggImg.style.transform = 'translate(-50%, -50%)';
             slot.appendChild(eggImg);
+
+            const progressWrapper = document.createElement('div');
+            progressWrapper.className = 'progress-container';
+            const progressBar = document.createElement('div');
+            progressBar.className = 'progress-bar';
+            progressWrapper.appendChild(progressBar);
+            slot.appendChild(progressWrapper);
         }
         nestsContainer.appendChild(slot);
     }
+    startProgressUpdates();
 }
 
 function loadNests() {
@@ -69,6 +81,24 @@ window.electronAPI?.on('pet-data', (event, data) => {
     pet = data;
     loadNests();
 });
+
+function updateProgressBars() {
+    const bars = document.querySelectorAll('.progress-bar');
+    bars.forEach((bar, index) => {
+        const egg = nestsData[index];
+        if (!egg) return;
+        const elapsed = Date.now() - egg.start;
+        let ratio = elapsed / HATCH_DURATION;
+        ratio = Math.max(0, Math.min(1, ratio));
+        bar.style.width = `${Math.floor(ratio * 100)}%`;
+    });
+}
+
+function startProgressUpdates() {
+    if (progressInterval) clearInterval(progressInterval);
+    updateProgressBars();
+    progressInterval = setInterval(updateProgressBars, 1000);
+}
 window.addEventListener('DOMContentLoaded', () => {
     loadNests();
     document.addEventListener('keydown', (e) => {
