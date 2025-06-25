@@ -336,8 +336,8 @@ class WindowManager {
 
         const preloadPath = path.join(__dirname, "..", "preload.js");
         this.penWindow = new BrowserWindow({
-            width: 300,
-            height: 300,
+            width: 350,
+            height: 360,
             frame: false,
             transparent: true,
             resizable: false,
