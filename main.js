@@ -759,6 +759,13 @@ ipcMain.on('resize-journey-window', (event, size) => {
     }
 });
 
+ipcMain.on('resize-pen-window', (event, data) => {
+    if (windowManager.penWindow && data && data.width) {
+        const [, height] = windowManager.penWindow.getSize();
+        windowManager.penWindow.setSize(Math.round(data.width), height);
+    }
+});
+
 ipcMain.on('buy-item', async (event, item) => {
     if (!currentPet) return;
     const prices = {
