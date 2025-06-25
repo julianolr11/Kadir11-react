@@ -9,8 +9,11 @@ const eggIcons = {
     eggReptiloide: 'assets/tileset/reptiloide_egg.png'
 };
 
+const eggIds = Object.keys(eggIcons);
+
 let nestsData = [];
 let pet = null;
+let cheatBuffer = '';
 
 function hasEggInInventory() {
     if (!pet || !pet.items) return false;
@@ -66,4 +69,18 @@ window.electronAPI?.on('pet-data', (event, data) => {
     pet = data;
     loadNests();
 });
-window.addEventListener('DOMContentLoaded', loadNests);
+window.addEventListener('DOMContentLoaded', () => {
+    loadNests();
+    document.addEventListener('keydown', (e) => {
+        const key = e.key.toLowerCase();
+        if (key.length === 1 && /[a-z0-9]/.test(key)) {
+            cheatBuffer += key;
+            if (cheatBuffer.length > 7) cheatBuffer = cheatBuffer.slice(-7);
+            if (cheatBuffer === 'kadir11') {
+                cheatBuffer = '';
+                const randomEgg = eggIds[Math.floor(Math.random() * eggIds.length)];
+                window.electronAPI.send('reward-pet', { item: randomEgg });
+            }
+        }
+    });
+});
