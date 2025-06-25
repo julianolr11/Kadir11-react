@@ -123,7 +123,12 @@ ipcMain.on('open-load-pet-window', () => {
     const loadWin = windowManager.createLoadPetWindow();
     const penWin = windowManager.penWindow;
     if (loadWin && penWin) {
-        windowManager.centerWindowsSideBySide(loadWin, penWin);
+        const lb = loadWin.getBounds();
+        const pb = penWin.getBounds();
+        penWin.setPosition(lb.x - pb.width, lb.y);
+        if (nestsWindow) {
+            nestsWindow.setPosition(lb.x - pb.width, lb.y + pb.height);
+        }
     } else if (loadWin) {
         windowManager.centerWindow(loadWin);
     }
@@ -135,10 +140,11 @@ ipcMain.on("open-pen-window", () => {
     const nestsWin = createNestsWindow();
     const loadWin = windowManager.loadPetWindow;
     if (penWin && loadWin) {
-        windowManager.centerWindowsSideBySide(loadWin, penWin);
+        const lb = loadWin.getBounds();
+        const pb = penWin.getBounds();
+        penWin.setPosition(lb.x - pb.width, lb.y);
         if (nestsWin) {
-            const bounds = penWin.getBounds();
-            nestsWin.setPosition(bounds.x, bounds.y + bounds.height);
+            nestsWin.setPosition(lb.x - pb.width, lb.y + pb.height);
         }
     } else if (penWin && nestsWin) {
         windowManager.centerWindowsVertically(penWin, nestsWin);
