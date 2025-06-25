@@ -27,9 +27,10 @@ function drawPen() {
     penCanvas.height = h;
     penCanvas.style.transform = `scale(${scale})`;
     if (petsLayer) petsLayer.style.transform = `scale(${scale})`;
+    const padding = 20;
     const size = {
-        width: Math.round(w * scale) + 10,
-        height: Math.round(h * scale) + 10
+        width: Math.round(w * scale) + padding,
+        height: Math.round(h * scale) + padding
     };
     window.electronAPI?.send('resize-pen-window', size);
     penCtx.clearRect(0,0,w,h);
