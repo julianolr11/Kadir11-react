@@ -79,6 +79,84 @@ function broadcastNestUpdate() {
     });
 }
 
+function generateRarity() {
+    const roll = Math.floor(Math.random() * 100);
+    if (roll < 40) return 'Comum';
+    if (roll < 70) return 'Incomum';
+    if (roll < 85) return 'Raro';
+    if (roll < 95) return 'MuitoRaro';
+    if (roll < 99) return 'Epico';
+    return 'Lendario';
+}
+
+const eggSpecieMap = {
+    eggAve: 'Ave',
+    eggCriaturaMistica: 'Criatura Mística',
+    eggCriaturaSombria: 'Criatura Sombria',
+    eggDraconideo: 'Draconídeo',
+    eggFera: 'Fera',
+    eggMonstro: 'Monstro',
+    eggReptiloide: 'Reptilóide'
+};
+
+const specieData = {
+    'Draconídeo': { dir: 'Draconideo', race: 'draak', element: 'puro' },
+    'Reptilóide': { dir: 'Reptiloide', race: 'viborom', element: 'puro' },
+    'Ave': { dir: 'Ave', race: 'pidgly' },
+    'Criatura Mística': { dir: 'CriaturaMistica' },
+    'Criatura Sombria': { dir: 'CriaturaSombria' },
+    'Monstro': { dir: 'Monstro' },
+    'Fera': { dir: 'Fera', race: 'Foxyl' }
+};
+
+function generatePetFromEgg(eggId) {
+    const specie = eggSpecieMap[eggId] || 'Ave';
+    const info = specieData[specie] || {};
+    const attributes = {
+        attack: Math.floor(Math.random() * 5) + 1,
+        defense: Math.floor(Math.random() * 5) + 1,
+        speed: Math.floor(Math.random() * 5) + 1,
+        magic: Math.floor(Math.random() * 5) + 1,
+        life: (Math.floor(Math.random() * 5) + 1) * 10
+    };
+
+    let statusImage = '';
+    let bioImage = '';
+    if (info.race) {
+        const base = info.element ? `${info.dir}/${info.element}/${info.race}` : `${info.dir}/${info.race}`;
+        statusImage = `${base}/front.gif`;
+        bioImage = `${base}/${info.race}.png`;
+    } else if (info.dir) {
+        statusImage = `${info.dir}/${info.dir.toLowerCase()}.png`;
+        bioImage = `${info.dir}/${info.dir.toLowerCase()}.png`;
+    } else {
+        statusImage = 'eggsy.png';
+        bioImage = 'eggsy.png';
+    }
+
+    return {
+        name: 'Eggsy',
+        element: info.element || 'puro',
+        attributes,
+        specie,
+        rarity: generateRarity(),
+        level: 1,
+        experience: 0,
+        createdAt: new Date().toISOString(),
+        image: statusImage,
+        race: info.race || null,
+        bio: '',
+        bioImage,
+        statusImage,
+        hunger: 100,
+        happiness: 100,
+        currentHealth: attributes.life,
+        maxHealth: attributes.life,
+        energy: 100,
+        kadirPoints: 5
+    };
+}
+
 app.whenReady().then(() => {
     console.log('Aplicativo iniciado');
     if (store.get('coins') === undefined) {
@@ -962,6 +1040,24 @@ ipcMain.on('place-egg-in-nest', async (event, eggId) => {
         });
     } catch (err) {
         console.error('Erro ao posicionar ovo no ninho:', err);
+    }
+});
+
+ipcMain.on('hatch-egg', async (event, index) => {
+    const nests = getNestsData();
+    const egg = nests[index];
+    if (!egg) return;
+    nests.splice(index, 1);
+    setNestsData(nests);
+    try {
+        const petData = generatePetFromEgg(egg.eggId);
+        const newPet = await petManager.createPet(petData);
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('nests-data-updated', nests);
+            if (w.webContents) w.webContents.send('pet-created', newPet);
+        });
+    } catch (err) {
+        console.error('Erro ao chocar ovo:', err);
     }
 });
 

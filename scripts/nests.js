@@ -15,6 +15,16 @@ let nestsData = [];
 let pet = null;
 let cheatBuffer = '';
 const HATCH_DURATION = 10 * 60 * 1000; // 10 minutos
+
+function createHatchButton(index) {
+    const btn = document.createElement('button');
+    btn.className = 'button small-button hatch-button';
+    btn.textContent = 'Chocar';
+    btn.addEventListener('click', () => {
+        window.electronAPI.hatchEgg(index);
+    });
+    return btn;
+}
 let progressInterval = null;
 
 function hasEggInInventory() {
@@ -49,12 +59,17 @@ function drawNests(count) {
             eggImg.style.transform = 'translate(-50%, -50%)';
             slot.appendChild(eggImg);
 
-            const progressWrapper = document.createElement('div');
-            progressWrapper.className = 'progress-container';
-            const progressBar = document.createElement('div');
-            progressBar.className = 'progress-bar';
-            progressWrapper.appendChild(progressBar);
-            slot.appendChild(progressWrapper);
+            const elapsed = Date.now() - egg.start;
+            if (elapsed >= HATCH_DURATION) {
+                slot.appendChild(createHatchButton(i));
+            } else {
+                const progressWrapper = document.createElement('div');
+                progressWrapper.className = 'progress-container';
+                const progressBar = document.createElement('div');
+                progressBar.className = 'progress-bar';
+                progressWrapper.appendChild(progressBar);
+                slot.appendChild(progressWrapper);
+            }
         }
         nestsContainer.appendChild(slot);
     }
@@ -89,8 +104,12 @@ function updateProgressBars() {
         if (!egg) return;
         const elapsed = Date.now() - egg.start;
         let ratio = elapsed / HATCH_DURATION;
-        ratio = Math.max(0, Math.min(1, ratio));
-        bar.style.width = `${Math.floor(ratio * 100)}%`;
+        if (ratio >= 1) {
+            drawNests(nestsData.length);
+        } else {
+            ratio = Math.max(0, Math.min(1, ratio));
+            bar.style.width = `${Math.floor(ratio * 100)}%`;
+        }
     });
 }
 
