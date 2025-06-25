@@ -806,10 +806,9 @@ ipcMain.on('resize-journey-window', (event, size) => {
     }
 });
 
-ipcMain.on('resize-pen-window', (event, data) => {
-    if (windowManager.penWindow && data && data.width) {
-        const [, height] = windowManager.penWindow.getSize();
-        windowManager.penWindow.setSize(Math.round(data.width), height);
+ipcMain.on('resize-pen-window', (event, size) => {
+    if (windowManager.penWindow && size && size.width && size.height) {
+        windowManager.penWindow.setSize(Math.round(size.width), Math.round(size.height));
         if (nestsWindow) {
             const bounds = windowManager.penWindow.getBounds();
             nestsWindow.setPosition(bounds.x, bounds.y + bounds.height);
