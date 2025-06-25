@@ -131,6 +131,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pending && won === '1') {
         currentIndex = Math.min(currentIndex + 1, route.length - 1);
         localStorage.setItem('journeyStep', String(currentIndex));
+        if (currentIndex === route.length - 1) {
+            window.electronAPI?.send('journey-complete');
+        }
     }
     if (pending) localStorage.removeItem('journeyPendingAdvance');
     if (won) localStorage.removeItem('journeyBattleWin');

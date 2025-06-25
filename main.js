@@ -56,6 +56,14 @@ function getNestPrice() {
     return 50 * Math.pow(2, getNestCount());
 }
 
+function getNestsData() {
+    return store.get('nestsData', []);
+}
+
+function setNestsData(data) {
+    store.set('nestsData', data);
+}
+
 function broadcastNestUpdate() {
     const count = getNestCount();
     BrowserWindow.getAllWindows().forEach(w => {
@@ -917,6 +925,26 @@ ipcMain.on('use-item', async (event, item) => {
     }
 });
 
+ipcMain.on('place-egg-in-nest', async (event, eggId) => {
+    if (!currentPet) return;
+    if (!currentPet.items || !currentPet.items[eggId] || currentPet.items[eggId] <= 0) return;
+    const nestCount = getNestCount();
+    let nests = getNestsData();
+    if (nests.length >= nestCount) return;
+    currentPet.items[eggId] -= 1;
+    nests.push({ eggId, start: Date.now() });
+    setNestsData(nests);
+    try {
+        await petManager.updatePet(currentPet.petId, { items: currentPet.items });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+            if (w.webContents) w.webContents.send('nests-data-updated', nests);
+        });
+    } catch (err) {
+        console.error('Erro ao posicionar ovo no ninho:', err);
+    }
+});
+
 ipcMain.on('use-move', async (event, move) => {
     if (!currentPet || !move) return;
     const cost = move.cost || 0;
@@ -1014,6 +1042,36 @@ ipcMain.on('reward-pet', async (event, reward) => {
     }
 });
 
+ipcMain.on('journey-complete', async () => {
+    if (!currentPet) return;
+    const specieEggMap = {
+        'Ave': 'eggAve',
+        'Criatura Mística': 'eggCriaturaMistica',
+        'Criatura Sombria': 'eggCriaturaSombria',
+        'Draconídeo': 'eggDraconideo',
+        'Fera': 'eggFera',
+        'Monstro': 'eggMonstro',
+        'Reptilóide': 'eggReptiloide'
+    };
+    const eggId = specieEggMap[currentPet.specie] || 'eggAve';
+    if (!currentPet.items) currentPet.items = {};
+    currentPet.items[eggId] = (currentPet.items[eggId] || 0) + 1;
+    currentPet.coins = (currentPet.coins || 0) + 50;
+    currentPet.kadirPoints = (currentPet.kadirPoints || 0) + 100;
+    try {
+        await petManager.updatePet(currentPet.petId, {
+            items: currentPet.items,
+            coins: currentPet.coins,
+            kadirPoints: currentPet.kadirPoints
+        });
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', currentPet);
+        });
+    } catch (err) {
+        console.error('Erro ao aplicar recompensa final da jornada:', err);
+    }
+});
+
 ipcMain.on('battle-result', async (event, result) => {
     if (!currentPet || !result) return;
     const win = !!result.win;
@@ -1107,6 +1165,10 @@ ipcMain.handle('get-pen-info', async () => {
 
 ipcMain.handle('get-nest-count', async () => {
     return getNestCount();
+});
+
+ipcMain.handle('get-nests-data', async () => {
+    return getNestsData();
 });
 
 ipcMain.handle('get-nest-price', async () => {
