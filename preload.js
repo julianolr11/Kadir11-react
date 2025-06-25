@@ -35,6 +35,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'reward-pet',
             'journey-complete',
             'place-egg-in-nest',
+            'hatch-egg',
             'use-move',
             'update-health',
             'kadirfull',
@@ -73,6 +74,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     createPet: (petData) => {
         console.log('Enviando create-pet via createPet:', petData);
         ipcRenderer.send('create-pet', petData);
+    },
+    hatchEgg: (index) => {
+        console.log('Enviando hatch-egg para o index:', index);
+        ipcRenderer.send('hatch-egg', index);
     },
     onPetCreated: (callback) => {
         console.log('Registrando listener para pet-created');
