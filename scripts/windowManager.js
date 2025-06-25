@@ -99,6 +99,19 @@ function centerSideBySide(winLeft, winRight) {
     animateMove(winRight, startX + b1.width, startY);
 }
 
+function centerVertical(winTop, winBottom) {
+    if (!winTop || !winBottom) return;
+    const display = screen.getPrimaryDisplay();
+    const { width: screenWidth, height: screenHeight } = display.workAreaSize;
+    const b1 = winTop.getBounds();
+    const b2 = winBottom.getBounds();
+    const totalH = b1.height + b2.height;
+    const startX = Math.round((screenWidth - Math.max(b1.width, b2.width)) / 2);
+    const startY = Math.round((screenHeight - totalH) / 2);
+    animateMove(winTop, startX, startY);
+    animateMove(winBottom, startX, startY + b1.height);
+}
+
 
 class WindowManager {
     constructor() {
@@ -120,6 +133,10 @@ class WindowManager {
 
     centerWindowsSideBySide(winLeft, winRight) {
         centerSideBySide(winLeft, winRight);
+    }
+
+    centerWindowsVertically(winTop, winBottom) {
+        centerVertical(winTop, winBottom);
     }
 
     // Criar a janela inicial (start.html)
