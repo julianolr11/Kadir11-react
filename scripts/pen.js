@@ -19,9 +19,10 @@ function drawPen() {
     const h = (dims.h + 2) * 32;
     penCanvas.width = w;
     penCanvas.height = h;
+    const rect = penCanvas.getBoundingClientRect();
     const size = {
-        width: w + 10,
-        height: h + 10
+        width: Math.round(rect.width) + 10,
+        height: Math.round(rect.height) + 10
     };
     window.electronAPI?.send('resize-pen-window', size);
     penCtx.clearRect(0,0,w,h);
