@@ -34,6 +34,14 @@ let journeyImagesCache = null;
 let journeySceneWindow = null;
 let nestsWindow = null;
 
+function getCoins() {
+    return store.get('coins', 20);
+}
+
+function setCoins(value) {
+    store.set('coins', value);
+}
+
 const penLimits = { small: 3, medium: 6, large: 10 };
 
 function getPenInfo() {
@@ -73,6 +81,9 @@ function broadcastNestUpdate() {
 
 app.whenReady().then(() => {
     console.log('Aplicativo iniciado');
+    if (store.get('coins') === undefined) {
+        store.set('coins', 20);
+    }
     windowManager.createStartWindow();
 
     globalShortcut.register('Ctrl+Shift+D', () => {
@@ -243,6 +254,7 @@ ipcMain.on('select-pet', async (event, petId) => {
 
         // Definir o pet atual e atualizar os timestamps
         currentPet = pet;
+        currentPet.coins = getCoins();
         lastUpdate = Date.now();
         resetTimers();
 
@@ -333,6 +345,7 @@ ipcMain.on('train-pet', async () => {
         const win = createTrainWindow();
         if (win) {
             win.webContents.on('did-finish-load', () => {
+                currentPet.coins = getCoins();
                 win.webContents.send('pet-data', currentPet);
             });
         }
@@ -347,6 +360,7 @@ ipcMain.on('itens-pet', (event, options) => {
         const win = createItemsWindow();
         if (win) {
             win.webContents.on('did-finish-load', () => {
+                currentPet.coins = getCoins();
                 win.webContents.send('pet-data', currentPet);
             });
 
@@ -844,7 +858,7 @@ ipcMain.on('buy-item', async (event, item) => {
         price = getNestPrice();
     }
     if (price === undefined) return;
-    if ((currentPet.coins || 0) < price) {
+    if (getCoins() < price) {
         BrowserWindow.getAllWindows().forEach(w => {
             if (w.webContents) w.webContents.send('show-store-error', 'Moedas insuficientes!');
         });
@@ -861,7 +875,8 @@ ipcMain.on('buy-item', async (event, item) => {
         }
     }
 
-    currentPet.coins -= price;
+    setCoins(getCoins() - price);
+    currentPet.coins = getCoins();
 
     if (item === 'terrainMedium' || item === 'terrainLarge') {
         const current = store.get('penSize', 'small');
@@ -882,7 +897,6 @@ ipcMain.on('buy-item', async (event, item) => {
 
     try {
         await petManager.updatePet(currentPet.petId, {
-            coins: currentPet.coins,
             items: currentPet.items
         });
         BrowserWindow.getAllWindows().forEach(w => {
@@ -1011,7 +1025,7 @@ ipcMain.on('reward-pet', async (event, reward) => {
         currentPet.items[reward.item] = (currentPet.items[reward.item] || 0) + qty;
     }
     if (reward.coins) {
-        currentPet.coins = (currentPet.coins || 0) + reward.coins;
+        setCoins(getCoins() + reward.coins);
     }
     if (reward.kadirPoints) {
         currentPet.kadirPoints = (currentPet.kadirPoints || 0) + reward.kadirPoints;
@@ -1029,9 +1043,9 @@ ipcMain.on('reward-pet', async (event, reward) => {
     }
 
     try {
+        currentPet.coins = getCoins();
         await petManager.updatePet(currentPet.petId, {
             items: currentPet.items,
-            coins: currentPet.coins,
             kadirPoints: currentPet.kadirPoints,
             level: currentPet.level,
             experience: currentPet.experience,
@@ -1062,12 +1076,12 @@ ipcMain.on('journey-complete', async () => {
     const eggId = specieEggMap[currentPet.specie] || 'eggAve';
     if (!currentPet.items) currentPet.items = {};
     currentPet.items[eggId] = (currentPet.items[eggId] || 0) + 1;
-    currentPet.coins = (currentPet.coins || 0) + 50;
+    setCoins(getCoins() + 50);
+    currentPet.coins = getCoins();
     currentPet.kadirPoints = (currentPet.kadirPoints || 0) + 100;
     try {
         await petManager.updatePet(currentPet.petId, {
             items: currentPet.items,
-            coins: currentPet.coins,
             kadirPoints: currentPet.kadirPoints
         });
         BrowserWindow.getAllWindows().forEach(w => {

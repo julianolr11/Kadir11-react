@@ -109,7 +109,6 @@ async function createPet(petData) {
         hunger: petData.hunger || 100,
         happiness: petData.happiness || 100,
         energy: petData.energy || 100,
-        coins: petData.coins || 20,
         kadirPoints: petData.kadirPoints || 5,
         winStreak: 0,
         lossStreak: 0,
@@ -154,9 +153,6 @@ async function listPets() {
                     if (pet.kadirPoints === undefined) {
                         pet.kadirPoints = 5;
                     }
-                    if (pet.coins === undefined) {
-                        pet.coins = 20;
-                    }
                    if (pet.items === undefined) {
                        pet.items = {};
                    }
@@ -199,9 +195,6 @@ async function loadPet(petId) {
         const pet = JSON.parse(data);
         if (pet.kadirPoints === undefined) {
             pet.kadirPoints = 5;
-        }
-        if (pet.coins === undefined) {
-            pet.coins = 20;
         }
        if (pet.items === undefined) {
            pet.items = {};
