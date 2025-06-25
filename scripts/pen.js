@@ -10,6 +10,12 @@ const sizeMap = { small: { w: 4, h: 3 }, medium: { w: 5, h: 4 }, large: { w: 7, 
 let sprites = [];
 let lastTime = 0;
 let animationId = null;
+let pet = null;
+
+function hasEggInInventory() {
+    if (!pet || !pet.items) return false;
+    return Object.keys(pet.items).some(id => id.startsWith('egg') && pet.items[id] > 0);
+}
 const MOVE_SPEED = 16; // pixels per second
 
 function getScale(size) {
@@ -58,7 +64,7 @@ function drawNests(count) {
     const n = Math.min(3, count || 0);
     for (let i = 0; i < n; i++) {
         const img = document.createElement('img');
-        img.src = 'Assets/tileset/nest.png';
+        img.src = hasEggInInventory() ? 'Assets/tileset/nest-plus.png' : 'Assets/tileset/nest.png';
         img.className = 'nest-image';
         nestsContainer.appendChild(img);
     }
@@ -157,6 +163,10 @@ function loadNests() {
 
 window.electronAPI?.on('pen-updated', () => loadPen());
 window.electronAPI?.on('nest-updated', (e, count) => drawNests(count));
+window.electronAPI?.on('pet-data', (event, data) => {
+    pet = data;
+    loadNests();
+});
 window.addEventListener('DOMContentLoaded', () => {
     loadPen();
     loadNests();
