@@ -68,19 +68,26 @@
             border: 2px solid #ffffff;
         }
 
-        #nests-container {
+        .nests-row {
             position: absolute;
             bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
+            background-color: #f0f0f0;
+            border: 1px solid #333;
+            padding: 5px;
+        }
+
+        #nests-container {
             display: flex;
             gap: 5px;
         }
 
         .nest-image {
-            width: 32px;
-            height: 32px;
+            width: 64px;
+            height: 64px;
             image-rendering: pixelated;
+            padding: 4px;
         }
     </style>
 </head>
@@ -89,7 +96,9 @@
         <div id="back-pen-window">↩</div>
         <canvas id="pen-canvas" width="192" height="160"></canvas>
         <div id="pets-layer"></div>
-        <div id="nests-container"></div>
+        <div class="nests-row">
+            <div id="nests-container"></div>
+        </div>
     </div>
     <script type="module" src="scripts/pen.js"></script>
 </body>
