@@ -125,9 +125,9 @@ ipcMain.on('open-load-pet-window', () => {
     if (loadWin && penWin) {
         const lb = loadWin.getBounds();
         const pb = penWin.getBounds();
-        penWin.setPosition(lb.x - pb.width, lb.y);
+        penWin.setPosition(lb.x + lb.width, lb.y);
         if (nestsWindow) {
-            nestsWindow.setPosition(lb.x - pb.width, lb.y + pb.height);
+            nestsWindow.setPosition(lb.x + lb.width, lb.y + pb.height);
         }
     } else if (loadWin) {
         windowManager.centerWindow(loadWin);
@@ -142,9 +142,9 @@ ipcMain.on("open-pen-window", () => {
     if (penWin && loadWin) {
         const lb = loadWin.getBounds();
         const pb = penWin.getBounds();
-        penWin.setPosition(lb.x - pb.width, lb.y);
+        penWin.setPosition(lb.x + lb.width, lb.y);
         if (nestsWin) {
-            nestsWin.setPosition(lb.x - pb.width, lb.y + pb.height);
+            nestsWin.setPosition(lb.x + lb.width, lb.y + pb.height);
         }
     } else if (penWin && nestsWin) {
         windowManager.centerWindowsVertically(penWin, nestsWin);
