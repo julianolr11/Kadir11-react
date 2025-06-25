@@ -10,6 +10,12 @@ const eggIcons = {
 };
 
 let nestsData = [];
+let pet = null;
+
+function hasEggInInventory() {
+    if (!pet || !pet.items) return false;
+    return Object.keys(pet.items).some(id => id.startsWith('egg') && pet.items[id] > 0);
+}
 
 function drawNests(count) {
     if (!nestsContainer) return;
@@ -18,11 +24,15 @@ function drawNests(count) {
     for (let i = 0; i < n; i++) {
         const slot = document.createElement('div');
         slot.style.position = 'relative';
-        const img = document.createElement('img');
-        img.src = 'Assets/tileset/nest.png';
-        img.className = 'nest-image';
-        slot.appendChild(img);
+        const baseImg = document.createElement('img');
         const egg = nestsData[i];
+        if (egg) {
+            baseImg.src = 'Assets/tileset/nest.png';
+        } else {
+            baseImg.src = hasEggInInventory() ? 'Assets/tileset/nest-plus.png' : 'Assets/tileset/nest.png';
+        }
+        baseImg.className = 'nest-image';
+        slot.appendChild(baseImg);
         if (egg) {
             const eggImg = document.createElement('img');
             eggImg.src = eggIcons[egg.eggId] || '';
@@ -50,6 +60,10 @@ function loadNests() {
 window.electronAPI?.on('nest-updated', (e, count) => drawNests(count));
 window.electronAPI?.on('nests-data-updated', (e, data) => {
     nestsData = Array.isArray(data) ? data : [];
+    loadNests();
+});
+window.electronAPI?.on('pet-data', (event, data) => {
+    pet = data;
     loadNests();
 });
 window.addEventListener('DOMContentLoaded', loadNests);
