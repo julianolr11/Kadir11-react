@@ -19,15 +19,11 @@ function drawPen() {
     const h = (dims.h + 2) * 32;
     penCanvas.width = w;
     penCanvas.height = h;
-    const container = document.querySelector('.pen-container');
-    if (container) {
-        const rect = container.getBoundingClientRect();
-        const size = {
-            width: rect.width + 10,
-            height: rect.height + 10
-        };
-        window.electronAPI?.send('resize-pen-window', size);
-    }
+    const size = {
+        width: w + 10,
+        height: h + 10
+    };
+    window.electronAPI?.send('resize-pen-window', size);
     penCtx.clearRect(0,0,w,h);
     for (let y=0; y<dims.h+2; y++) {
         for (let x=0; x<dims.w+2; x++) {
