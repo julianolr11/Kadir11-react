@@ -1113,8 +1113,18 @@ ipcMain.on('hatch-egg', async (event, index) => {
         const newPet = await petManager.createPet(petData);
         BrowserWindow.getAllWindows().forEach(w => {
             if (w.webContents) w.webContents.send('nests-data-updated', nests);
-            if (w.webContents) w.webContents.send('pet-created', newPet);
+            if (w !== hatchWindow && w.webContents) {
+                w.webContents.send('pet-created', newPet);
+            }
         });
+        if (hatchWindow && hatchWindow.webContents) {
+            const sendPet = () => hatchWindow.webContents.send('pet-created', newPet);
+            if (hatchWindow.webContents.isLoading()) {
+                hatchWindow.webContents.once('did-finish-load', sendPet);
+            } else {
+                sendPet();
+            }
+        }
     } catch (err) {
         console.error('Erro ao chocar ovo:', err);
     }
