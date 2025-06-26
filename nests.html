@@ -61,19 +61,6 @@
             width: 0;
             background-color: #6cf;
         }
-        #hatch-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 50;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
         #hatch-name {
             display: none;
             flex-direction: column;
@@ -137,21 +124,7 @@
     </div>
     <div id="egg-select-overlay">
         <div id="egg-select-box">
-            <p>Selecione um ovo para colocar no ninho:</p>
             <div id="egg-list"></div>
-            <div class="confirm-buttons">
-                <button class="button small-button" id="egg-select-cancel">Cancelar</button>
-            </div>
-        </div>
-    </div>
-    <div id="hatch-overlay">
-        <video id="hatch-video" src="Assets/Mons/egg_hatch.mp4" style="width:100%;height:100%;object-fit:contain;"></video>
-        <div id="hatch-name">
-            <img id="hatch-gif" src="" alt="Pet" style="width:128px;height:128px;image-rendering:pixelated;">
-            <div>
-                <input type="text" id="hatch-name-input" placeholder="dê um nome para o seu novo pet!" maxlength="15" />
-                <button class="button small-button" id="hatch-ok">OK</button>
-            </div>
         </div>
     </div>
     <script type="module" src="scripts/nests.js"></script>
