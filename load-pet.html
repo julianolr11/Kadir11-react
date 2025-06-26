@@ -431,6 +431,10 @@
         // Carregar a lista de pets ao iniciar
         reloadPetList();
 
+        window.electronAPI?.onPetCreated(() => {
+            reloadPetList();
+        });
+
         // Confirmar exclusão do pet
         confirmDeleteBtn.addEventListener('click', () => {
             if (petIdToDelete !== null) {
