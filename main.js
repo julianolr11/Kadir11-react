@@ -42,6 +42,14 @@ function setCoins(value) {
     store.set('coins', value);
 }
 
+function getItems() {
+    return store.get('items', {});
+}
+
+function setItems(value) {
+    store.set('items', value);
+}
+
 const penLimits = { small: 3, medium: 6, large: 10 };
 
 function getPenInfo() {
@@ -321,18 +329,12 @@ ipcMain.on('select-pet', async (event, petId) => {
         }
         console.log('Pet selecionado:', pet);
 
-        if (!pet.items) {
-            pet.items = {};
-            try {
-                await petManager.updatePet(pet.petId, { items: pet.items });
-            } catch (err) {
-                console.error('Erro ao inicializar inventário do pet:', err);
-            }
-        }
+        pet.items = getItems();
 
         // Definir o pet atual e atualizar os timestamps
         currentPet = pet;
         currentPet.coins = getCoins();
+        currentPet.items = getItems();
         lastUpdate = Date.now();
         resetTimers();
 
@@ -409,6 +411,7 @@ ipcMain.on('open-status-window', () => {
     if (currentPet) {
         const statusWindow = windowManager.createStatusWindow();
         statusWindow.webContents.on('did-finish-load', () => {
+            currentPet.items = getItems();
             console.log('Enviando pet-data para statusWindow:', currentPet);
             statusWindow.webContents.send('pet-data', currentPet);
         });
@@ -424,6 +427,7 @@ ipcMain.on('train-pet', async () => {
         if (win) {
             win.webContents.on('did-finish-load', () => {
                 currentPet.coins = getCoins();
+                currentPet.items = getItems();
                 win.webContents.send('pet-data', currentPet);
             });
         }
@@ -439,6 +443,7 @@ ipcMain.on('itens-pet', (event, options) => {
         if (win) {
             win.webContents.on('did-finish-load', () => {
                 currentPet.coins = getCoins();
+                currentPet.items = getItems();
                 win.webContents.send('pet-data', currentPet);
             });
 
@@ -474,6 +479,7 @@ ipcMain.on('store-pet', (event, options) => {
         const win = createStoreWindow();
         if (win) {
             win.webContents.on('did-finish-load', () => {
+                currentPet.items = getItems();
                 win.webContents.send('pet-data', currentPet);
             });
 
@@ -881,6 +887,7 @@ ipcMain.on('open-journey-mode-window', () => {
     const win = createJourneyModeWindow();
     if (currentPet && win) {
         win.webContents.on('did-finish-load', () => {
+            currentPet.items = getItems();
             win.webContents.send('pet-data', currentPet);
         });
     }
@@ -901,6 +908,7 @@ ipcMain.on('open-journey-scene-window', async (event, data) => {
             statusEffects: currentPet ? currentPet.statusEffects || [] : []
         });
         if (currentPet) {
+            currentPet.items = getItems();
             win.webContents.send('pet-data', currentPet);
         }
     });
@@ -969,26 +977,22 @@ ipcMain.on('buy-item', async (event, item) => {
         store.set('nestCount', getNestCount() + 1);
         broadcastNestUpdate();
     } else {
-        if (!currentPet.items) currentPet.items = {};
-        currentPet.items[item] = (currentPet.items[item] || 0) + 1;
+        const items = getItems();
+        items[item] = (items[item] || 0) + 1;
+        setItems(items);
+        currentPet.items = items;
     }
 
-    try {
-        await petManager.updatePet(currentPet.petId, {
-            items: currentPet.items
-        });
-        BrowserWindow.getAllWindows().forEach(w => {
-            if (w.webContents) w.webContents.send('pet-data', currentPet);
-        });
-    } catch (err) {
-        console.error('Erro ao comprar item:', err);
-    }
+    BrowserWindow.getAllWindows().forEach(w => {
+        if (w.webContents) w.webContents.send('pet-data', currentPet);
+    });
 });
 
 ipcMain.on('use-item', async (event, item) => {
     if (!currentPet) return;
-    if (!currentPet.items || !currentPet.items[item]) return;
-    if (currentPet.items[item] <= 0) return;
+    const items = getItems();
+    if (!items[item]) return;
+    if (items[item] <= 0) return;
 
     switch (item) {
         case 'healthPotion':
@@ -1005,42 +1009,41 @@ ipcMain.on('use-item', async (event, item) => {
             break;
     }
 
-    currentPet.items[item] -= 1;
+    items[item] -= 1;
+    setItems(items);
+    currentPet.items = items;
 
     try {
         await petManager.updatePet(currentPet.petId, {
             currentHealth: currentPet.currentHealth,
             hunger: currentPet.hunger,
             happiness: currentPet.happiness,
-            energy: currentPet.energy,
-            items: currentPet.items
-        });
-        BrowserWindow.getAllWindows().forEach(w => {
-            if (w.webContents) w.webContents.send('pet-data', currentPet);
+            energy: currentPet.energy
         });
     } catch (err) {
         console.error('Erro ao usar item:', err);
     }
+    BrowserWindow.getAllWindows().forEach(w => {
+        if (w.webContents) w.webContents.send('pet-data', currentPet);
+    });
 });
 
 ipcMain.on('place-egg-in-nest', async (event, eggId) => {
     if (!currentPet) return;
-    if (!currentPet.items || !currentPet.items[eggId] || currentPet.items[eggId] <= 0) return;
+    const items = getItems();
+    if (!items[eggId] || items[eggId] <= 0) return;
     const nestCount = getNestCount();
     let nests = getNestsData();
     if (nests.length >= nestCount) return;
-    currentPet.items[eggId] -= 1;
+    items[eggId] -= 1;
+    setItems(items);
+    currentPet.items = items;
     nests.push({ eggId, start: Date.now() });
     setNestsData(nests);
-    try {
-        await petManager.updatePet(currentPet.petId, { items: currentPet.items });
-        BrowserWindow.getAllWindows().forEach(w => {
-            if (w.webContents) w.webContents.send('pet-data', currentPet);
-            if (w.webContents) w.webContents.send('nests-data-updated', nests);
-        });
-    } catch (err) {
-        console.error('Erro ao posicionar ovo no ninho:', err);
-    }
+    BrowserWindow.getAllWindows().forEach(w => {
+        if (w.webContents) w.webContents.send('pet-data', currentPet);
+        if (w.webContents) w.webContents.send('nests-data-updated', nests);
+    });
 });
 
 ipcMain.on('hatch-egg', async (event, index) => {
@@ -1116,9 +1119,11 @@ ipcMain.on('kadirfull', async () => {
 ipcMain.on('reward-pet', async (event, reward) => {
     if (!currentPet || !reward) return;
     if (reward.item) {
-        if (!currentPet.items) currentPet.items = {};
+        const items = getItems();
         const qty = reward.qty || 1;
-        currentPet.items[reward.item] = (currentPet.items[reward.item] || 0) + qty;
+        items[reward.item] = (items[reward.item] || 0) + qty;
+        setItems(items);
+        currentPet.items = items;
     }
     if (reward.coins) {
         setCoins(getCoins() + reward.coins);
@@ -1141,7 +1146,6 @@ ipcMain.on('reward-pet', async (event, reward) => {
     try {
         currentPet.coins = getCoins();
         await petManager.updatePet(currentPet.petId, {
-            items: currentPet.items,
             kadirPoints: currentPet.kadirPoints,
             level: currentPet.level,
             experience: currentPet.experience,
@@ -1170,14 +1174,15 @@ ipcMain.on('journey-complete', async () => {
         'Reptilóide': 'eggReptiloide'
     };
     const eggId = specieEggMap[currentPet.specie] || 'eggAve';
-    if (!currentPet.items) currentPet.items = {};
-    currentPet.items[eggId] = (currentPet.items[eggId] || 0) + 1;
+    const items = getItems();
+    items[eggId] = (items[eggId] || 0) + 1;
+    setItems(items);
+    currentPet.items = items;
     setCoins(getCoins() + 50);
     currentPet.coins = getCoins();
     currentPet.kadirPoints = (currentPet.kadirPoints || 0) + 100;
     try {
         await petManager.updatePet(currentPet.petId, {
-            items: currentPet.items,
             kadirPoints: currentPet.kadirPoints
         });
         BrowserWindow.getAllWindows().forEach(w => {
