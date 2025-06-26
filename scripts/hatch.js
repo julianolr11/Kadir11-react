@@ -14,15 +14,11 @@ function showHatchAnimation(newPet) {
     hatchName.style.display = 'none';
     hatchOverlay.style.display = 'flex';
     hatchVideo.style.display = 'block';
-    hatchVideo.currentTime = 0;
-    hatchVideo.play();
     const showName = () => {
-        hatchVideo.pause();
         hatchVideo.style.display = 'none';
         hatchName.style.display = 'flex';
         hatchInput.focus();
     };
-    hatchVideo.onended = showName;
     setTimeout(showName, 7000);
 }
 

@@ -159,17 +159,14 @@ function showFinalAnimation(newPet) {
     finalAnimation.style.display = 'flex';
     console.log('Exibindo animação final');
 
-    // Fade-in do vídeo
+    // Fade-in da animação
     setTimeout(() => {
         finalAnimationVideo.style.opacity = '1';
-        finalAnimationVideo.play();
     }, 100); // Pequeno delay pra garantir que o display: flex tenha efeito
 
     setTimeout(() => {
         finalAnimation.style.display = 'none';
         finalAnimationVideo.style.opacity = '0'; // Resetar a opacidade pra próxima vez
-        finalAnimationVideo.pause();
-        finalAnimationVideo.currentTime = 0;
         console.log('Animação final concluída');
 
         // Após o GIF, revelar o pet com fade-in
