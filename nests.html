@@ -83,6 +83,52 @@
         #hatch-name-input {
             max-width: 150px;
         }
+        #egg-select-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 60;
+        }
+        #egg-select-box {
+            background-color: #2a323e;
+            border: 2px solid #ffffff;
+            border-radius: 7px;
+            padding: 10px;
+            font-family: 'PixelOperator', sans-serif;
+            text-align: center;
+            max-height: 80%;
+            display: flex;
+            flex-direction: column;
+        }
+        #egg-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 5px 0;
+            overflow-y: auto;
+            margin-bottom: 10px;
+        }
+        #egg-list .inventory-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 0;
+            border-bottom: 1px solid #2a323e;
+        }
+        #egg-list .inventory-item:last-child { border-bottom: none; }
+        #egg-list .inventory-item img {
+            width: 32px;
+            height: 32px;
+            image-rendering: pixelated;
+        }
+        #egg-list .item-name { flex-grow: 1; }
+        #egg-list .item-qty { margin-right: 4px; }
     </style>
 </head>
 <body>
@@ -96,6 +142,15 @@
             <div>
                 <input type="text" id="hatch-name-input" placeholder="dê um nome para o seu novo pet!" maxlength="15">
                 <button class="button small-button" id="hatch-ok">OK</button>
+            </div>
+        </div>
+    </div>
+    <div id="egg-select-overlay">
+        <div id="egg-select-box">
+            <p>Selecione um ovo para colocar no ninho:</p>
+            <div id="egg-list"></div>
+            <div class="confirm-buttons">
+                <button class="button small-button" id="egg-select-cancel">Cancelar</button>
             </div>
         </div>
     </div>
