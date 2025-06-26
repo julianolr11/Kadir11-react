@@ -540,11 +540,12 @@ ipcMain.on('battle-pet', async () => {
             return;
         }
 
-        if (currentPet.currentHealth <= 0) {
+        const minHealth = currentPet.maxHealth * 0.3;
+        if (currentPet.currentHealth < minHealth) {
             console.log(`Vida insuficiente para batalhar: ${currentPet.currentHealth}/${currentPet.maxHealth}`);
             BrowserWindow.getAllWindows().forEach(window => {
                 if (window.webContents) {
-                    window.webContents.send('show-battle-error', 'Descanse um pouco até sua próxima batalha! Vida insuficiente.');
+                    window.webContents.send('show-battle-error', 'Seu pet precisa de pelo menos 30% de vida para batalhar.');
                 }
             });
             return;
@@ -937,6 +938,26 @@ function closeAllGameWindows() {
 
 ipcMain.on('open-battle-mode-window', () => {
     console.log('Recebido open-battle-mode-window');
+    if (!currentPet) {
+        console.error('Nenhum pet selecionado para batalhar');
+        BrowserWindow.getAllWindows().forEach(window => {
+            if (window.webContents) {
+                window.webContents.send('show-battle-error', 'Nenhum pet selecionado para batalhar!');
+            }
+        });
+        return;
+    }
+
+    const minHealth = currentPet.maxHealth * 0.3;
+    if (currentPet.currentHealth < minHealth) {
+        BrowserWindow.getAllWindows().forEach(window => {
+            if (window.webContents) {
+                window.webContents.send('show-battle-error', 'Seu pet precisa de pelo menos 30% de vida para batalhar.');
+            }
+        });
+        return;
+    }
+
     createBattleModeWindow();
 });
 
