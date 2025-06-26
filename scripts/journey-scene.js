@@ -1,4 +1,5 @@
 console.log('journey-scene.js carregado');
+import { getElementMultiplier } from './elements.js';
 
 function closeWindow() {
     window.close();
@@ -37,6 +38,7 @@ let playerIdleSrc = '';
 let playerAttackSrc = '';
 let enemyIdleSrc = '';
 let enemyAttackSrc = '';
+let enemyElement = 'puro';
 
 async function loadItemsInfo() {
     try {
@@ -88,7 +90,20 @@ function updateMoves() {
         const btn = document.createElement('button');
         btn.className = 'button small-button';
         const cost = move.cost || 0;
-        btn.textContent = `${move.name} (-${cost})`;
+
+        const moveElement = Array.isArray(move.elements)
+            ? (move.elements.includes(pet.element) ? pet.element : move.elements[0])
+            : (move.element || pet.element || 'puro');
+        const mult = getElementMultiplier(moveElement, enemyElement);
+
+        let indicator = '';
+        if (mult > 1) {
+            indicator = '<span class="move-indicator up">▲</span>';
+        } else if (mult < 1) {
+            indicator = '<span class="move-indicator down">▼</span>';
+        }
+
+        btn.innerHTML = `${move.name} (-${cost}) ${indicator}`;
         btn.addEventListener('click', () => {
             performPlayerMove(move);
         });
@@ -298,7 +313,13 @@ function performPlayerMove(move) {
     hideMenus();
     const playerImg = document.getElementById('player-pet');
     playAttackAnimation(playerImg, playerIdleSrc, playerAttackSrc, () => {
-        enemyHealth = Math.max(0, enemyHealth - 10);
+        const base = move.power || 10;
+        const moveElement = Array.isArray(move.elements)
+            ? (move.elements.includes(pet.element) ? pet.element : move.elements[0])
+            : (move.element || pet.element || 'puro');
+        const mult = getElementMultiplier(moveElement, enemyElement);
+        const dmg = Math.round(base * mult);
+        enemyHealth = Math.max(0, enemyHealth - dmg);
         updateHealthBars();
         if (enemyHealth <= 0) {
             concludeBattle(true);
@@ -311,7 +332,10 @@ function performPlayerMove(move) {
 function enemyAction() {
     const enemyImg = document.getElementById('enemy-pet');
     playAttackAnimation(enemyImg, enemyIdleSrc, enemyAttackSrc, () => {
-        playerHealth = Math.max(0, playerHealth - 8);
+        const base = 8;
+        const mult = getElementMultiplier(enemyElement, pet.element || 'puro');
+        const dmg = Math.round(base * mult);
+        playerHealth = Math.max(0, playerHealth - dmg);
         updateHealthBars();
         window.electronAPI.send('update-health', playerHealth);
         if (playerHealth <= 0) {
@@ -398,6 +422,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.enemyPet && enemyFront) {
             const frontPath = data.enemyPet.replace(/idle\.gif$/i, 'front.gif');
             enemyFront.src = assetPath(frontPath);
+        }
+
+        if (data.enemyElement) {
+            enemyElement = data.enemyElement;
+            updateMoves();
         }
 
         if (data.enemyName && enemyName) enemyName.textContent = data.enemyName;

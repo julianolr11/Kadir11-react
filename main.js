@@ -957,12 +957,14 @@ ipcMain.on('open-journey-scene-window', async (event, data) => {
     if (!win) return;
     const enemy = await getRandomEnemyIdle(currentPet ? currentPet.statusImage : null);
     const enemyName = enemy ? path.basename(path.dirname(enemy)) : '';
+    const enemyElement = extractElementFromPath(enemy);
     win.webContents.on('did-finish-load', () => {
         win.webContents.send('scene-data', {
             background: data.background,
             playerPet: currentPet ? resolveIdleGif(currentPet.statusImage || currentPet.image) : null,
             enemyPet: enemy,
             enemyName,
+            enemyElement,
             statusEffects: currentPet ? currentPet.statusEffects || [] : []
         });
         if (currentPet) {
@@ -1443,6 +1445,16 @@ async function getRandomEnemyIdle(exclude) {
     if (filtered.length === 0) return null;
     const choice = filtered[Math.floor(Math.random() * filtered.length)];
     return path.relative(__dirname, choice).replace(/\\/g, '/');
+}
+
+function extractElementFromPath(p) {
+    if (!p) return null;
+    const parts = p.replace(/\\/g, '/').split('/');
+    const monsIdx = parts.indexOf('Mons');
+    if (monsIdx >= 0 && parts.length > monsIdx + 2) {
+        return parts[monsIdx + 2].toLowerCase();
+    }
+    return null;
 }
 
 module.exports = { app, ipcMain, globalShortcut, windowManager, petManager };
