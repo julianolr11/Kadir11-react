@@ -23,6 +23,11 @@ const hatchOk = document.getElementById('hatch-ok');
 let hatchedPet = null;
 const HATCH_DURATION = 10 * 60 * 1000; // 10 minutos
 
+let itemsInfo = {};
+const eggSelectOverlay = document.getElementById('egg-select-overlay');
+const eggListEl = document.getElementById('egg-list');
+const eggSelectCancel = document.getElementById('egg-select-cancel');
+
 function createHatchButton(index) {
     const btn = document.createElement('button');
     btn.className = 'button small-button hatch-button';
@@ -58,6 +63,64 @@ function hasEggInInventory() {
     if (!pet || !pet.items) return false;
     return Object.keys(pet.items).some(id => id.startsWith('egg') && pet.items[id] > 0);
 }
+
+async function loadItemsInfo() {
+    try {
+        const resp = await fetch('data/items.json');
+        const data = await resp.json();
+        itemsInfo = {};
+        data.forEach(it => { itemsInfo[it.id] = it; });
+    } catch (err) {
+        console.error('Erro ao carregar itens:', err);
+    }
+}
+
+function showEggSelect() {
+    if (!pet || !eggSelectOverlay || !eggListEl) return;
+    eggListEl.innerHTML = '';
+    const items = pet.items || {};
+    Object.keys(items).forEach(id => {
+        if (!id.startsWith('egg')) return;
+        const qty = items[id];
+        if (qty <= 0) return;
+        const info = itemsInfo[id] || {};
+        const div = document.createElement('div');
+        div.className = 'inventory-item';
+
+        const img = document.createElement('img');
+        img.src = info.icon || '';
+        img.alt = info.name || id;
+        img.style.imageRendering = 'pixelated';
+
+        const nameSpan = document.createElement('span');
+        nameSpan.className = 'item-name';
+        nameSpan.textContent = info.name || id;
+
+        const qtySpan = document.createElement('span');
+        qtySpan.className = 'item-qty';
+        qtySpan.textContent = `x ${qty}`;
+
+        const btn = document.createElement('button');
+        btn.className = 'button small-button use-button';
+        btn.textContent = 'Usar';
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            window.electronAPI.send('place-egg-in-nest', id);
+            eggSelectOverlay.style.display = 'none';
+        });
+
+        div.appendChild(img);
+        div.appendChild(nameSpan);
+        div.appendChild(qtySpan);
+        div.appendChild(btn);
+        eggListEl.appendChild(div);
+    });
+    eggSelectOverlay.style.display = 'flex';
+}
+
+eggSelectCancel?.addEventListener('click', () => {
+    if (eggSelectOverlay) eggSelectOverlay.style.display = 'none';
+});
 
 function drawNests(count) {
     if (!nestsContainer) return;
@@ -102,6 +165,10 @@ function drawNests(count) {
             }
         } else {
             slot.appendChild(wrapper);
+            if (hasEggInInventory()) {
+                wrapper.style.cursor = 'pointer';
+                wrapper.addEventListener('click', showEggSelect);
+            }
         }
         nestsContainer.appendChild(slot);
     }
@@ -151,6 +218,7 @@ function startProgressUpdates() {
     progressInterval = setInterval(updateProgressBars, 1000);
 }
 window.addEventListener('DOMContentLoaded', () => {
+    loadItemsInfo();
     loadNests();
     hatchOk?.addEventListener('click', () => {
         if (!hatchedPet) return;
