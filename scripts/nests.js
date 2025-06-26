@@ -39,7 +39,9 @@ function drawNests(count) {
     for (let i = 0; i < n; i++) {
         const slot = document.createElement('div');
         slot.className = 'nest-slot';
-        slot.style.position = 'relative';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'nest-image-wrapper';
+        wrapper.style.position = 'relative';
         const baseImg = document.createElement('img');
         const egg = nestsData[i];
         if (egg) {
@@ -48,7 +50,7 @@ function drawNests(count) {
             baseImg.src = hasEggInInventory() ? 'Assets/tileset/nest-plus.png' : 'Assets/tileset/nest.png';
         }
         baseImg.className = 'nest-image';
-        slot.appendChild(baseImg);
+        wrapper.appendChild(baseImg);
         if (egg) {
             const eggImg = document.createElement('img');
             eggImg.src = eggIcons[egg.eggId] || '';
@@ -57,9 +59,10 @@ function drawNests(count) {
             eggImg.style.left = '50%';
             eggImg.style.top = '50%';
             eggImg.style.transform = 'translate(-50%, -50%)';
-            slot.appendChild(eggImg);
+            wrapper.appendChild(eggImg);
 
             const elapsed = Date.now() - egg.start;
+            slot.appendChild(wrapper);
             if (elapsed >= HATCH_DURATION) {
                 slot.appendChild(createHatchButton(i));
             } else {
@@ -70,6 +73,8 @@ function drawNests(count) {
                 progressWrapper.appendChild(progressBar);
                 slot.appendChild(progressWrapper);
             }
+        } else {
+            slot.appendChild(wrapper);
         }
         nestsContainer.appendChild(slot);
     }
