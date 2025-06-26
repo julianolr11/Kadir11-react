@@ -234,18 +234,20 @@ ipcMain.on('open-load-pet-window', () => {
 
 ipcMain.on("open-pen-window", () => {
     console.log("Recebido open-pen-window");
+    const loadWin = windowManager.loadPetWindow;
+    if (!loadWin) {
+        console.log("Load-pet window não está aberta. Ignorando pedido de abrir pen.");
+        return;
+    }
     const penWin = windowManager.createPenWindow();
     const nestsWin = createNestsWindow();
-    const loadWin = windowManager.loadPetWindow;
-    if (penWin && loadWin) {
+    if (penWin) {
         const lb = loadWin.getBounds();
         const pb = penWin.getBounds();
         penWin.setPosition(lb.x + lb.width, lb.y);
         if (nestsWin) {
             nestsWin.setPosition(lb.x + lb.width, lb.y + pb.height);
         }
-    } else if (penWin && nestsWin) {
-        windowManager.centerWindowsVertically(penWin, nestsWin);
     }
 });
 
