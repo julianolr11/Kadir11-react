@@ -85,6 +85,17 @@ img {
     padding: 4px 8px;
 }
 
+.move-indicator {
+    margin-left: 4px;
+    font-weight: bold;
+}
+.move-indicator.up {
+    color: #00ff00;
+}
+.move-indicator.down {
+    color: #ff4444;
+}
+
 .button:hover {
     background-color: #3a4250; /* Um tom mais claro para hover */
 }
