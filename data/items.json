@@ -21,6 +21,13 @@
     "effect": "Recupera 20 pontos de energia."
   },
   {
+    "id": "chocolate",
+    "name": "Chocolate",
+    "icon": "Assets/Shop/chocolate.png",
+    "description": "Restaura 20 de felicidade, 10 de energia e 3 de fome.",
+    "effect": "Restaura 20 de felicidade, 10 de energia e 3 de fome."
+  },
+  {
     "id": "terrainMedium",
     "name": "Terreno Médio",
     "icon": "assets/tileset/tileset.png",
