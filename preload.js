@@ -36,6 +36,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'journey-complete',
             'place-egg-in-nest',
             'hatch-egg',
+            'open-hatch-window',
+            'close-hatch-window',
             'use-move',
             'update-health',
             'kadirfull',
@@ -130,6 +132,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
     getNestsData: () => {
         console.log('Enviando get-nests-data');
         return ipcRenderer.invoke('get-nests-data');
+    },
+    openHatchWindow: () => {
+        console.log('Enviando open-hatch-window');
+        ipcRenderer.send('open-hatch-window');
+    },
+    closeHatchWindow: () => {
+        console.log('Enviando close-hatch-window');
+        ipcRenderer.send('close-hatch-window');
     }
 });
 

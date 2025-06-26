@@ -33,6 +33,7 @@ let storeWindow = null;
 let journeyImagesCache = null;
 let journeySceneWindow = null;
 let nestsWindow = null;
+let hatchWindow = null;
 
 function getCoins() {
     return store.get('coins', 20);
@@ -264,6 +265,16 @@ ipcMain.on("close-pen-window", () => {
     console.log("Recebido close-pen-window");
     windowManager.closePenWindow();
     closeNestsWindow();
+});
+
+ipcMain.on('open-hatch-window', () => {
+    console.log('Recebido open-hatch-window');
+    createHatchWindow();
+});
+
+ipcMain.on('close-hatch-window', () => {
+    console.log('Recebido close-hatch-window');
+    closeHatchWindow();
 });
 
 ipcMain.on('close-start-window', () => {
@@ -825,6 +836,38 @@ function createNestsWindow() {
     return nestsWindow;
 }
 
+function createHatchWindow() {
+    if (hatchWindow) {
+        hatchWindow.show();
+        hatchWindow.focus();
+        return hatchWindow;
+    }
+
+    const preloadPath = require('path').join(__dirname, 'preload.js');
+
+    hatchWindow = new BrowserWindow({
+        width: 350,
+        height: 300,
+        frame: false,
+        transparent: true,
+        resizable: false,
+        show: false,
+        webPreferences: {
+            preload: preloadPath,
+            nodeIntegration: false,
+            contextIsolation: true,
+        },
+    });
+
+    hatchWindow.loadFile('hatch.html');
+    windowManager.attachFadeHandlers(hatchWindow);
+    hatchWindow.on('closed', () => {
+        hatchWindow = null;
+    });
+
+    return hatchWindow;
+}
+
 function closeBattleModeWindow() {
     if (battleModeWindow) {
         battleModeWindow.close();
@@ -867,6 +910,12 @@ function closeNestsWindow() {
     }
 }
 
+function closeHatchWindow() {
+    if (hatchWindow) {
+        hatchWindow.close();
+    }
+}
+
 function closeAllGameWindows() {
     windowManager.closeTrayWindow();
     windowManager.closeStatusWindow();
@@ -879,6 +928,7 @@ function closeAllGameWindows() {
     closeItemsWindow();
     closeStoreWindow();
     closeNestsWindow();
+    closeHatchWindow();
 }
 
 ipcMain.on('open-battle-mode-window', () => {

@@ -33,6 +33,7 @@ function createHatchButton(index) {
     btn.className = 'button small-button hatch-button';
     btn.textContent = 'Chocar';
     btn.addEventListener('click', () => {
+        window.electronAPI.send('open-hatch-window');
         window.electronAPI.hatchEgg(index);
     });
     return btn;
