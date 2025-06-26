@@ -994,6 +994,7 @@ ipcMain.on('buy-item', async (event, item) => {
         healthPotion: 10,
         meat: 5,
         staminaPotion: 8,
+        chocolate: 2,
         terrainMedium: 100,
         terrainLarge: 200
     };
@@ -1064,6 +1065,11 @@ ipcMain.on('use-item', async (event, item) => {
             break;
         case 'staminaPotion':
             currentPet.energy = Math.min((currentPet.energy || 0) + 20, 100);
+            break;
+        case 'chocolate':
+            currentPet.happiness = Math.min((currentPet.happiness || 0) + 20, 100);
+            currentPet.energy = Math.min((currentPet.energy || 0) + 10, 100);
+            currentPet.hunger = Math.min((currentPet.hunger || 0) + 3, 100);
             break;
     }
 
