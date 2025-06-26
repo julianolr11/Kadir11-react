@@ -300,6 +300,7 @@ ipcMain.on('create-pet', async (event, petData) => {
 
         // Notificar o renderer que o pet foi criado, mas não fechar a janela ainda
         event.reply('pet-created', newPet);
+        broadcastPenUpdate();
     } catch (err) {
         console.error('Erro ao criar pet no main.js:', err);
         event.reply('create-pet-error', err.message);
@@ -396,6 +397,7 @@ ipcMain.handle('delete-pet', async (event, petId) => {
     console.log('Recebido delete-pet com petId:', petId);
     const result = await petManager.deletePet(petId);
     console.log('Pet excluído:', result);
+    broadcastPenUpdate();
     return result;
 });
 
@@ -1125,6 +1127,7 @@ ipcMain.on('hatch-egg', async (event, index) => {
                 sendPet();
             }
         }
+        broadcastPenUpdate();
     } catch (err) {
         console.error('Erro ao chocar ovo:', err);
     }
