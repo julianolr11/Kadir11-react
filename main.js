@@ -387,19 +387,23 @@ ipcMain.handle('delete-pet', async (event, petId) => {
 });
 
 ipcMain.on('rename-pet', async (event, data) => {
-    if (!currentPet || !data || currentPet.petId !== data.petId) {
+    const petId = data?.petId;
+    const newName = typeof data?.newName === 'string' ? data.newName.trim() : '';
+    if (!petId) {
         console.error('Pet para renomear não encontrado');
         return;
     }
-    const newName = typeof data.newName === 'string' ? data.newName.trim() : '';
     if (!newName || newName.length > 15) {
         console.error('Nome inválido para renomear o pet');
         return;
     }
     try {
-        currentPet = await petManager.updatePet(currentPet.petId, { name: newName });
+        const updatedPet = await petManager.updatePet(petId, { name: newName });
+        if (currentPet && currentPet.petId === petId) {
+            currentPet = updatedPet;
+        }
         BrowserWindow.getAllWindows().forEach(w => {
-            if (w.webContents) w.webContents.send('pet-data', currentPet);
+            if (w.webContents) w.webContents.send('pet-data', updatedPet);
         });
     } catch (err) {
         console.error('Erro ao renomear pet:', err);
