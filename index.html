@@ -240,6 +240,27 @@
             animation: blink 2s infinite !important;
         }
 
+        /* Balão de item encontrado */
+        .item-bubble {
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 7px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 7;
+        }
+
+        .item-bubble img {
+            width: 28px;
+            height: 28px;
+            image-rendering: pixelated;
+        }
+
         @keyframes blink {
             0% {
                 opacity: 1;
@@ -354,6 +375,9 @@
             <!-- Imagens de alerta -->
             <img id="hunger-warning" class="warning-image" src="Assets/Shop/meat1.png" alt="Fome baixa" style="image-rendering: pixelated;">
             <img id="happiness-warning" class="warning-image" src="Assets/Shop/sad.png" alt="Felicidade baixa" style="image-rendering: pixelated;">
+            <div id="item-found-bubble" class="item-bubble">
+                <img id="item-found-img" src="" alt="Item" />
+            </div>
             <!-- Alerta de batalha -->
             <div id="battle-alert"></div>
         </div>
