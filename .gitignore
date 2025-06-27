@@ -35,6 +35,8 @@ backups/
 
 # Git
 .git
+
+# Pets data stored locally
 pets/
 Assets/icons/*.png
 Assets/Modes/mapa.png
