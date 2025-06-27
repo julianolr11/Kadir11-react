@@ -162,8 +162,8 @@ function setImageWithFallback(imgElement, relativePath) {
 
     // Ajustar a posição dos alertas com base no decaimento
     adjustWarnings();
-    updateStatusBubble();
-    }
+    showStatusBubble();
+}
     
     // Função para ajustar a posição e exibição dos alertas
 function adjustWarnings() {
@@ -205,7 +205,7 @@ function adjustWarnings() {
     }
     }
 
-    function updateStatusBubble() {
+function updateStatusBubble() {
         if (!statusBubble) return;
         let icon = '';
         const h = petData.happiness || 0;
@@ -221,7 +221,17 @@ function adjustWarnings() {
             icon = '<img src="Assets/Shop/sad.png" alt="Triste">';
         }
         statusBubble.innerHTML = icon;
-    }
+}
+
+function showStatusBubble() {
+    if (!statusBubble) return;
+    updateStatusBubble();
+    statusBubble.style.display = 'block';
+    clearTimeout(statusBubble.hideTimeout);
+    statusBubble.hideTimeout = setTimeout(() => {
+        statusBubble.style.display = 'none';
+    }, 5000);
+}
 
     function getRandomItem() {
         if (!itemsData.length) return null;
@@ -260,13 +270,7 @@ function adjustWarnings() {
 
     if (petImageEl) {
         petImageEl.addEventListener('click', () => {
-            if (!statusBubble) return;
-            updateStatusBubble();
-            statusBubble.style.display = 'block';
-            clearTimeout(statusBubble.hideTimeout);
-            statusBubble.hideTimeout = setTimeout(() => {
-                statusBubble.style.display = 'none';
-            }, 5000);
+            showStatusBubble();
         });
         document.addEventListener('click', (e) => {
             if (statusBubble && !petImageEl.contains(e.target) && e.target !== statusBubble) {
