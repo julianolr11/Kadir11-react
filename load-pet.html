@@ -301,6 +301,7 @@
         const cancelDeleteBtn = document.getElementById('delete-confirm-no');
         const limitOverlay = document.getElementById('limit-overlay');
         const limitOkBtn = document.getElementById('limit-ok');
+        const showPenButton = document.getElementById('show-pen-button');
         let petIdToDelete = null;
         let petLimit = 3;
 
@@ -379,6 +380,9 @@
             const petList = document.getElementById('pet-list');
             petList.innerHTML = ''; // Limpar a lista atual
             window.electronAPI.listPets().then(pets => {
+                if (showPenButton) {
+                    showPenButton.style.display = pets.length > 0 ? 'inline-block' : 'none';
+                }
                 if (limitOverlay) {
                     if (pets.length >= petLimit) {
                         limitOverlay.style.display = 'flex';
