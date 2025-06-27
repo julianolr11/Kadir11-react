@@ -4,6 +4,41 @@ const exitOverlay = document.getElementById('exit-confirm-overlay');
 const exitYesBtn = document.getElementById('exit-confirm-yes');
 const exitNoBtn = document.getElementById('exit-confirm-no');
 
+const itemBubble = document.getElementById('item-found-bubble');
+const itemBubbleImg = document.getElementById('item-found-img');
+
+let itemsData = [];
+const itemRarities = {
+    healthPotion: 'Comum',
+    meat: 'Comum',
+    staminaPotion: 'Comum',
+    chocolate: 'Comum',
+    terrainMedium: 'Raro',
+    terrainLarge: 'Epico',
+    nest: 'Raro',
+    eggAve: 'Raro',
+    eggCriaturaMistica: 'Raro',
+    eggCriaturaSombria: 'Raro',
+    eggDraconideo: 'Raro',
+    eggFera: 'Raro',
+    eggMonstro: 'Raro',
+    eggReptiloide: 'Raro'
+};
+
+const rarityWeights = {
+    Comum: 40,
+    Incomum: 30,
+    Raro: 15,
+    MuitoRaro: 10,
+    Epico: 4,
+    Lendario: 1
+};
+
+fetch('data/items.json')
+    .then(r => r.json())
+    .then(d => { itemsData = d; })
+    .catch(() => { itemsData = []; });
+
 function setImageWithFallback(imgElement, relativePath) {
     if (!imgElement) return;
     if (!relativePath) {
@@ -129,7 +164,7 @@ function setImageWithFallback(imgElement, relativePath) {
     }
     
     // Função para ajustar a posição e exibição dos alertas
-    function adjustWarnings() {
+function adjustWarnings() {
     let baseTop = 110; // Posição inicial
     let verticalOffset = 20; // Espaçamento entre ícones
     
@@ -167,7 +202,39 @@ function setImageWithFallback(imgElement, relativePath) {
     console.error('Elementos de alerta não encontrados');
     }
     }
-    
+
+    function getRandomItem() {
+        if (!itemsData.length) return null;
+        let total = 0;
+        const weights = itemsData.map(it => {
+            const rarity = itemRarities[it.id] || 'Comum';
+            const w = rarityWeights[rarity] || 1;
+            total += w;
+            return w;
+        });
+        let r = Math.random() * total;
+        for (let i = 0; i < itemsData.length; i++) {
+            if (r < weights[i]) return itemsData[i];
+            r -= weights[i];
+        }
+        return itemsData[0];
+    }
+
+    function maybeFindItem() {
+        if (Math.random() < 0.1) { // 10% de chance
+            const item = getRandomItem();
+            if (!item) return;
+            if (itemBubble && itemBubbleImg) {
+                itemBubbleImg.src = item.icon;
+                itemBubble.style.display = 'flex';
+                setTimeout(() => {
+                    if (itemBubble) itemBubble.style.display = 'none';
+                }, 5000);
+            }
+            window.electronAPI?.send('reward-pet', { item: item.id, qty: 1 });
+        }
+    }
+
     // Carregar dados iniciais
     loadPet(petData);
     
@@ -277,9 +344,12 @@ function setImageWithFallback(imgElement, relativePath) {
     window.electronAPI.send('exit-app');
     });
 
-    exitNoBtn?.addEventListener('click', () => {
+exitNoBtn?.addEventListener('click', () => {
     if (exitOverlay) {
         exitOverlay.style.display = 'none';
     }
-    });
+});
+
+    // Verificação periódica para encontrar itens
+    setInterval(maybeFindItem, 20 * 60 * 1000);
 
