@@ -49,7 +49,11 @@ function showHatchAnimation(newPet) {
     hatchName.style.display = 'none';
     hatchOverlay.style.display = 'flex';
     hatchVideo.style.display = 'block';
+    hatchVideo.style.opacity = '1';
     hatchVideoGif.style.display = 'none';
+    hatchVideoGif.style.opacity = '1';
+    hatchGif.style.opacity = '0';
+    hatchGif.style.transform = 'scale(0.5)';
     hatchVideo.currentTime = 0;
     const playPromise = hatchVideo.play();
     if (playPromise !== undefined) {
@@ -62,13 +66,28 @@ function showHatchAnimation(newPet) {
         hatchVideo.style.display = 'none';
         hatchVideoGif.style.display = 'block';
     };
-    const showName = () => {
-        hatchVideo.style.display = 'none';
-        hatchVideoGif.style.display = 'none';
-        hatchName.style.display = 'flex';
-        hatchInput.focus();
+    const showPet = () => {
+        hatchVideo.removeEventListener('ended', showPet);
+        hatchVideo.style.opacity = '0';
+        hatchVideoGif.style.opacity = '0';
+        setTimeout(() => {
+            hatchVideo.style.display = 'none';
+            hatchVideoGif.style.display = 'none';
+            hatchName.style.display = 'flex';
+            hatchGif.style.opacity = '1';
+            hatchGif.style.transform = 'scale(1)';
+            setTimeout(() => {
+                hatchGif.style.transition = 'transform 0.2s ease';
+                hatchGif.style.transform = 'scale(1) translateY(-20px)';
+                setTimeout(() => {
+                    hatchGif.style.transform = 'scale(1) translateY(0)';
+                }, 200);
+            }, 500);
+            hatchInput.focus();
+        }, 500);
     };
-    setTimeout(showName, 7000); // fallback
+    hatchVideo.addEventListener('ended', showPet);
+    setTimeout(showPet, 7000); // fallback
 }
 
 function hasEggInInventory() {
