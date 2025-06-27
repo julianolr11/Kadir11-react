@@ -367,6 +367,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const playerFront = document.getElementById('player-front');
     const enemyFront = document.getElementById('enemy-front');
     const enemyName = document.getElementById('enemy-name');
+    const playerName = document.getElementById('player-name');
+    const playerElementImg = document.getElementById('player-element');
+    const enemyElementImg = document.getElementById('enemy-element');
+    const playerLevelTxt = document.getElementById('player-level');
+    const enemyLevelTxt = document.getElementById('enemy-level');
     loadItemsInfo();
     loadStatusEffectsInfo().then(updateStatusIcons);
 
@@ -440,6 +445,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (data.enemyElement) {
             enemyElement = data.enemyElement;
+            if (enemyElementImg) {
+                enemyElementImg.src = `Assets/Elements/${enemyElement}.png`;
+                enemyElementImg.alt = enemyElement;
+            }
             updateMoves();
         }
 
@@ -452,6 +461,14 @@ document.addEventListener('DOMContentLoaded', () => {
     window.electronAPI.on('pet-data', (event, data) => {
         if (!data) return;
         pet = data;
+        if (playerName) playerName.textContent = data.name || '';
+        if (playerElementImg) {
+            const el = (data.element || 'default').toLowerCase();
+            playerElementImg.src = `Assets/Elements/${el}.png`;
+            playerElementImg.alt = el;
+        }
+        if (playerLevelTxt) playerLevelTxt.textContent = `Lvl ${data.level || 1}`;
+        if (enemyLevelTxt) enemyLevelTxt.textContent = `Lvl ${data.level || 1}`;
         playerHealth = data.currentHealth ?? playerHealth;
         playerMaxHealth = data.maxHealth ?? playerMaxHealth;
         const healthFill = document.getElementById('player-health-fill');
