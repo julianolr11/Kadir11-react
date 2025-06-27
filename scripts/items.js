@@ -111,7 +111,7 @@ function updateItems() {
                 window.electronAPI.send('place-egg-in-nest', id);
             });
         } else {
-            useBtn.textContent = 'Usar';
+            useBtn.textContent = info.type === 'equipment' ? 'Equipar' : 'Usar';
             useBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 window.electronAPI.send('use-item', id);

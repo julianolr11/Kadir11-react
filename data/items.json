@@ -28,6 +28,38 @@
     "effect": "Restaura 20 de felicidade, 10 de energia e 3 de fome."
   },
   {
+    "id": "finger",
+    "name": "Garra do Predador",
+    "icon": "Assets/Shop/finger.png",
+    "description": "Aumenta o ataque em 20% quando equipado.",
+    "effect": "Equipamento que aumenta o ataque em 20%.",
+    "type": "equipment"
+  },
+  {
+    "id": "turtleShell",
+    "name": "Casco de Protetor",
+    "icon": "Assets/Shop/turtle_shell.png",
+    "description": "Aumenta a defesa em 20% quando equipado.",
+    "effect": "Equipamento que aumenta a defesa em 20%.",
+    "type": "equipment"
+  },
+  {
+    "id": "feather",
+    "name": "Pena da Tempestade",
+    "icon": "Assets/Shop/feather.png",
+    "description": "Aumenta a velocidade em 20% quando equipado.",
+    "effect": "Equipamento que aumenta a velocidade em 20%.",
+    "type": "equipment"
+  },
+  {
+    "id": "orbe",
+    "name": "Orbe de Éter",
+    "icon": "Assets/Shop/orbe.png",
+    "description": "Aumenta a magia em 20% quando equipado.",
+    "effect": "Equipamento que aumenta a magia em 20%.",
+    "type": "equipment"
+  },
+  {
     "id": "terrainMedium",
     "name": "Terreno Médio",
     "icon": "assets/tileset/tileset.png",
