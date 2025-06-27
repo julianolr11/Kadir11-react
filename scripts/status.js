@@ -396,9 +396,9 @@ function updateStatus() {
     if (statusEquipImg) {
         const info = itemsInfo[pet.equippedItem];
         if (info && info.icon) {
-            statusEquipImg.src = info.icon;
+            statusEquipImg.style.backgroundImage = `url(${info.icon})`;
         } else {
-            statusEquipImg.src = '';
+            statusEquipImg.style.backgroundImage = 'none';
         }
     }
 
