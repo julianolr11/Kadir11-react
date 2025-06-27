@@ -1136,9 +1136,16 @@ ipcMain.on('use-item', async (event, item) => {
         case 'finger':
         case 'turtleShell':
         case 'feather':
-        case 'orbe':
+        case 'orbe': {
+            if (currentPet.equippedItem === item) {
+                return;
+            }
+            if (currentPet.equippedItem) {
+                items[currentPet.equippedItem] = (items[currentPet.equippedItem] || 0) + 1;
+            }
             currentPet.equippedItem = item;
             break;
+        }
     }
 
     items[item] -= 1;
