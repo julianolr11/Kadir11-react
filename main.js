@@ -387,6 +387,8 @@ ipcMain.on('select-pet', async (event, petId) => {
         closeItemsWindow();
         closeStoreWindow();
         windowManager.closeStatusWindow();
+        closeNestsWindow();
+        closeHatchWindow();
     } catch (err) {
         console.error('Erro ao selecionar pet no main.js:', err);
         event.reply('select-pet-error', err.message);
