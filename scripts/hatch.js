@@ -66,6 +66,7 @@ window.addEventListener('DOMContentLoaded', () => {
             return;
         }
         window.electronAPI.send('rename-pet', { petId: hatchedPet.petId, newName: name });
+        window.electronAPI.selectPet(hatchedPet.petId);
         hatchedPet = null;
         window.electronAPI.send('close-hatch-window');
     });
