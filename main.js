@@ -1168,6 +1168,24 @@ ipcMain.on('use-item', async (event, item) => {
     });
 });
 
+ipcMain.on('unequip-item', async () => {
+    if (!currentPet || !currentPet.equippedItem) return;
+    const items = getItems();
+    const eq = currentPet.equippedItem;
+    items[eq] = (items[eq] || 0) + 1;
+    currentPet.equippedItem = null;
+    setItems(items);
+    currentPet.items = items;
+    try {
+        await petManager.updatePet(currentPet.petId, { equippedItem: null });
+    } catch (err) {
+        console.error('Erro ao remover item:', err);
+    }
+    BrowserWindow.getAllWindows().forEach(w => {
+        if (w.webContents) w.webContents.send('pet-data', currentPet);
+    });
+});
+
 ipcMain.on('place-egg-in-nest', async (event, eggId) => {
     if (!currentPet) return;
     const items = getItems();
