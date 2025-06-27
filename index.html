@@ -83,6 +83,7 @@
             bottom: -100px;
             left: 33%;
             transform: translateX(0%);
+            cursor: pointer;
         }
 
         .pet-info {
@@ -261,6 +262,30 @@
             image-rendering: pixelated;
         }
 
+        /* Balão de status do pet */
+        #pet-status-bubble {
+            position: absolute;
+            bottom: 170px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            padding: 5px;
+            border-radius: 5px;
+            font-family: 'PixelOperator', sans-serif;
+            font-size: 12px;
+            display: none;
+            z-index: 8;
+            text-align: left;
+        }
+
+        #pet-status-bubble img {
+            width: 16px;
+            height: 16px;
+            image-rendering: pixelated;
+            vertical-align: middle;
+        }
+
         @keyframes blink {
             0% {
                 opacity: 1;
@@ -378,6 +403,7 @@
             <div id="item-found-bubble" class="item-bubble">
                 <img id="item-found-img" src="" alt="Item" />
             </div>
+            <div id="pet-status-bubble"></div>
             <!-- Alerta de batalha -->
             <div id="battle-alert"></div>
         </div>

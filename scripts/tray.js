@@ -89,6 +89,8 @@ function setImageWithFallback(imgElement, relativePath) {
     const hungerWarning = document.getElementById('hunger-warning');
     const happinessWarning = document.getElementById('happiness-warning');
     const battleAlert = document.getElementById('battle-alert');
+    const petImageEl = document.getElementById('pet-image');
+    const statusBubble = document.getElementById('pet-status-bubble');
     const penCanvas = document.getElementById('pen-canvas');
     const penCtx = penCanvas ? penCanvas.getContext('2d') : null;
     const tileset = new Image();
@@ -146,21 +148,21 @@ function setImageWithFallback(imgElement, relativePath) {
     console.error('Nenhum petData recebido via IPC');
     }
     
-    const petImage = document.getElementById('pet-image');
     const petName = document.querySelector('.pet-name');
     healthFill.style.width = `${(petData.currentHealth / petData.maxHealth || 0) * 100}%`;
     energyFill.style.width = `${petData.energy || 0}%`;
     levelDisplay.textContent = `Lvl ${petData.level || 1}`;
     if (petData.statusImage) {
-        setImageWithFallback(petImage, petData.statusImage);
+        setImageWithFallback(petImageEl, petData.statusImage);
     } else {
-        setImageWithFallback(petImage, petData.image);
+        setImageWithFallback(petImageEl, petData.image);
     }
     petImageBackground.style.background = rarityGradients[petData.rarity] || rarityGradients['Comum'];
     petName.textContent = petData.name || 'Eggsy';
-    
+
     // Ajustar a posição dos alertas com base no decaimento
     adjustWarnings();
+    updateStatusBubble();
     }
     
     // Função para ajustar a posição e exibição dos alertas
@@ -203,6 +205,17 @@ function adjustWarnings() {
     }
     }
 
+    function updateStatusBubble() {
+        if (!statusBubble) return;
+        statusBubble.innerHTML = `
+            <div>HP: ${petData.currentHealth || 0}/${petData.maxHealth || 0}</div>
+            <div>Fome: ${petData.hunger || 0}/100</div>
+            <div>Felicidade: ${petData.happiness || 0}/100
+                ${petData.happiness > 90 ? '<img src="Assets/Shop/happy.png" alt="Feliz">' : petData.happiness < 30 ? '<img src="Assets/Shop/sad.png" alt="Triste">' : ''}
+            </div>
+            <div>Energia: ${petData.energy || 0}/100</div>`;
+    }
+
     function getRandomItem() {
         if (!itemsData.length) return null;
         let total = 0;
@@ -231,12 +244,29 @@ function adjustWarnings() {
                     if (itemBubble) itemBubble.style.display = 'none';
                 }, 5000);
             }
-            window.electronAPI?.send('reward-pet', { item: item.id, qty: 1 });
+    window.electronAPI?.send('reward-pet', { item: item.id, qty: 1 });
         }
     }
 
     // Carregar dados iniciais
     loadPet(petData);
+
+    if (petImageEl) {
+        petImageEl.addEventListener('click', () => {
+            if (!statusBubble) return;
+            if (statusBubble.style.display === 'block') {
+                statusBubble.style.display = 'none';
+            } else {
+                updateStatusBubble();
+                statusBubble.style.display = 'block';
+            }
+        });
+        document.addEventListener('click', (e) => {
+            if (statusBubble && !petImageEl.contains(e.target) && e.target !== statusBubble) {
+                statusBubble.style.display = 'none';
+            }
+        });
+    }
     
     // Toggle entre raridade e textura
     let showRarity = true;
