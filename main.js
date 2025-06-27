@@ -118,7 +118,7 @@ const specieData = {
     'Fera': { dir: 'Fera', race: 'Foxyl' }
 };
 
-function generatePetFromEgg(eggId) {
+function generatePetFromEgg(eggId, rarity) {
     const specie = eggSpecieMap[eggId] || 'Ave';
     const info = specieData[specie] || {};
     const attributes = {
@@ -148,7 +148,7 @@ function generatePetFromEgg(eggId) {
         element: info.element || 'puro',
         attributes,
         specie,
-        rarity: generateRarity(),
+        rarity: rarity || generateRarity(),
         level: 1,
         experience: 0,
         createdAt: new Date().toISOString(),
@@ -1160,7 +1160,7 @@ ipcMain.on('place-egg-in-nest', async (event, eggId) => {
     items[eggId] -= 1;
     setItems(items);
     currentPet.items = items;
-    nests.push({ eggId, start: Date.now() });
+    nests.push({ eggId, start: Date.now(), rarity: generateRarity() });
     setNestsData(nests);
     BrowserWindow.getAllWindows().forEach(w => {
         if (w.webContents) w.webContents.send('pet-data', currentPet);
@@ -1175,7 +1175,7 @@ ipcMain.on('hatch-egg', async (event, index) => {
     nests.splice(index, 1);
     setNestsData(nests);
     try {
-        const petData = generatePetFromEgg(egg.eggId);
+        const petData = generatePetFromEgg(egg.eggId, egg.rarity);
         const newPet = await petManager.createPet(petData);
         BrowserWindow.getAllWindows().forEach(w => {
             if (w.webContents) w.webContents.send('nests-data-updated', nests);

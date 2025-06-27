@@ -22,7 +22,18 @@ const hatchGif = document.getElementById('hatch-gif');
 const hatchInput = document.getElementById('hatch-name-input');
 const hatchOk = document.getElementById('hatch-ok');
 let hatchedPet = null;
-const HATCH_DURATION = 10 * 60 * 1000; // 10 minutos
+const HATCH_DURATIONS = {
+    Comum: 20 * 60 * 1000,
+    Incomum: 35 * 60 * 1000,
+    Raro: 50 * 60 * 1000,
+    MuitoRaro: 80 * 60 * 1000,
+    Epico: 120 * 60 * 1000,
+    Lendario: 180 * 60 * 1000
+};
+
+function getHatchDuration(rarity) {
+    return HATCH_DURATIONS[rarity] || HATCH_DURATIONS.Comum;
+}
 
 let itemsInfo = {};
 const eggSelectOverlay = document.getElementById('egg-select-overlay');
@@ -182,9 +193,10 @@ function drawNests(count) {
             eggImg.style.transform = 'translate(-50%, -50%)';
             wrapper.appendChild(eggImg);
 
+            const hatchDuration = getHatchDuration(egg.rarity);
             const elapsed = Date.now() - egg.start;
             slot.appendChild(wrapper);
-            if (elapsed >= HATCH_DURATION) {
+            if (elapsed >= hatchDuration) {
                 slot.appendChild(createHatchButton(i));
             } else {
                 const progressWrapper = document.createElement('div');
@@ -232,8 +244,9 @@ function updateProgressBars() {
     bars.forEach((bar, index) => {
         const egg = nestsData[index];
         if (!egg) return;
+        const hatchDuration = getHatchDuration(egg.rarity);
         const elapsed = Date.now() - egg.start;
-        let ratio = elapsed / HATCH_DURATION;
+        let ratio = elapsed / hatchDuration;
         if (ratio >= 1) {
             drawNests(nestsData.length);
         } else {
