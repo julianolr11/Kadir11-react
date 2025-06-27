@@ -296,5 +296,60 @@
     "effect": "queimado",
     "cost": 20,
     "level": 5
+  },
+  {
+    "name": "Faísca",
+    "description": "Golpe simples de fogo que causa dano leve.",
+    "rarity": "Comum",
+    "elements": ["fogo"],
+    "species": ["Draconídeo", "Ave", "Fera"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Pedregulho",
+    "description": "Arremessa uma pedra para causar dano leve.",
+    "rarity": "Comum",
+    "elements": ["terra"],
+    "species": ["Draconídeo", "Ave", "Fera"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Rajada de Vento",
+    "description": "Jato de ar que causa leve dano ao adversário.",
+    "rarity": "Comum",
+    "elements": ["ar"],
+    "species": ["Draconídeo", "Ave", "Fera"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Jato D'água",
+    "description": "Disparo de água que acerta o inimigo com leve força.",
+    "rarity": "Comum",
+    "elements": ["agua"],
+    "species": ["Draconídeo", "Ave", "Fera"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
+  },
+  {
+    "name": "Luz Singela",
+    "description": "Luz pura que fere o inimigo com intensidade moderada.",
+    "rarity": "Comum",
+    "elements": ["puro"],
+    "species": ["Draconídeo", "Ave", "Fera"],
+    "power": 10,
+    "effect": "nenhum",
+    "cost": 5,
+    "level": 1
   }
 ]
