@@ -309,6 +309,16 @@
             /* Mantém o alinhamento à direita */
         }
 
+        /* Animação extra para o balão de felicidade */
+        #happiness-warning {
+            animation: blink 2s infinite, bounce 1s infinite !important;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
         /* Espaçamento vertical (será ajustado pelo JS) */
         .warning-image+.warning-image {
             top: 95px !important;
