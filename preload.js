@@ -64,7 +64,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'fade-out-start-music', // Sinalizar o fade-out da música de start
             'pen-updated',
             'nest-updated',
-            'nests-data-updated'
+            'nests-data-updated',
+            'activate-status-tab'
         ];
         if (validChannels.includes(channel)) {
             console.log(`Registrando listener para o canal: ${channel}`);
