@@ -34,6 +34,10 @@ function hideDescription() {
 let renameModal = null;
 let renameInput = null;
 let cheatBuffer = '';
+let equipModal = null;
+let equipItemsContainer = null;
+let unequipButton = null;
+let closeEquipButton = null;
 
 async function loadItemsInfo() {
     try {
@@ -79,6 +83,46 @@ function confirmRename() {
     window.electronAPI.send('rename-pet', { petId: pet.petId, newName: trimmed });
     updateStatus();
     closeRenameModal();
+}
+
+function openEquipModal() {
+    if (!equipModal || !equipItemsContainer || !pet || !pet.items) return;
+    equipItemsContainer.innerHTML = '';
+    Object.keys(pet.items).forEach(id => {
+        const qty = pet.items[id];
+        const info = itemsInfo[id];
+        if (!info || info.type !== 'equipment' || qty <= 0) return;
+        const btn = document.createElement('button');
+        btn.className = 'button small-button';
+        btn.style.display = 'flex';
+        btn.style.alignItems = 'center';
+        btn.style.gap = '5px';
+        const img = document.createElement('img');
+        img.src = info.icon;
+        img.alt = info.name;
+        img.style.width = '32px';
+        img.style.height = '32px';
+        img.style.imageRendering = 'pixelated';
+        const span = document.createElement('span');
+        span.textContent = info.name;
+        btn.appendChild(img);
+        btn.appendChild(span);
+        btn.addEventListener('click', () => {
+            window.electronAPI.send('use-item', id);
+            closeEquipModal();
+        });
+        equipItemsContainer.appendChild(btn);
+    });
+    if (pet.equippedItem) {
+        unequipButton.style.display = 'block';
+    } else {
+        unequipButton.style.display = 'none';
+    }
+    equipModal.style.display = 'flex';
+}
+
+function closeEquipModal() {
+    if (equipModal) equipModal.style.display = 'none';
 }
 
 function setImageWithFallback(imgElement, relativePath) {
@@ -400,6 +444,16 @@ document.addEventListener('DOMContentLoaded', () => {
     renameInput = document.getElementById('rename-input');
     const renameOk = document.getElementById('rename-ok');
     const renameCancel = document.getElementById('rename-cancel');
+    equipModal = document.getElementById('equipment-modal');
+    equipItemsContainer = document.getElementById('equip-items-container');
+    unequipButton = document.getElementById('unequip-item-button');
+    closeEquipButton = document.getElementById('close-equip-modal');
+    document.getElementById('status-equipped-item')?.addEventListener('click', openEquipModal);
+    unequipButton?.addEventListener('click', () => {
+        window.electronAPI.send('unequip-item');
+        closeEquipModal();
+    });
+    closeEquipButton?.addEventListener('click', closeEquipModal);
     if (nameSpan) nameSpan.addEventListener('click', openRenameModal);
     if (editIcon) editIcon.addEventListener('click', openRenameModal);
     renameOk?.addEventListener('click', confirmRename);
