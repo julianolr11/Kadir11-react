@@ -35,6 +35,13 @@ let journeySceneWindow = null;
 let nestsWindow = null;
 let hatchWindow = null;
 
+function updateNestsPosition() {
+    if (nestsWindow && windowManager.penWindow) {
+        const bounds = windowManager.penWindow.getBounds();
+        nestsWindow.setPosition(bounds.x, bounds.y + bounds.height);
+    }
+}
+
 function getCoins() {
     return store.get('coins', 20);
 }
@@ -222,10 +229,13 @@ ipcMain.on('open-load-pet-window', () => {
     const penWin = windowManager.penWindow;
     if (loadWin && penWin) {
         const lb = loadWin.getBounds();
-        const pb = penWin.getBounds();
         penWin.setPosition(lb.x + lb.width, lb.y);
-        if (nestsWindow) {
-            nestsWindow.setPosition(lb.x + lb.width, lb.y + pb.height);
+        updateNestsPosition();
+        if (!penWin.__nestsMoveListener) {
+            const reposition = updateNestsPosition;
+            penWin.on('move', reposition);
+            penWin.on('resize', reposition);
+            penWin.__nestsMoveListener = true;
         }
     } else if (loadWin) {
         windowManager.centerWindow(loadWin);
@@ -243,10 +253,13 @@ ipcMain.on("open-pen-window", () => {
     const nestsWin = createNestsWindow();
     if (penWin) {
         const lb = loadWin.getBounds();
-        const pb = penWin.getBounds();
         penWin.setPosition(lb.x + lb.width, lb.y);
-        if (nestsWin) {
-            nestsWin.setPosition(lb.x + lb.width, lb.y + pb.height);
+        updateNestsPosition();
+        if (!penWin.__nestsMoveListener) {
+            const reposition = updateNestsPosition;
+            penWin.on('move', reposition);
+            penWin.on('resize', reposition);
+            penWin.__nestsMoveListener = true;
         }
     }
 });
@@ -875,6 +888,8 @@ function createNestsWindow() {
         nestsWindow = null;
     });
 
+    updateNestsPosition();
+
     return nestsWindow;
 }
 
@@ -1041,10 +1056,7 @@ ipcMain.on('resize-journey-window', (event, size) => {
 ipcMain.on('resize-pen-window', (event, size) => {
     if (windowManager.penWindow && size && size.width && size.height) {
         windowManager.penWindow.setSize(Math.round(size.width), Math.round(size.height));
-        if (nestsWindow) {
-            const bounds = windowManager.penWindow.getBounds();
-            nestsWindow.setPosition(bounds.x, bounds.y + bounds.height);
-        }
+        updateNestsPosition();
     }
 });
 
