@@ -33,12 +33,14 @@ let playerStatusEffects = [];
 let playerHealth = 100;
 let playerMaxHealth = 100;
 let enemyHealth = 100;
+let enemyEnergy = 100;
 let currentTurn = 'player';
 let playerIdleSrc = '';
 let playerAttackSrc = '';
 let enemyIdleSrc = '';
 let enemyAttackSrc = '';
 let enemyElement = 'puro';
+const enemyAttackCost = 10;
 
 async function loadItemsInfo() {
     try {
@@ -195,6 +197,15 @@ function updateHealthBars() {
         const percent = (enemyHealth / 100) * 100;
         enemyFill.style.width = `${percent}%`;
     }
+    const playerEnergy = pet ? (pet.energy || 0) : 0;
+    const playerEnergyFill = document.getElementById('player-energy-fill');
+    if (playerEnergyFill) {
+        playerEnergyFill.style.width = `${playerEnergy}%`;
+    }
+    const enemyEnergyFill = document.getElementById('enemy-energy-fill');
+    if (enemyEnergyFill) {
+        enemyEnergyFill.style.width = `${enemyEnergy}%`;
+    }
 }
 
 function playAttackAnimation(img, idle, attack, cb) {
@@ -332,6 +343,8 @@ function performPlayerMove(move) {
 function enemyAction() {
     const enemyImg = document.getElementById('enemy-pet');
     playAttackAnimation(enemyImg, enemyIdleSrc, enemyAttackSrc, () => {
+        enemyEnergy = Math.max(0, enemyEnergy - enemyAttackCost);
+        updateHealthBars();
         const base = 8;
         const mult = getElementMultiplier(enemyElement, pet.element || 'puro');
         const dmg = Math.round(base * mult);
@@ -412,6 +425,7 @@ document.addEventListener('DOMContentLoaded', () => {
             enemyIdleSrc = assetPath(data.enemyPet);
             enemyAttackSrc = await computeAttackSrc(data.enemyPet);
             enemy.src = enemyIdleSrc;
+            enemyEnergy = 100;
         }
 
         if (data.playerPet && playerFront) {
