@@ -337,6 +337,9 @@ class WindowManager {
         });
 
         this.statusWindow.loadFile('status.html');
+        this.statusWindow.once('ready-to-show', () => {
+            centerWindowAnimated(this.statusWindow);
+        });
         attachFadeHandlers(this.statusWindow);
         this.statusWindow.on('closed', () => {
             this.statusWindow = null;
