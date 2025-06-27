@@ -480,6 +480,16 @@
             z-index: 1000;
             white-space: nowrap;
         }
+        /* Ajustes para a lista de equipamentos */
+        #equip-items-container {
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        #equip-items-container .small-button {
+            width: auto;
+            font-size: 12px;
+            padding: 4px 8px;
+        }
     </style>
 </head>
 
@@ -609,7 +619,7 @@
 
     <div id="equipment-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); align-items:center; justify-content:center; z-index:1000;">
         <div style="background:#2a323e; border:2px solid #fff; padding:10px; border-radius:8px; text-align:center; width:300px;">
-            <div id="equip-items-container" style="display:flex; flex-direction:column; gap:5px; margin-bottom:8px;"></div>
+            <div id="equip-items-container" class="scroll-container" style="display:flex; flex-direction:column; gap:5px; margin-bottom:8px;"></div>
             <div style="display:flex; justify-content:center; gap:10px;">
                 <button id="unequip-item-button" class="button small-button">Remover</button>
                 <button id="close-equip-modal" class="button small-button">Fechar</button>
