@@ -122,7 +122,8 @@ async function createPet(petData) {
         bioImage: petData.bioImage || null,
         statusImage: petData.statusImage || null,
         items: {},
-        statusEffects: []
+        statusEffects: [],
+        equippedItem: null
     };
 
     ensureStatusImage(newPet);
@@ -150,15 +151,18 @@ async function listPets() {
                 try {
                     const data = await fs.readFile(filePath, 'utf8');
                     const pet = JSON.parse(data);
-                    if (pet.kadirPoints === undefined) {
-                        pet.kadirPoints = 5;
-                    }
+                   if (pet.kadirPoints === undefined) {
+                       pet.kadirPoints = 5;
+                   }
                    if (pet.items === undefined) {
                        pet.items = {};
                    }
                    if (pet.statusEffects === undefined) {
                        pet.statusEffects = [];
                    }
+                    if (pet.equippedItem === undefined) {
+                        pet.equippedItem = null;
+                    }
                     if (pet.winStreak === undefined) {
                         pet.winStreak = 0;
                     }
@@ -202,6 +206,9 @@ async function loadPet(petId) {
        if (pet.statusEffects === undefined) {
            pet.statusEffects = [];
        }
+        if (pet.equippedItem === undefined) {
+            pet.equippedItem = null;
+        }
         if (pet.winStreak === undefined) {
             pet.winStreak = 0;
         }

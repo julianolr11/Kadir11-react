@@ -13,6 +13,7 @@ function getRequiredXpForNextLevel(level) {
 console.log('status.js carregado com sucesso');
 
 let pet = {};
+let itemsInfo = {};
 
 let descriptionEl = null;
 
@@ -33,6 +34,17 @@ function hideDescription() {
 let renameModal = null;
 let renameInput = null;
 let cheatBuffer = '';
+
+async function loadItemsInfo() {
+    try {
+        const resp = await fetch('data/items.json');
+        const data = await resp.json();
+        itemsInfo = {};
+        data.forEach(it => { itemsInfo[it.id] = it; });
+    } catch (err) {
+        console.error('Erro ao carregar infos de itens:', err);
+    }
+}
 
 function activateKadirFull() {
     if (!pet || !pet.petId) return;
@@ -128,6 +140,7 @@ function updateStatus() {
     const statusLevel = document.getElementById('status-level');
     const statusKadirPoints = document.getElementById('kadir-points-value');
     const statusMoves = document.getElementById('status-moves');
+    const statusEquipImg = document.getElementById('status-equipped-item');
     const statusPetImage = document.getElementById('status-pet-image');
     const statusBioImage = document.getElementById('status-bio-image');
     const bioText = document.getElementById('bio-text');
@@ -141,7 +154,7 @@ function updateStatus() {
     const statusPetImageGradient = document.getElementById('status-pet-image-gradient');
 
     // Verificar se todos os elementos estão disponíveis
-    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusKadirPoints || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText || !xpBarFill || !xpText || !specieText || !raceText || !elementText) {
+    if (!healthContainer || !hungerContainer || !happinessContainer || !energyContainer || !statusAttack || !statusDefense || !statusSpeed || !statusMagic || !statusRarityLabel || !statusHealthFill || !statusHungerFill || !statusHappinessFill || !statusEnergyFill || !statusLevel || !statusKadirPoints || !statusMoves || !statusPetImage || !statusBioImage || !titleBarElement || !titleBarPetName || !statusPetImageGradient || !bioText || !xpBarFill || !xpText || !specieText || !raceText || !elementText || !statusEquipImg) {
         console.error('Um ou mais elementos do status-container ou title-bar não encontrados', {
             healthContainer: !!healthContainer,
             hungerContainer: !!hungerContainer,
@@ -168,7 +181,8 @@ function updateStatus() {
             xpText: !!xpText,
             specieText: !!specieText,
             raceText: !!raceText,
-            elementText: !!elementText
+            elementText: !!elementText,
+            statusEquipImg: !!statusEquipImg
         });
         return;
     }
@@ -190,10 +204,29 @@ function updateStatus() {
     statusHunger.textContent = `${pet.hunger || 0}/100`;
     statusHappiness.textContent = `${pet.happiness || 0}/100`;
     statusEnergy.textContent = `${pet.energy || 0}/100`;
-    statusAttack.textContent = pet.attributes?.attack || 0;
-    statusDefense.textContent = pet.attributes?.defense || 0;
-    statusSpeed.textContent = pet.attributes?.speed || 0;
-    statusMagic.textContent = pet.attributes?.magic || 0;
+
+    let atk = pet.attributes?.attack || 0;
+    let def = pet.attributes?.defense || 0;
+    let spd = pet.attributes?.speed || 0;
+    let mag = pet.attributes?.magic || 0;
+    switch (pet.equippedItem) {
+        case 'finger':
+            atk = Math.round(atk * 1.2);
+            break;
+        case 'turtleShell':
+            def = Math.round(def * 1.2);
+            break;
+        case 'feather':
+            spd = Math.round(spd * 1.2);
+            break;
+        case 'orbe':
+            mag = Math.round(mag * 1.2);
+            break;
+    }
+    statusAttack.textContent = atk;
+    statusDefense.textContent = def;
+    statusSpeed.textContent = spd;
+    statusMagic.textContent = mag;
     statusRarityLabel.textContent = formatRarity(pet.rarity).toUpperCase();
     statusLevel.innerHTML = `<strong>Level: ${pet.level || 0}</strong>`;
     statusKadirPoints.textContent = pet.kadirPoints ?? 0;
@@ -296,6 +329,16 @@ function updateStatus() {
         setImageWithFallback(statusPetImage, pet.image);
     }
 
+    if (statusEquipImg) {
+        const info = itemsInfo[pet.equippedItem];
+        if (info && info.icon) {
+            statusEquipImg.src = info.icon;
+            statusEquipImg.style.display = 'block';
+        } else {
+            statusEquipImg.style.display = 'none';
+        }
+    }
+
     if (statusBioImage) {
         let bioPath = null;
         const dir = specieDirs[pet.specie];
@@ -346,6 +389,8 @@ function updateTabImage(tabId) {
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('DOM carregado na janela de status');
+
+    loadItemsInfo();
 
     descriptionEl = document.getElementById('move-description');
 

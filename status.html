@@ -182,14 +182,28 @@
 
         #status-rarity-label {
             position: absolute;
-            bottom: 5px;
-            right: 5px;
+            top: 5px;
+            left: 5px;
             font-size: 14px;
             color: #ffffff;
             background-color: rgba(0, 0, 0, 0.5);
             padding: 2px 5px;
             border-radius: 3px;
             z-index: 4;
+        }
+
+        #status-equipped-item {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 32px;
+            height: 32px;
+            border-radius: 3px;
+            border: 2px solid #ffffff;
+            background-color: #2a323e;
+            image-rendering: pixelated;
+            z-index: 4;
+            display: none;
         }
 
         #status-level {
@@ -494,6 +508,7 @@
                         <img id="status-bio-image" src="" alt="Bio do Pet" style="image-rendering: pixelated;">
                         <div id="status-rarity-label">RARIDADE</div>
                         <div id="status-level">Level: 0</div>
+                        <img id="status-equipped-item" src="" alt="Equipamento">
                     </div>
                 </div>
                 <div class="tab-buttons">

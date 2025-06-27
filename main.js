@@ -1053,6 +1053,10 @@ ipcMain.on('buy-item', async (event, item) => {
         meat: 5,
         staminaPotion: 8,
         chocolate: 2,
+        finger: 35,
+        turtleShell: 35,
+        feather: 35,
+        orbe: 35,
         terrainMedium: 100,
         terrainLarge: 200
     };
@@ -1129,6 +1133,12 @@ ipcMain.on('use-item', async (event, item) => {
             currentPet.energy = Math.min((currentPet.energy || 0) + 10, 100);
             currentPet.hunger = Math.min((currentPet.hunger || 0) + 3, 100);
             break;
+        case 'finger':
+        case 'turtleShell':
+        case 'feather':
+        case 'orbe':
+            currentPet.equippedItem = item;
+            break;
     }
 
     items[item] -= 1;
@@ -1140,7 +1150,8 @@ ipcMain.on('use-item', async (event, item) => {
             currentHealth: currentPet.currentHealth,
             hunger: currentPet.hunger,
             happiness: currentPet.happiness,
-            energy: currentPet.energy
+            energy: currentPet.energy,
+            equippedItem: currentPet.equippedItem
         });
     } catch (err) {
         console.error('Erro ao usar item:', err);
