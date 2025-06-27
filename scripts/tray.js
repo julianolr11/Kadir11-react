@@ -208,9 +208,16 @@ function adjustWarnings() {
     function updateStatusBubble() {
         if (!statusBubble) return;
         let icon = '';
-        if (petData.happiness > 90) {
+        const h = petData.happiness || 0;
+        if (h > 90) {
             icon = '<img src="Assets/Shop/happy.png" alt="Feliz">';
-        } else if (petData.happiness < 30) {
+        } else if (h > 70) {
+            icon = '<img src="Assets/Shop/smile.png" alt="Sorriso">';
+        } else if (h > 50) {
+            icon = '<img src="Assets/Shop/shy-smile.png" alt="Sorriso tímido">';
+        } else if (h > 30) {
+            icon = '<img src="Assets/Shop/poker-face.png" alt="Poker face">';
+        } else {
             icon = '<img src="Assets/Shop/sad.png" alt="Triste">';
         }
         statusBubble.innerHTML = icon;
