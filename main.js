@@ -446,8 +446,15 @@ ipcMain.on('train-pet', async () => {
     }
 
     console.log('Abrindo janela de treinamento para:', currentPet.name);
-    const trainWin = createTrainWindow();
     const statusWin = windowManager.createStatusWindow();
+    const trainWin = createTrainWindow({
+        centerOnShow: false,
+        onReadyToShow: () => {
+            if (statusWin) {
+                windowManager.centerWindowsSideBySide(statusWin, trainWin);
+            }
+        }
+    });
 
     if (trainWin) {
         trainWin.webContents.on('did-finish-load', () => {
@@ -465,9 +472,6 @@ ipcMain.on('train-pet', async () => {
         });
     }
 
-    if (trainWin && statusWin) {
-        windowManager.centerWindowsSideBySide(statusWin, trainWin);
-    }
 });
 
 ipcMain.on('itens-pet', (event, options) => {
@@ -722,7 +726,9 @@ function createJourneySceneWindow() {
     return journeySceneWindow;
 }
 
-function createTrainWindow() {
+function createTrainWindow(options = {}) {
+    const { centerOnShow = true, onReadyToShow } = options;
+
     if (trainWindow) {
         trainWindow.show();
         trainWindow.focus();
@@ -746,9 +752,17 @@ function createTrainWindow() {
     });
 
     trainWindow.loadFile('train.html');
-    trainWindow.once('ready-to-show', () => {
-        windowManager.centerWindow(trainWindow);
-    });
+
+    if (centerOnShow) {
+        trainWindow.once('ready-to-show', () => {
+            windowManager.centerWindow(trainWindow);
+        });
+    }
+
+    if (typeof onReadyToShow === 'function') {
+        trainWindow.once('ready-to-show', () => onReadyToShow(trainWindow));
+    }
+
     windowManager.attachFadeHandlers(trainWindow);
     trainWindow.on('closed', () => {
         trainWindow = null;
