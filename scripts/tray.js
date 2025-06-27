@@ -207,13 +207,13 @@ function adjustWarnings() {
 
     function updateStatusBubble() {
         if (!statusBubble) return;
-        statusBubble.innerHTML = `
-            <div>HP: ${petData.currentHealth || 0}/${petData.maxHealth || 0}</div>
-            <div>Fome: ${petData.hunger || 0}/100</div>
-            <div>Felicidade: ${petData.happiness || 0}/100
-                ${petData.happiness > 90 ? '<img src="Assets/Shop/happy.png" alt="Feliz">' : petData.happiness < 30 ? '<img src="Assets/Shop/sad.png" alt="Triste">' : ''}
-            </div>
-            <div>Energia: ${petData.energy || 0}/100</div>`;
+        let icon = '';
+        if (petData.happiness > 90) {
+            icon = '<img src="Assets/Shop/happy.png" alt="Feliz">';
+        } else if (petData.happiness < 30) {
+            icon = '<img src="Assets/Shop/sad.png" alt="Triste">';
+        }
+        statusBubble.innerHTML = icon;
     }
 
     function getRandomItem() {
@@ -254,12 +254,12 @@ function adjustWarnings() {
     if (petImageEl) {
         petImageEl.addEventListener('click', () => {
             if (!statusBubble) return;
-            if (statusBubble.style.display === 'block') {
+            updateStatusBubble();
+            statusBubble.style.display = 'block';
+            clearTimeout(statusBubble.hideTimeout);
+            statusBubble.hideTimeout = setTimeout(() => {
                 statusBubble.style.display = 'none';
-            } else {
-                updateStatusBubble();
-                statusBubble.style.display = 'block';
-            }
+            }, 5000);
         });
         document.addEventListener('click', (e) => {
             if (statusBubble && !petImageEl.contains(e.target) && e.target !== statusBubble) {
