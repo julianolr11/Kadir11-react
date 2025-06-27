@@ -423,3 +423,13 @@ document.addEventListener('DOMContentLoaded', () => {
         closeWindow();
     });
 });
+
+// Ativar uma aba específica quando solicitado pelo processo principal
+window.electronAPI.on('activate-status-tab', (event, tabId) => {
+    const button = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+    if (button) {
+        button.click();
+    } else {
+        console.warn('Botão da aba', tabId, 'não encontrado');
+    }
+});

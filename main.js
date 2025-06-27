@@ -440,18 +440,33 @@ ipcMain.on('open-status-window', () => {
 });
 
 ipcMain.on('train-pet', async () => {
-    if (currentPet) {
-        console.log('Abrindo janela de treinamento para:', currentPet.name);
-        const win = createTrainWindow();
-        if (win) {
-            win.webContents.on('did-finish-load', () => {
-                currentPet.coins = getCoins();
-                currentPet.items = getItems();
-                win.webContents.send('pet-data', currentPet);
-            });
-        }
-    } else {
+    if (!currentPet) {
         console.error('Nenhum pet selecionado para treinar');
+        return;
+    }
+
+    console.log('Abrindo janela de treinamento para:', currentPet.name);
+    const trainWin = createTrainWindow();
+    const statusWin = windowManager.createStatusWindow();
+
+    if (trainWin) {
+        trainWin.webContents.on('did-finish-load', () => {
+            currentPet.coins = getCoins();
+            currentPet.items = getItems();
+            trainWin.webContents.send('pet-data', currentPet);
+        });
+    }
+
+    if (statusWin) {
+        statusWin.webContents.on('did-finish-load', () => {
+            currentPet.items = getItems();
+            statusWin.webContents.send('pet-data', currentPet);
+            statusWin.webContents.send('activate-status-tab', 'tab-moves');
+        });
+    }
+
+    if (trainWin && statusWin) {
+        windowManager.centerWindowsSideBySide(statusWin, trainWin);
     }
 });
 
@@ -734,6 +749,9 @@ function createTrainWindow() {
     windowManager.attachFadeHandlers(trainWindow);
     trainWindow.on('closed', () => {
         trainWindow = null;
+        if (windowManager.statusWindow) {
+            windowManager.centerWindow(windowManager.statusWindow);
+        }
     });
 
     return trainWindow;
