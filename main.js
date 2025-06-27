@@ -746,6 +746,9 @@ function createTrainWindow() {
     });
 
     trainWindow.loadFile('train.html');
+    trainWindow.once('ready-to-show', () => {
+        windowManager.centerWindow(trainWindow);
+    });
     windowManager.attachFadeHandlers(trainWindow);
     trainWindow.on('closed', () => {
         trainWindow = null;
