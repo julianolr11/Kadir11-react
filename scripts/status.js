@@ -92,25 +92,45 @@ function openEquipModal() {
         const qty = pet.items[id];
         const info = itemsInfo[id];
         if (!info || info.type !== 'equipment' || qty <= 0) return;
+
         const btn = document.createElement('button');
         btn.className = 'button small-button';
         btn.style.display = 'flex';
         btn.style.alignItems = 'center';
         btn.style.gap = '5px';
+        btn.style.width = '100%';
+        btn.style.textAlign = 'left';
+
         const img = document.createElement('img');
         img.src = info.icon;
         img.alt = info.name;
         img.style.width = '32px';
         img.style.height = '32px';
         img.style.imageRendering = 'pixelated';
+
+        const textWrap = document.createElement('div');
+        textWrap.style.display = 'flex';
+        textWrap.style.flexDirection = 'column';
+        textWrap.style.alignItems = 'flex-start';
+
         const span = document.createElement('span');
         span.textContent = info.name;
+
+        const desc = document.createElement('span');
+        desc.textContent = info.description || '';
+        desc.style.fontSize = '12px';
+
+        textWrap.appendChild(span);
+        textWrap.appendChild(desc);
+
         btn.appendChild(img);
-        btn.appendChild(span);
+        btn.appendChild(textWrap);
+
         btn.addEventListener('click', () => {
             window.electronAPI.send('use-item', id);
             closeEquipModal();
         });
+
         equipItemsContainer.appendChild(btn);
     });
     if (pet.equippedItem) {
@@ -377,9 +397,8 @@ function updateStatus() {
         const info = itemsInfo[pet.equippedItem];
         if (info && info.icon) {
             statusEquipImg.src = info.icon;
-            statusEquipImg.style.display = 'block';
         } else {
-            statusEquipImg.style.display = 'none';
+            statusEquipImg.src = '';
         }
     }
 
