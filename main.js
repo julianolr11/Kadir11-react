@@ -887,7 +887,7 @@ function createHatchWindow() {
 
     hatchWindow = new BrowserWindow({
         width: 350,
-        height: 300,
+        height: 400,
         frame: false,
         transparent: true,
         resizable: false,
