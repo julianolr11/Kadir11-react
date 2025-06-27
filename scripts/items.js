@@ -114,6 +114,15 @@ function updateItems() {
             useBtn.textContent = info.type === 'equipment' ? 'Equipar' : 'Usar';
             useBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
+                if (info.type === 'equipment' && pet.equippedItem && pet.equippedItem !== id) {
+                    const confirmSwap = window.confirm('Deseja trocar de acessório?');
+                    if (!confirmSwap) {
+                        return;
+                    }
+                }
+                if (info.type === 'equipment' && pet.equippedItem === id) {
+                    return;
+                }
                 window.electronAPI.send('use-item', id);
             });
         }
