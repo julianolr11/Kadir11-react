@@ -2,6 +2,10 @@ let pet = null;
 let itemsInfo = {};
 let descriptionEl = null;
 let cheatBuffer = '';
+let swapModal = null;
+let swapConfirmBtn = null;
+let swapCancelBtn = null;
+let pendingEquipId = null;
 
 function showDescription(text, evt) {
     if (!descriptionEl) return;
@@ -15,6 +19,11 @@ function hideDescription() {
     if (!descriptionEl) return;
     descriptionEl.textContent = '';
     descriptionEl.style.visibility = 'hidden';
+}
+
+function openSwapModal(equipId) {
+    pendingEquipId = equipId;
+    if (swapModal) swapModal.style.display = 'flex';
 }
 
 function closeWindow() {
@@ -33,6 +42,21 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     descriptionEl = document.getElementById('item-description');
+    swapModal = document.getElementById('swap-modal');
+    swapConfirmBtn = document.getElementById('swap-confirm');
+    swapCancelBtn = document.getElementById('swap-cancel');
+    swapConfirmBtn?.addEventListener('click', () => {
+        if (pendingEquipId) {
+            window.electronAPI.send('use-item', pendingEquipId);
+        }
+        pendingEquipId = null;
+        if (swapModal) swapModal.style.display = 'none';
+    });
+    swapCancelBtn?.addEventListener('click', () => {
+        pendingEquipId = null;
+        if (swapModal) swapModal.style.display = 'none';
+    });
+
     loadItemsInfo();
 
     window.electronAPI.on('pet-data', (event, data) => {
@@ -114,14 +138,14 @@ function updateItems() {
             useBtn.textContent = info.type === 'equipment' ? 'Equipar' : 'Usar';
             useBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                if (info.type === 'equipment' && pet.equippedItem && pet.equippedItem !== id) {
-                    const confirmSwap = window.confirm('Deseja trocar de acessório?');
-                    if (!confirmSwap) {
+                if (info.type === 'equipment') {
+                    if (pet.equippedItem && pet.equippedItem !== id) {
+                        openSwapModal(id);
                         return;
                     }
-                }
-                if (info.type === 'equipment' && pet.equippedItem === id) {
-                    return;
+                    if (pet.equippedItem === id) {
+                        return;
+                    }
                 }
                 window.electronAPI.send('use-item', id);
             });
