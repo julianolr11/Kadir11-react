@@ -16,6 +16,7 @@ let pet = null;
 let cheatBuffer = '';
 const hatchOverlay = document.getElementById('hatch-overlay');
 const hatchVideo = document.getElementById('hatch-video');
+const hatchVideoGif = document.getElementById('hatch-video-gif');
 const hatchName = document.getElementById('hatch-name');
 const hatchGif = document.getElementById('hatch-gif');
 const hatchInput = document.getElementById('hatch-name-input');
@@ -41,15 +42,29 @@ function createHatchButton(index) {
 let progressInterval = null;
 
 function showHatchAnimation(newPet) {
-    if (!hatchOverlay || !hatchVideo || !hatchName || !hatchGif || !hatchInput) return;
+    if (!hatchOverlay || !hatchVideo || !hatchVideoGif || !hatchName || !hatchGif || !hatchInput) return;
     hatchedPet = newPet;
     hatchGif.src = newPet.statusImage ? `Assets/Mons/${newPet.statusImage}` : (newPet.image ? `Assets/Mons/${newPet.image}` : 'Assets/Mons/eggsy.png');
     hatchInput.value = '';
     hatchName.style.display = 'none';
     hatchOverlay.style.display = 'flex';
     hatchVideo.style.display = 'block';
+    hatchVideoGif.style.display = 'none';
+    hatchVideo.currentTime = 0;
+    const playPromise = hatchVideo.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            hatchVideo.style.display = 'none';
+            hatchVideoGif.style.display = 'block';
+        });
+    }
+    hatchVideo.onerror = () => {
+        hatchVideo.style.display = 'none';
+        hatchVideoGif.style.display = 'block';
+    };
     const showName = () => {
         hatchVideo.style.display = 'none';
+        hatchVideoGif.style.display = 'none';
         hatchName.style.display = 'flex';
         hatchInput.focus();
     };

@@ -155,9 +155,26 @@ function showElementSelection() {
 function showFinalAnimation(newPet) {
     const finalAnimation = document.getElementById('final-animation');
     const finalAnimationVideo = document.getElementById('final-animation-video');
+    const finalAnimationGif = document.getElementById('final-animation-gif');
 
     finalAnimation.style.display = 'flex';
     console.log('Exibindo animação final');
+
+    // Iniciar a animação
+    finalAnimationVideo.style.display = 'block';
+    finalAnimationGif.style.display = 'none';
+    finalAnimationVideo.currentTime = 0;
+    const playPromise = finalAnimationVideo.play();
+    if (playPromise !== undefined) {
+        playPromise.catch(() => {
+            finalAnimationVideo.style.display = 'none';
+            finalAnimationGif.style.display = 'block';
+        });
+    }
+    finalAnimationVideo.onerror = () => {
+        finalAnimationVideo.style.display = 'none';
+        finalAnimationGif.style.display = 'block';
+    };
 
     // Fade-in da animação
     setTimeout(() => {
@@ -167,6 +184,9 @@ function showFinalAnimation(newPet) {
     setTimeout(() => {
         finalAnimation.style.display = 'none';
         finalAnimationVideo.style.opacity = '0'; // Resetar a opacidade pra próxima vez
+        finalAnimationVideo.pause();
+        finalAnimationVideo.currentTime = 0;
+        finalAnimationGif.style.display = 'none';
         console.log('Animação final concluída');
 
         // Após o GIF, revelar o pet com fade-in
