@@ -115,11 +115,11 @@ function updateTerrainVisibility(info) {
     if (!terrainMediumEl || !terrainLargeEl) return;
     const apply = (penSize) => {
         if (penSize === 'small') {
-            terrainMediumEl.style.display = 'block';
+            terrainMediumEl.style.display = 'flex';
             terrainLargeEl.style.display = 'none';
         } else if (penSize === 'medium') {
             terrainMediumEl.style.display = 'none';
-            terrainLargeEl.style.display = 'block';
+            terrainLargeEl.style.display = 'flex';
         } else {
             terrainMediumEl.style.display = 'none';
             terrainLargeEl.style.display = 'none';
