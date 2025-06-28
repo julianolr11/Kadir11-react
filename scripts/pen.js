@@ -19,8 +19,8 @@ function hasEggInInventory() {
 const MOVE_SPEED = 16; // pixels per second
 
 function getScale(size) {
-    // Pens larger than medium should be displayed slightly smaller
-    return size === 'large' ? 1.2 : 1.5;
+    // Keep a constant scale so the window size matches the pen exactly
+    return 1;
 }
 
 function drawPen() {
