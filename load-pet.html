@@ -374,6 +374,16 @@
                 .replace(/\b\w/g, c => c.toUpperCase()); // Capitaliza a primeira letra de cada palavra
         }
 
+        function escapeHtml(str) {
+            if (typeof str !== 'string') return str;
+            return str
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/'/g, '&#39;')
+                .replace(/"/g, '&quot;');
+        }
+
 
         // Função para recarregar a lista de pets
         function reloadPetList() {
@@ -394,14 +404,15 @@
                     const petItem = document.createElement('div');
                     petItem.className = 'pet-item';
                     petItem.setAttribute('data-element', pet.element);
+                    const safeName = escapeHtml(pet.name);
                     petItem.innerHTML = `
                         <div class="pet-image-container">
                             <div class="pet-image-background"></div>
                             <div class="pet-image-texture"></div>
-                            <img src="${pet.statusImage ? `Assets/Mons/${pet.statusImage}` : (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png')}" alt="${pet.name}" style="image-rendering: pixelated;" />
+                            <img src="${pet.statusImage ? `Assets/Mons/${pet.statusImage}` : (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png')}" alt="${safeName}" style="image-rendering: pixelated;" />
                         </div>
                         <div class="pet-info">
-                            <p><strong>Nome:</strong> ${pet.name}</p>
+                            <p><strong>Nome:</strong> ${safeName}</p>
                             <p><strong>Nível:</strong> ${pet.level}</p>
                             <p><strong>Raridade:</strong> ${formatRarity(pet.rarity)}</p>
                             <p><strong>Último Acesso:</strong> ${pet.lastAccessed ? formatDate(pet.lastAccessed) : 'Nunca'}</p>
@@ -425,7 +436,7 @@
                     deleteButton.addEventListener('click', (e) => {
                         e.stopPropagation();
                         petIdToDelete = pet.petId;
-                        deleteMessage.textContent = `Tem certeza que deseja excluir o pet "${pet.name}"? Essa ação não pode ser desfeita.`;
+                        deleteMessage.textContent = `Tem certeza que deseja excluir o pet "${safeName}"? Essa ação não pode ser desfeita.`;
                         deleteOverlay.style.display = 'flex';
                     });
                 });
