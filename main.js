@@ -249,11 +249,18 @@ ipcMain.on("open-pen-window", () => {
         console.log("Load-pet window não está aberta. Ignorando pedido de abrir pen.");
         return;
     }
-    const penWin = windowManager.createPenWindow();
+    const info = getPenInfo();
+    const dimsMap = { small: { w: 4, h: 3 }, medium: { w: 5, h: 4 }, large: { w: 7, h: 5 } };
+    const dims = dimsMap[info.size] || dimsMap.small;
+    const w = (dims.w + 2) * 32;
+    const h = (dims.h + 2) * 32;
+    const border = 4; // canvas border size
+    const penWin = windowManager.createPenWindow(w + border, h + border);
     const nestsWin = createNestsWindow();
     if (penWin) {
         const lb = loadWin.getBounds();
         penWin.setPosition(lb.x + lb.width, lb.y);
+        penWin.setSize(w + border, h + border);
         updateNestsPosition();
         if (!penWin.__nestsMoveListener) {
             const reposition = updateNestsPosition;

@@ -348,7 +348,7 @@ class WindowManager {
         return this.statusWindow;
     }
     // Criar a janela do cercado (pen.html)
-    createPenWindow() {
+    createPenWindow(width, height) {
         if (this.penWindow) {
             this.penWindow.focus();
             return this.penWindow;
@@ -356,8 +356,8 @@ class WindowManager {
 
         const preloadPath = path.join(__dirname, "..", "preload.js");
         this.penWindow = new BrowserWindow({
-            width: 370,
-            height: 300,
+            width: width || 370,
+            height: height || 300,
             frame: false,
             transparent: true,
             resizable: false,
