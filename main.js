@@ -256,7 +256,12 @@ ipcMain.on("open-pen-window", () => {
     const h = (dims.h + 2) * 32;
     const border = 4; // canvas border size
     const penWin = windowManager.createPenWindow(w + border, h + border);
-    const nestsWin = createNestsWindow();
+    let nestsWin = null;
+    if (getNestCount() > 0) {
+        nestsWin = createNestsWindow();
+    } else {
+        closeNestsWindow();
+    }
     if (penWin) {
         const lb = loadWin.getBounds();
         penWin.setPosition(lb.x + lb.width, lb.y);
@@ -867,6 +872,9 @@ function createStoreWindow() {
 }
 
 function createNestsWindow() {
+    if (getNestCount() <= 0) {
+        return null;
+    }
     if (nestsWindow) {
         nestsWindow.show();
         nestsWindow.focus();
