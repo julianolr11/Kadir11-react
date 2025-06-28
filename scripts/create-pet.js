@@ -1,3 +1,4 @@
+import { createPet } from "./api.js";
 console.log('Script do create-pet.js carregado');
 
 // Informações de pasta e raça para cada espécie
@@ -292,7 +293,7 @@ function showNameSelection(element) {
         console.log('Pet a ser criado:', petData);
 
         // Enviar o pedido de criação do pet
-        window.electronAPI.createPet(petData);
+        createPet(petData);
 
         // Escutar a confirmação de criação e exibir a animação + revelar o pet
         window.electronAPI.onPetCreated((newPet) => {
