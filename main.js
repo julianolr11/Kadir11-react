@@ -332,6 +332,40 @@ ipcMain.on('create-pet', async (event, petData) => {
     }
 });
 
+// Resgatar código para ganhar um pet especial
+ipcMain.on('redeem-code', async (event, code) => {
+    const codesPath = path.join(__dirname, 'data', 'codes.json');
+    let codes = {};
+    try {
+        codes = JSON.parse(fs.readFileSync(codesPath, 'utf8'));
+    } catch (err) {
+        console.error('Erro ao ler codes.json:', err);
+        event.reply('redeem-code-result', { success: false, message: 'Falha ao verificar código' });
+        return;
+    }
+
+    const entry = codes[code];
+    if (!entry || entry.used) {
+        event.reply('redeem-code-result', { success: false, message: 'Código inválido ou já utilizado' });
+        return;
+    }
+
+    try {
+        const newPet = await petManager.createPet(entry.pet);
+        entry.used = true;
+        fs.writeFileSync(codesPath, JSON.stringify(codes, null, 2));
+        event.reply('redeem-code-result', { success: true, pet: newPet });
+        broadcastPenUpdate();
+    } catch (err) {
+        console.error('Erro ao resgatar código:', err);
+        event.reply('redeem-code-result', { success: false, message: 'Erro ao criar pet' });
+    }
+
+    // Este mecanismo lê e grava codes.json localmente. No futuro, ele pode
+    // ser substituído por uma chamada a uma API que valide o código e marque
+    // seu uso em um servidor remoto.
+});
+
 ipcMain.on('animation-finished', () => {
     console.log('Animação finalizada, prosseguindo com o redirecionamento');
     windowManager.closeCreatePetWindow();
