@@ -42,6 +42,58 @@ let enemyAttackSrc = '';
 let enemyElement = 'puro';
 const enemyAttackCost = 10;
 
+const rarityMultipliers = {
+    'Comum': 1.0,
+    'Incomum': 1.05,
+    'Raro': 1.1,
+    'MuitoRaro': 1.2,
+    'Epico': 1.35,
+    'Lendario': 1.55
+};
+
+function getRequiredXpForNextLevel(level) {
+    const baseXp = 100;
+    const scale = 1.2;
+    return Math.round(baseXp * Math.pow(level, 1.5) * scale);
+}
+
+function calculateXpGain(baseXp, rarity) {
+    const mult = rarityMultipliers[rarity] || 1.0;
+    return Math.round(baseXp * mult);
+}
+
+function calculateBattleXp(full) {
+    if (!pet) return 0;
+    const level = pet.level || 1;
+    const rarity = pet.rarity || 'Comum';
+    const base = Math.round(getRequiredXpForNextLevel(level) / 10);
+    const xp = calculateXpGain(base, rarity);
+    return full ? xp : Math.floor(xp * 0.1);
+}
+
+function randomFrom(ids) {
+    if (!ids.length) return null;
+    return ids[Math.floor(Math.random() * ids.length)];
+}
+
+function getEggIds() {
+    return Object.keys(itemsInfo).filter(id => id.startsWith('egg'));
+}
+
+function getAccessoryIds() {
+    return Object.keys(itemsInfo).filter(id => itemsInfo[id].type === 'equipment');
+}
+
+function getNormalItemIds() {
+    return Object.keys(itemsInfo).filter(id => !id.startsWith('egg') && itemsInfo[id].type !== 'equipment');
+}
+
+function calculateCoinReward() {
+    if (!pet) return 1;
+    const levelBonus = Math.floor((pet.level || 1) / 3);
+    return Math.floor(Math.random() * 5) + 1 + levelBonus;
+}
+
 async function loadItemsInfo() {
     try {
         const resp = await fetch('data/items.json');
@@ -234,39 +286,58 @@ function applyStatusEffects() {
     window.electronAPI.send('update-health', playerHealth);
 }
 
-function generateReward() {
-    const types = ['experience', 'kadirPoints', 'coins', 'item'];
-    const choice = types[Math.floor(Math.random() * types.length)];
-    if (choice === 'experience') {
-        return { experience: Math.floor(Math.random() * 10) + 5 };
+function generateReward(win) {
+    const reward = {};
+    const xp = calculateBattleXp(win);
+    if (xp > 0) reward.experience = xp;
+
+    if (!win) return reward;
+
+    reward.kadirPoints = 1;
+
+    const roll = Math.random() * 100;
+    if (roll < 0.5) {
+        const egg = randomFrom(getEggIds());
+        if (egg) {
+            reward.item = egg;
+            reward.qty = 1;
+        }
+    } else if (roll < 20.5) {
+        const item = randomFrom(getNormalItemIds());
+        if (item) {
+            reward.item = item;
+            reward.qty = 1;
+        }
+    } else if (roll < 40.5) {
+        reward.coins = calculateCoinReward();
+    } else if (roll < 45.5) {
+        const acc = randomFrom(getAccessoryIds());
+        if (acc) {
+            reward.item = acc;
+            reward.qty = 1;
+        }
     }
-    if (choice === 'kadirPoints') {
-        return { kadirPoints: 1 };
-    }
-    if (choice === 'coins') {
-        return { coins: Math.floor(Math.random() * 5) + 1 };
-    }
-    const ids = Object.keys(itemsInfo);
-    if (ids.length === 0) return { coins: 1 };
-    const id = ids[Math.floor(Math.random() * ids.length)];
-    return { item: id, qty: 1 };
+    return reward;
 }
 
-function showVictoryModal(reward) {
+function showVictoryModal(reward, win) {
     const modal = document.getElementById('victory-modal');
     const rewardBox = document.getElementById('victory-reward');
+    const textEl = document.getElementById('victory-text');
     const closeBtn = document.getElementById('victory-close');
-    if (!modal || !rewardBox || !closeBtn) return;
+    if (!modal || !rewardBox || !closeBtn || !textEl) return;
 
-    let text = '';
-    if (reward.experience) text = `Você recebeu ${reward.experience} XP!`;
-    else if (reward.kadirPoints) text = `Você recebeu ${reward.kadirPoints} DNA Kadir!`;
-    else if (reward.coins) text = `Você recebeu ${reward.coins} moedas!`;
-    else if (reward.item) {
+    textEl.textContent = win ? 'Parabéns! Você venceu!' : 'Você perdeu!';
+
+    const lines = [];
+    if (reward.experience) lines.push(`Você recebeu ${reward.experience} XP`);
+    if (reward.kadirPoints) lines.push(`Você recebeu ${reward.kadirPoints} DNA Kadir`);
+    if (reward.coins) lines.push(`Você recebeu ${reward.coins} moedas`);
+    if (reward.item) {
         const info = itemsInfo[reward.item] || { name: reward.item };
-        text = `Você recebeu 1 ${info.name}!`;
+        lines.push(`Você recebeu 1 ${info.name}`);
     }
-    rewardBox.textContent = text;
+    rewardBox.innerHTML = lines.join('<br>');
     modal.style.display = 'flex';
     closeBtn.onclick = () => {
         modal.style.display = 'none';
@@ -280,14 +351,11 @@ function concludeBattle(playerWon) {
     hideMenus();
     window.electronAPI.send('battle-result', { win: playerWon });
     localStorage.setItem('journeyBattleWin', playerWon ? '1' : '0');
-    if (playerWon) {
-        const reward = generateReward();
+    const reward = generateReward(playerWon);
+    if (reward && Object.keys(reward).length) {
         window.electronAPI.send('reward-pet', reward);
-        showVictoryModal(reward);
-    } else {
-        showMessage('Você perdeu!');
-        setTimeout(() => { window.electronAPI.send('open-journey-mode-window'); closeWindow(); }, 2000);
     }
+    showVictoryModal(reward, playerWon);
 }
 
 function endPlayerTurn() {
