@@ -30,6 +30,7 @@ class WindowManager {
     });
 
     this.mainWindow.loadFile('dist/index.html');
+    this.mainWindow.once('ready-to-show', () => this.mainWindow.show());
     this.mainWindow.on('closed', () => {
       this.mainWindow = null;
     });
@@ -46,6 +47,23 @@ class WindowManager {
       this.mainWindow.close();
     }
   }
+
+  attachFadeHandlers(win) {
+    if (!win) return;
+    win.once('ready-to-show', () => win.show());
+  }
+
+  centerWindow(win) {
+    if (win && typeof win.center === 'function') {
+      win.center();
+    }
+  }
+
+  // Placeholder methods referenced in main.js. They currently do nothing
+  // but prevent errors if called before being fully implemented.
+  closeCreatePetWindow() {}
+  closeTrayWindow() {}
+  closeStatusWindow() {}
 }
 
 module.exports = new WindowManager();
