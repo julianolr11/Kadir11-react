@@ -6,14 +6,15 @@ Kadir11 é um jogo estilo Tamagotchi escrito em [Electron](https://electronjs.or
 
 1. Certifique‑se de ter o [Node.js](https://nodejs.org/) instalado.
 2. Execute `npm install` para baixar as dependências.
+3. Após a instalação das dependências, gere a pasta `dist` com:
 
 ```bash
-npm install
+npm run build
 ```
 
 ## Como iniciar
 
-Após instalar as dependências, inicie o jogo com:
+Após instalar as dependências e gerar a pasta `dist`, inicie o jogo com:
 
 ```bash
 npm start
@@ -35,6 +36,7 @@ pet.
 ## Principais comandos
 
 - `npm install` – instalação das dependências.
+- `npm run build` – compila o frontend React para a pasta `dist`.
 - `npm start` – inicia a aplicação.
 
 
