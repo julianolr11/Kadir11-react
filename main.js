@@ -178,7 +178,7 @@ app.whenReady().then(() => {
     if (store.get('coins') === undefined) {
         store.set('coins', 20);
     }
-    windowManager.createStartWindow();
+    windowManager.createMainWindow();
 
     globalShortcut.register('Ctrl+Shift+D', () => {
         const focusedWindow = BrowserWindow.getFocusedWindow();
@@ -193,8 +193,8 @@ app.whenReady().then(() => {
     startPetUpdater(() => currentPet);
 
     app.on('activate', () => {
-        if (windowManager.getStartWindow() === null) {
-            windowManager.createStartWindow();
+        if (windowManager.getMainWindow() === null) {
+            windowManager.createMainWindow();
         }
     });
 });
@@ -306,12 +306,12 @@ ipcMain.on('close-hatch-window', () => {
 
 ipcMain.on('close-start-window', () => {
     console.log('Recebido close-start-window');
-    windowManager.closeStartWindow();
+    windowManager.closeMainWindow();
 });
 
 ipcMain.on('open-start-window', () => {
     console.log('Recebido open-start-window');
-    windowManager.createStartWindow();
+    windowManager.createMainWindow();
 });
 
 ipcMain.on('create-pet', async (event, petData) => {
@@ -369,7 +369,7 @@ ipcMain.on('redeem-code', async (event, code) => {
 ipcMain.on('animation-finished', () => {
     console.log('Animação finalizada, prosseguindo com o redirecionamento');
     windowManager.closeCreatePetWindow();
-    const startWin = windowManager.getStartWindow();
+    const startWin = windowManager.getMainWindow();
     if (startWin && !startWin.isDestroyed()) {
         console.log('Solicitando fade-out da música da startWindow');
         startWin.webContents.send('fade-out-start-music');
@@ -430,10 +430,10 @@ ipcMain.on('select-pet', async (event, petId) => {
         windowManager.closeLoadPetWindow();
 
         // Verificar se a startWindow existe antes de tentar fechá-la
-        const startWindow = windowManager.getStartWindow();
+        const startWindow = windowManager.getMainWindow();
         if (startWindow && !startWindow.isDestroyed()) {
             console.log('Fechando a startWindow');
-            windowManager.closeStartWindow();
+            windowManager.closeMainWindow();
         } else {
             console.log('Nenhuma startWindow encontrada para fechar ou já está destruída');
         }
@@ -710,7 +710,7 @@ function createBattleModeWindow() {
         },
     });
 
-    battleModeWindow.loadFile('battle-mode.html');
+    battleModeWindow.loadFile('dist/index.html');
     windowManager.attachFadeHandlers(battleModeWindow);
     battleModeWindow.on('closed', () => {
         console.log('battleModeWindow fechada');
@@ -745,7 +745,7 @@ function createJourneyModeWindow() {
         },
     });
 
-    journeyModeWindow.loadFile('journey-mode.html');
+    journeyModeWindow.loadFile('dist/index.html');
     windowManager.attachFadeHandlers(journeyModeWindow);
     journeyModeWindow.on('closed', () => {
         console.log('journeyModeWindow fechada');
@@ -778,7 +778,7 @@ function createJourneySceneWindow() {
         },
     });
 
-    journeySceneWindow.loadFile('journey-scene.html');
+    journeySceneWindow.loadFile('dist/index.html');
     windowManager.attachFadeHandlers(journeySceneWindow);
     journeySceneWindow.on('closed', () => {
         journeySceneWindow = null;
@@ -812,7 +812,7 @@ function createTrainWindow(options = {}) {
         },
     });
 
-    trainWindow.loadFile('train.html');
+    trainWindow.loadFile('dist/index.html');
 
     if (centerOnShow) {
         trainWindow.once('ready-to-show', () => {
@@ -858,7 +858,7 @@ function createItemsWindow() {
         },
     });
 
-    itemsWindow.loadFile('items.html');
+    itemsWindow.loadFile('dist/index.html');
     windowManager.attachFadeHandlers(itemsWindow);
     itemsWindow.on('closed', () => {
         itemsWindow = null;
@@ -893,7 +893,7 @@ function createStoreWindow() {
         },
     });
 
-    storeWindow.loadFile('store.html');
+    storeWindow.loadFile('dist/index.html');
     windowManager.attachFadeHandlers(storeWindow);
     storeWindow.on('closed', () => {
         storeWindow = null;
@@ -931,7 +931,7 @@ function createNestsWindow() {
         },
     });
 
-    nestsWindow.loadFile('nests.html');
+    nestsWindow.loadFile('dist/index.html');
     windowManager.attachFadeHandlers(nestsWindow);
     nestsWindow.on('closed', () => {
         nestsWindow = null;
@@ -965,7 +965,7 @@ function createHatchWindow() {
         },
     });
 
-    hatchWindow.loadFile('hatch.html');
+    hatchWindow.loadFile('dist/index.html');
     windowManager.attachFadeHandlers(hatchWindow);
     hatchWindow.on('closed', () => {
         hatchWindow = null;
@@ -1026,7 +1026,7 @@ function closeAllGameWindows() {
     windowManager.closeTrayWindow();
     windowManager.closeStatusWindow();
     windowManager.closeCreatePetWindow();
-    windowManager.closeStartWindow();
+    windowManager.closeMainWindow();
     closeBattleModeWindow();
     closeJourneyModeWindow();
     closeJourneySceneWindow();
