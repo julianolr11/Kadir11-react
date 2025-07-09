@@ -1,6 +1,9 @@
 const { BrowserWindow } = require('electron');
 const path = require('path');
 
+// Simple helper focused on managing a single main window. All
+// game views are rendered through React inside this window.
+
 class WindowManager {
   constructor() {
     this.mainWindow = null;
@@ -44,4 +47,5 @@ class WindowManager {
     }
   }
 }
+
 module.exports = new WindowManager();
