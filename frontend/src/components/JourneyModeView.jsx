@@ -1,4 +1,4 @@
-import '../../styles/main.css'
+import '../styles/main.css'
 export default function JourneyModeView() {
   return (
     <div className="window">

@@ -10,7 +10,7 @@
 /* Definir a fonte principal */
 @font-face {
     font-family: 'PixelOperator';
-    src: url('../Assets/Fonts/PixelOperator.ttf') format('truetype');
+    src: url('../../../Assets/Fonts/PixelOperator.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -148,5 +148,7 @@ img {
 #title-bar-buttons {
     display: flex;
     gap: 5px;
-    -webkit-app-region: no-drag;
+    -webkit-app-region: no-drag;}
+.hidden {
+    display: none;
 }

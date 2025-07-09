@@ -1,4 +1,4 @@
-import '../../styles/main.css'
+import '../styles/main.css'
 export default function CreatePetView() {
   return (
     <div className="window">
