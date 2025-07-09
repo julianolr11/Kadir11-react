@@ -135,11 +135,10 @@ if (window.electronAPI) {
     listPets().then(pets => {
         console.log('Pets recebidos:', pets);
         if (pets.length > 0) {
-            document.getElementById('load-button').style.display = 'block';
+            document.getElementById('load-button').classList.remove('hidden');
         }
     }).catch(err => {
         console.error('Erro ao listar pets:', err);
     });
 } else {
-    console.error('electronAPI não está disponível para listar pets');
-}
+    console.error('electronAPI não está disponível para listar pets');}

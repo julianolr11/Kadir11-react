@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; media-src 'self'">
     <title>Kadir11 - Status do Pet</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="frontend/src/styles/main.css">
     <style>
         html {
             width: 100%;
@@ -29,7 +29,7 @@
             margin: 0;
         }
 
-        /* Título configurado em styles/main.css */
+        /* Título configurado em frontend/src/styles/main.css */
 
         #title-bar-element {
             width: 20px;
@@ -83,7 +83,7 @@
             font-weight: bold;
             text-shadow: none;
         }
-        /* title-bar-buttons configurado em styles/main.css */
+        /* title-bar-buttons configurado em frontend/src/styles/main.css */
         #back-status-titlebar {
             width: 20px;
             height: 20px;
@@ -499,7 +499,7 @@
     <div class="window" style="margin:0px; padding: 0px;">
         <div id="title-bar">
             <div id="title-bar-content">
-                <img id="title-bar-element" src="Assets/Elements/default.png" alt="Elemento" style="image-rendering: pixelated;">
+                <img id="title-bar-element" src="Assets/Elements/default.png" alt="Elemento">
                 <div id="title-bar-pet-name-container">
                     <span id="title-bar-pet-name">Nome do Pet</span>
                     <span id="edit-pet-name" title="Editar nome">✏️</span>
@@ -516,8 +516,8 @@
                     <div id="status-pet-image-container">
                         <div id="status-pet-image-gradient"></div>
                         <div id="status-pet-image-texture"></div>
-                        <img id="status-pet-image" src="Assets/Mons/eggsy.png" alt="Pet" style="image-rendering: pixelated;">
-                        <img id="status-bio-image" src="" alt="Bio do Pet" style="image-rendering: pixelated;">
+                        <img id="status-pet-image" src="Assets/Mons/eggsy.png" alt="Pet">
+                        <img id="status-bio-image" src="" alt="Bio do Pet">
                         <div id="status-rarity-label">RARIDADE</div>
                         <div id="status-level">Level: 0</div>
                         <div id="status-equipped-item"></div>

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import '../../styles/main.css'
+import '../styles/main.css'
 
 const rarityGradients = {
   Comum: 'linear-gradient(135deg, #808080, #A9A9A9)',

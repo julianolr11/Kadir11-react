@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; media-src 'self'">
     <title>Kadir11 - Carregar Pet</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="frontend/src/styles/main.css">
     <style>
         html {
             width: 100%;
@@ -433,7 +433,7 @@
                         <div class="pet-image-container">
                             <div class="pet-image-background"></div>
                             <div class="pet-image-texture"></div>
-                            <img src="${pet.statusImage ? `Assets/Mons/${pet.statusImage}` : (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png')}" alt="${safeName}" style="image-rendering: pixelated;" />
+                            <img src="${pet.statusImage ? `Assets/Mons/${pet.statusImage}` : (pet.image ? `Assets/Mons/${pet.image}` : 'Assets/Mons/eggsy.png')}" alt="${safeName}" />
                         </div>
                         <div class="pet-info">
                             <p><strong>Nome:</strong> ${safeName}</p>
@@ -443,7 +443,7 @@
                             <p><img class="currency-icon" src="assets/icons/dna-kadir.png" alt="KP"> ${pet.kadirPoints ?? 0}</p>
                         </div>
                         <button class="delete-button" data-pet-id="${pet.petId}">
-                            <img src="Assets/Icons/trash-can.svg" alt="Delete Icon" style="image-rendering: pixelated;" />
+                            <img src="Assets/Icons/trash-can.svg" alt="Delete Icon" />
                         </button>
                     `;
                     petItem.addEventListener('click', () => {

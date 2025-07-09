@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self'; script-src 'self'; media-src 'self'">
     <title>Kadir11 - Pet Tray (Teste)</title>
-    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="frontend/src/styles/main.css">
     <style>
         @font-face {
             font-family: 'PixelOperator';
@@ -389,7 +389,7 @@
         <div class="pet-image-container">
             <div class="pet-image-background"></div>
             <div class="pet-image-texture"></div>
-            <img id="pet-image" src="Assets/Mons/eggsy.png" alt="Pet Image" style="image-rendering: pixelated;" />
+            <img id="pet-image" src="Assets/Mons/eggsy.png" alt="Pet Image" />
             <div class="pet-info">
                 <div class="pet-name">Eggsy</div>
                 <div class="health-bar">
@@ -401,7 +401,7 @@
                 <div class="pet-level" id="level-display">Lvl 5</div>
             </div>
             <div class="hamburger-menu">
-                <img class="hamburger-icon" src="Assets/Icons/Hamburger_icon.svg.png" alt="Menu" style="image-rendering: pixelated;" />
+                <img class="hamburger-icon" src="Assets/Icons/Hamburger_icon.svg.png" alt="Menu" />
                 <div class="menu-dropdown">
                     <div class="menu-item" data-action="open-status">Status</div>
                     <div class="menu-item" data-action="care-pet">Cuidar</div>
@@ -414,8 +414,8 @@
                 </div>
             </div>
             <!-- Imagens de alerta -->
-            <img id="hunger-warning" class="warning-image" src="Assets/Shop/meat1.png" alt="Fome baixa" style="image-rendering: pixelated;">
-            <img id="happiness-warning" class="warning-image" src="Assets/Shop/sad.png" alt="Felicidade baixa" style="image-rendering: pixelated;">
+            <img id="hunger-warning" class="warning-image" src="Assets/Shop/meat1.png" alt="Fome baixa">
+            <img id="happiness-warning" class="warning-image" src="Assets/Shop/sad.png" alt="Felicidade baixa">
             <div id="item-found-bubble" class="item-bubble">
                 <img id="item-found-img" src="" alt="Item" />
             </div>
@@ -439,5 +439,4 @@
     <script type="module" src="scripts/tray.js"></script>
 
 </body>
-
 </html>

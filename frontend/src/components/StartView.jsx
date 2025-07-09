@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import '../../styles/main.css'
+import '../styles/main.css'
 import './StartView.css'
 
 export default function StartView() {
