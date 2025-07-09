@@ -326,16 +326,10 @@ ipcMain.on('redeem-code', async (event, code) => {
 
 ipcMain.on('animation-finished', () => {
     console.log('Animação finalizada, prosseguindo com o redirecionamento');
-    windowManager.closeCreatePetWindow();
-    const startWin = windowManager.getMainWindow();
-    if (startWin && !startWin.isDestroyed()) {
-        console.log('Solicitando fade-out da música da startWindow');
-        startWin.webContents.send('fade-out-start-music');
-    }
-    const trayWindow = windowManager.createTrayWindow();
-    trayWindow.webContents.on('did-finish-load', () => {
-        console.log('Enviando pet-data para trayWindow:', currentPet);
-        trayWindow.webContents.send('pet-data', currentPet);
+    broadcastNavigate('/tray');
+    BrowserWindow.getAllWindows().forEach(w => {
+        if (w.webContents) w.webContents.send('fade-out-start-music');
+        if (w.webContents) w.webContents.send('pet-data', currentPet);
     });
 });
 
@@ -369,43 +363,10 @@ ipcMain.on('select-pet', async (event, petId) => {
         lastUpdate = Date.now();
         resetTimers();
 
-        // Criar a nova trayWindow antes de fechar outras janelas
-        // para evitar que o aplicativo encerre ao ficar sem janelas abertas
-        const trayWindow = windowManager.createTrayWindow();
-        const sendPetData = () => {
-            console.log('Enviando pet-data:', pet);
-            trayWindow.webContents.send('pet-data', pet);
-        };
-
-        if (trayWindow.webContents.isLoading()) {
-            trayWindow.webContents.once('did-finish-load', sendPetData);
-        } else {
-            sendPetData();
-        }
-
-        // Fechar a janela de load-pet
-        console.log('Fechando a janela de load-pet');
-        windowManager.closeLoadPetWindow();
-
-        // Verificar se a startWindow existe antes de tentar fechá-la
-        const startWindow = windowManager.getMainWindow();
-        if (startWindow && !startWindow.isDestroyed()) {
-            console.log('Fechando a startWindow');
-            windowManager.closeMainWindow();
-        } else {
-            console.log('Nenhuma startWindow encontrada para fechar ou já está destruída');
-        }
-
-        // Fechar janelas extras sem afetar a nova trayWindow
-        closeBattleModeWindow();
-        closeJourneyModeWindow();
-        closeJourneySceneWindow();
-        closeTrainWindow();
-        closeItemsWindow();
-        closeStoreWindow();
-        windowManager.closeStatusWindow();
-        closeNestsWindow();
-        closeHatchWindow();
+        BrowserWindow.getAllWindows().forEach(w => {
+            if (w.webContents) w.webContents.send('pet-data', pet);
+        });
+        broadcastNavigate('/tray');
     } catch (err) {
         console.error('Erro ao selecionar pet no main.js:', err);
         event.reply('select-pet-error', err.message);
