@@ -68,7 +68,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
             'nest-updated',
             'nests-data-updated',
             'activate-status-tab',
-            'redeem-code-result'
+            'redeem-code-result',
+            'navigate'
         ];
         if (validChannels.includes(channel)) {
             console.log(`Registrando listener para o canal: ${channel}`);
