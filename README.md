@@ -19,5 +19,14 @@ Boilerplate usando **React**, **Vite** e **Tailwind CSS**.
    npm run build
    ```
 
+## Rodar como aplicativo desktop
+
+1. Gere a build de produção com `npm run build`.
+2. Em seguida, execute:
+   ```bash
+   npm run electron
+   ```
+   Isso abre o app em uma janela do Electron.
+
 Os assets utilizados pelo React ficam em `Assets/`.
 
