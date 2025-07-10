@@ -10,7 +10,17 @@ export default function HomeScreen() {
   const [language, setLanguage] = useState('pt')
   const [volume, setVolume] = useState(50)
   const [showLogo2, setShowLogo2] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
   const audioRef = useRef(null)
+
+  const toggleFullscreen = (enable) => {
+    if (enable) {
+      document.documentElement.requestFullscreen().catch(() => {})
+    } else if (document.fullscreenElement) {
+      document.exitFullscreen()
+    }
+    setIsFullscreen(enable)
+  }
 
   useEffect(() => {
     const t = setTimeout(() => setShowLogo2(true), 5000)
@@ -35,17 +45,17 @@ export default function HomeScreen() {
     <div className="relative flex flex-col items-center justify-center h-full">
       <img src={bgGif} alt="background" className="absolute inset-0 w-full h-full object-cover -z-10" />
       <audio ref={audioRef} src={musicSrc} autoPlay loop className="hidden" />
-      <div className="relative w-[650px] h-[650px]">
+      <div className="relative w-[900px] h-[900px]">
         <img
           src={logo1}
           alt="Kadir11"
-          className={`absolute w-[650px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-0' : 'opacity-90'}`}
-          style={{ mixBlendMode: 'overlay' }}
+          className={`absolute w-[900px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-0' : 'opacity-90'}`}
+          style={{ mixBlendMode: 'screen' }}
         />
         <img
           src={logo2}
           alt="Kadir11"
-          className={`absolute w-[650px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute w-[900px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-100' : 'opacity-0'}`}
         />
       </div>
       <div className="absolute bottom-8 flex flex-col items-center w-full">
@@ -109,6 +119,15 @@ export default function HomeScreen() {
               />
               <span role="img" aria-label="sound" className="cursor-pointer" onClick={() => setVolume(100)}>🔊</span>
             </div>
+            <label className="cursor-pointer flex items-center mb-4">
+              <input
+                type="checkbox"
+                className="mr-2"
+                checked={isFullscreen}
+                onChange={(e) => toggleFullscreen(e.target.checked)}
+              />
+              Tela cheia
+            </label>
             <button
               className="button"
               onClick={() => setShowOptions(false)}
