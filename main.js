@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut } = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
 
 const isDev = !app.isPackaged;
@@ -12,10 +12,14 @@ function createWindow() {
     minWidth: 800,
     minHeight: 600,
     backgroundColor: '#000000',
+    frame: false,
     webPreferences: {
-      contextIsolation: true
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.js')
     }
   });
+
+  win.setMenuBarVisibility(false);
 
   if (isDev) {
     win.loadURL('http://localhost:5173');
@@ -30,6 +34,22 @@ app.whenReady().then(() => {
   globalShortcut.register('CommandOrControl+Shift+D', () => {
     if (win) {
       win.webContents.openDevTools();
+    }
+  });
+
+  ipcMain.on('window-close', () => {
+    win.close();
+  });
+
+  ipcMain.on('window-minimize', () => {
+    win.minimize();
+  });
+
+  ipcMain.on('window-toggle-maximize', () => {
+    if (win.isMaximized()) {
+      win.unmaximize();
+    } else {
+      win.maximize();
     }
   });
 });
