@@ -10,6 +10,7 @@ export default function HomeScreen() {
   const [language, setLanguage] = useState('pt')
   const [volume, setVolume] = useState(50)
   const [showLogo2, setShowLogo2] = useState(false)
+  const [bgVisible, setBgVisible] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const audioRef = useRef(null)
 
@@ -23,8 +24,13 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
-    const t = setTimeout(() => setShowLogo2(true), 5000)
-    return () => clearTimeout(t)
+    const logoTimer = setTimeout(() => setShowLogo2(true), 3000)
+    return () => clearTimeout(logoTimer)
+  }, [])
+
+  useEffect(() => {
+    const bgTimer = setTimeout(() => setBgVisible(true), 0)
+    return () => clearTimeout(bgTimer)
   }, [])
 
   useEffect(() => {
@@ -43,7 +49,11 @@ export default function HomeScreen() {
 
   return (
     <div className="relative flex flex-col items-center justify-center h-full">
-      <img src={bgGif} alt="background" className="absolute inset-0 w-full h-full object-cover -z-10" />
+      <img
+        src={bgGif}
+        alt="background"
+        className={`absolute inset-0 w-full h-full object-cover -z-10 transition-opacity duration-1000 ${bgVisible ? 'opacity-100' : 'opacity-0'}`}
+      />
       <audio ref={audioRef} src={musicSrc} autoPlay loop className="hidden" />
       <div className="relative w-[700px] h-[700px]">
         <img
