@@ -4,8 +4,16 @@
 
 html, body, #root {
   height: 100%;
+  overflow: hidden;
 }
 
 body {
   @apply bg-gray-900 text-white;
+  /* Hide scrollbars */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
