@@ -1,6 +1,7 @@
 # Ignora dependências e builds
 node_modules/
 dist/
+frontend/dist/
 build/
 
 # Ignora arquivos de log e cache do sistema
