@@ -9,6 +9,7 @@ export default function HomeScreen() {
   const [showOptions, setShowOptions] = useState(false)
   const [language, setLanguage] = useState('pt')
   const [volume, setVolume] = useState(50)
+  const [showLogo1, setShowLogo1] = useState(false)
   const [showLogo2, setShowLogo2] = useState(false)
   const [bgVisible, setBgVisible] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -22,6 +23,11 @@ export default function HomeScreen() {
     }
     setIsFullscreen(enable)
   }
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLogo1(true), 0)
+    return () => clearTimeout(timer)
+  }, [])
 
   useEffect(() => {
     const logoTimer = setTimeout(() => setShowLogo2(true), 3000)
@@ -39,6 +45,15 @@ export default function HomeScreen() {
     }
   }, [volume])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (audioRef.current) {
+        audioRef.current.play().catch(() => {})
+      }
+    }, 3000)
+    return () => clearTimeout(timer)
+  }, [])
+
   const quit = () => {
     if (window.api?.quit) {
       window.api.quit()
@@ -54,12 +69,12 @@ export default function HomeScreen() {
         alt="background"
         className={`absolute inset-0 w-full h-full object-cover -z-10 transition-opacity duration-1000 ${bgVisible ? 'opacity-100' : 'opacity-0'}`}
       />
-      <audio ref={audioRef} src={musicSrc} autoPlay loop className="hidden" />
+      <audio ref={audioRef} src={musicSrc} loop className="hidden" />
       <div className="relative w-[700px] h-[700px]">
         <img
           src={logo1}
           alt="Kadir11"
-          className={`absolute w-[700px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-0' : 'opacity-90'}`}
+          className={`absolute w-[700px] transition-opacity duration-1000 ${showLogo1 ? (showLogo2 ? 'opacity-0' : 'opacity-90') : 'opacity-0'}`}
           style={{ mixBlendMode: 'screen', top: '130px' }}
         />
         <img
