@@ -52,6 +52,10 @@ app.whenReady().then(() => {
       win.maximize();
     }
   });
+
+  ipcMain.on('app-quit', () => {
+    app.quit();
+  });
 });
 
 app.on('will-quit', () => {
