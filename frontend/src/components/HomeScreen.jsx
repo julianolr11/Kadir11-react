@@ -97,48 +97,62 @@ export default function HomeScreen() {
 
       {showOptions && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-gray-800 p-4 rounded text-center">
-            <label className="flex justify-center items-center mb-4">
-              <input
-                type="checkbox"
-                className="mr-2"
-                checked={isFullscreen}
-                onChange={(e) => toggleFullscreen(e.target.checked)}
-              />
-              Tela cheia
-            </label>
-            <div className="space-x-4 mb-4">
-              <label>
+          <div className="bg-gray-800 p-4 rounded text-center w-72">
+            <h2 className="text-xl mb-4">Opções</h2>
+
+            <div className="mb-4">
+              <h3 className="text-sm mb-1">Tela cheia</h3>
+              <label className="flex justify-center items-center">
                 <input
-                  type="radio"
-                  value="pt"
-                  checked={language === 'pt'}
-                  onChange={() => setLanguage('pt')}
+                  type="checkbox"
+                  className="mr-2"
+                  checked={isFullscreen}
+                  onChange={(e) => toggleFullscreen(e.target.checked)}
                 />
-                <span className="ml-1" role="img" aria-label="Brazil flag">🇧🇷</span> PT-BR
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="en"
-                  checked={language === 'en'}
-                  onChange={() => setLanguage('en')}
-                />
-                <span className="ml-1" role="img" aria-label="USA flag">🇺🇸</span> US
+                Tela cheia
               </label>
             </div>
-            <div className="flex items-center mb-4">
-              <span role="img" aria-label="muted" onClick={() => setVolume(0)}>🔇</span>
-              <input
-                className="mx-2"
-                type="range"
-                min="0"
-                max="100"
-                value={volume}
-                onChange={(e) => setVolume(Number(e.target.value))}
-              />
-              <span role="img" aria-label="sound" onClick={() => setVolume(100)}>🔊</span>
+
+            <div className="mb-4">
+              <h3 className="text-sm mb-1">Linguagem</h3>
+              <div className="space-x-4">
+                <label>
+                  <input
+                    type="radio"
+                    value="pt"
+                    checked={language === 'pt'}
+                    onChange={() => setLanguage('pt')}
+                  />
+                  <span className="ml-1" role="img" aria-label="Brazil flag">🇧🇷</span> PT-BR
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="en"
+                    checked={language === 'en'}
+                    onChange={() => setLanguage('en')}
+                  />
+                  <span className="ml-1" role="img" aria-label="USA flag">🇺🇸</span> US
+                </label>
+              </div>
             </div>
+
+            <div className="mb-4">
+              <h3 className="text-sm mb-1">Som do jogo</h3>
+              <div className="flex items-center">
+                <span role="img" aria-label="muted" onClick={() => setVolume(0)}>🔇</span>
+                <input
+                  className="mx-2"
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={(e) => setVolume(Number(e.target.value))}
+                />
+                <span role="img" aria-label="sound" onClick={() => setVolume(100)}>🔊</span>
+              </div>
+            </div>
+
             <button
               className="button"
               onClick={() => setShowOptions(false)}
