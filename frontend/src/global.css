@@ -9,7 +9,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: url('../../Assets/Cursors/cursor.png'), auto;
+    cursor: url('../../Assets/Cursors/pointer.png'), auto;
     user-select: none;
 }
 
