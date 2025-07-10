@@ -139,7 +139,7 @@ export default function HomeScreen() {
 
             <div className="mb-4">
               <h3 className="text-sm mb-1">Som do jogo</h3>
-              <div className="flex items-center">
+              <div className="flex items-center justify-center">
                 <span role="img" aria-label="muted" onClick={() => setVolume(0)}>🔇</span>
                 <input
                   className="mx-2"
