@@ -1,14 +1,5 @@
-<<<<<<< HEAD
-import React from 'react'
-import logo from '../../Assets/Logo/kadirnobg.png'
-
-export default function HomeScreen() {
-  return (
-    <div>
-      <h1>Bem-vindo ao Kadir11</h1>
-      <img src={logo} alt="Kadir11" style={{ width: '200px' }} />
-=======
 import React, { useState } from 'react'
+import logo from '../../../Assets/Logo/kadirnobg.png'
 
 export default function HomeScreen() {
   const [showExit, setShowExit] = useState(false)
@@ -26,6 +17,8 @@ export default function HomeScreen() {
 
   return (
     <div className="home-container">
+      <h1>Bem-vindo ao Kadir11</h1>
+      <img src={logo} alt="Kadir11" style={{ width: '200px' }} />
       <button className="home-button">Iniciar</button>
       <button className="home-button" onClick={() => setShowOptions(true)}>Opções</button>
       <button className="home-button" onClick={() => setShowExit(true)}>Sair</button>
@@ -68,7 +61,6 @@ export default function HomeScreen() {
           </div>
         </div>
       )}
->>>>>>> 63cc4071c04df45ddab26298b528a6b7b504a401
     </div>
   )
 }
