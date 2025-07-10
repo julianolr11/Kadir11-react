@@ -7,6 +7,10 @@ html, body, #root {
   overflow: hidden;
 }
 
+html {
+  border: 1px solid #3a4450;
+}
+
 body {
   @apply bg-gray-900 text-white;
   /* Hide scrollbars */
