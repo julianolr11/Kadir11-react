@@ -17,4 +17,7 @@ npm run build
 npm start
 ```
 
+Durante a execução pressione **Ctrl+Shift+D** para abrir o console de
+desenvolvedor a qualquer momento.
+
 Os assets utilizados pelo React ficam em `Assets/`.

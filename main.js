@@ -1,8 +1,10 @@
-const { app, BrowserWindow, ipcMain } = require('electron')
+const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron')
 const path = require('path')
 
+let mainWindow
+
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     fullscreen: true,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js')
@@ -10,14 +12,20 @@ function createWindow() {
   })
 
   if (app.isPackaged) {
-    win.loadFile(path.join(__dirname, 'frontend', 'dist', 'index.html'))
+    mainWindow.loadFile(path.join(__dirname, 'frontend', 'dist', 'index.html'))
   } else {
-    win.loadURL('http://localhost:5173')
+    mainWindow.loadURL('http://localhost:5173')
   }
 }
 
 app.whenReady().then(() => {
   createWindow()
+
+  globalShortcut.register('CommandOrControl+Shift+D', () => {
+    if (mainWindow) {
+      mainWindow.webContents.openDevTools({ mode: 'detach' })
+    }
+  })
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
@@ -30,4 +38,8 @@ ipcMain.on('quit-app', () => {
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
+})
+
+app.on('will-quit', () => {
+  globalShortcut.unregisterAll()
 })
