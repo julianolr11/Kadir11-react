@@ -19,15 +19,15 @@ export default function HomeScreen() {
     <div className="flex flex-col items-center justify-center h-full">
       <h1 className="text-2xl mb-4">Bem-vindo ao Kadir11</h1>
       <img src={logo} alt="Kadir11" className="w-52" />
-      <button className="my-2 px-6 py-3 text-lg bg-blue-600 text-white rounded">Iniciar</button>
+      <button className="button">Iniciar</button>
       <button
-        className="my-2 px-6 py-3 text-lg bg-gray-200 rounded"
+        className="button"
         onClick={() => setShowOptions(true)}
       >
         Opções
       </button>
       <button
-        className="my-2 px-6 py-3 text-lg bg-red-500 text-white rounded"
+        className="button"
         onClick={() => setShowExit(true)}
       >
         Sair
