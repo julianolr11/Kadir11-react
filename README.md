@@ -10,6 +10,7 @@ Este projeto combina Electron e React para criar uma nova interface do jogo.
 ```bash
 npm run build
 ```
+O bundle sera gerado em `frontend/dist`.
 
 3. Inicie a aplicação com:
 
