@@ -10,7 +10,7 @@ Boilerplate usando **React**, **Vite** e **Tailwind CSS**.
    npm install
    npm install --prefix frontend
    ```
-3. Inicie o servidor de desenvolvimento:
+3. Inicie o servidor de desenvolvimento (abrirá o Electron automaticamente):
    ```bash
    npm start
    ```
