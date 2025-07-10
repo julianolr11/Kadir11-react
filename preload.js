@@ -1,2 +1,6 @@
-const { contextBridge } = require('electron')
-contextBridge.exposeInMainWorld('versions', process.versions)
+const { contextBridge, ipcRenderer } = require('electron')
+
+contextBridge.exposeInMainWorld('api', {
+  versions: process.versions,
+  quit: () => ipcRenderer.send('quit-app')
+})
