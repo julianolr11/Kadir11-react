@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import logo1 from '../../../Assets/Logo/kadirnobg.png'
 import logo2 from '../../../Assets/Logo/kadir11nme.png'
 import bgGif from '../../../Assets/Logo/gifer.gif'
@@ -10,11 +10,18 @@ export default function HomeScreen() {
   const [language, setLanguage] = useState('pt')
   const [volume, setVolume] = useState(50)
   const [logo, setLogo] = useState(logo1)
+  const audioRef = useRef(null)
 
   useEffect(() => {
     const t = setTimeout(() => setLogo(logo2), 5000)
     return () => clearTimeout(t)
   }, [])
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = volume / 100
+    }
+  }, [volume])
 
   const quit = () => {
     if (window.api?.quit) {
@@ -27,8 +34,8 @@ export default function HomeScreen() {
   return (
     <div className="relative flex flex-col items-center justify-center h-full">
       <img src={bgGif} alt="background" className="absolute inset-0 w-full h-full object-cover -z-10" />
-      <audio src={musicSrc} autoPlay loop className="hidden" />
-      <img src={logo} alt="Kadir11" className="w-52" />
+      <audio ref={audioRef} src={musicSrc} autoPlay loop className="hidden" />
+      <img src={logo} alt="Kadir11" className="w-[358px]" />
       <button className="button">Iniciar</button>
       <button
         className="button"
@@ -45,51 +52,51 @@ export default function HomeScreen() {
 
       {showExit && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded text-center">
+          <div className="bg-gray-800 p-4 rounded text-center">
             <p>Deseja mesmo sair do jogo?</p>
-            <button className="mx-2 px-4 py-2 bg-red-500 text-white rounded" onClick={quit}>Sim</button>
-            <button className="mx-2 px-4 py-2 bg-gray-200 rounded" onClick={() => setShowExit(false)}>Não</button>
+            <button className="mx-2 button bg-red-600" onClick={quit}>Sim</button>
+            <button className="mx-2 button" onClick={() => setShowExit(false)}>Não</button>
           </div>
         </div>
       )}
 
       {showOptions && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-4 rounded text-center">
+          <div className="bg-gray-800 p-4 rounded text-center">
             <div className="space-x-4 mb-4">
-              <label>
+              <label className="cursor-pointer">
                 <input
                   type="radio"
                   value="pt"
                   checked={language === 'pt'}
                   onChange={() => setLanguage('pt')}
                 />
-                Português
+                <span className="ml-1" role="img" aria-label="Brazil flag">🇧🇷</span> Português
               </label>
-              <label>
+              <label className="cursor-pointer">
                 <input
                   type="radio"
                   value="en"
                   checked={language === 'en'}
                   onChange={() => setLanguage('en')}
                 />
-                Inglês
+                <span className="ml-1" role="img" aria-label="USA flag">🇺🇸</span> Inglês
               </label>
             </div>
             <div className="flex items-center mb-4">
-              <span role="img" aria-label="muted">🔇</span>
+              <span role="img" aria-label="muted" className="cursor-pointer" onClick={() => setVolume(0)}>🔇</span>
               <input
                 className="mx-2"
                 type="range"
-                min="1"
+                min="0"
                 max="100"
                 value={volume}
-                onChange={(e) => setVolume(e.target.value)}
+                onChange={(e) => setVolume(Number(e.target.value))}
               />
-              <span role="img" aria-label="sound">🔊</span>
+              <span role="img" aria-label="sound" className="cursor-pointer" onClick={() => setVolume(100)}>🔊</span>
             </div>
             <button
-              className="px-4 py-2 bg-gray-200 rounded"
+              className="button"
               onClick={() => setShowOptions(false)}
             >
               Fechar
