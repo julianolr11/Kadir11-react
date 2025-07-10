@@ -90,3 +90,60 @@ img {
 .scroll-container::-webkit-scrollbar-track {
     background-color: #101218;
 }
+
+/* Title bar styles */
+#title-bar {
+    position: relative;
+    width: 100%;
+    height: 30px !important;
+    min-height: 30px;
+    line-height: 30px;
+    background: #3a4450;
+    -webkit-app-region: drag;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+}
+
+#title-bar-content {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+}
+
+#title-bar-buttons {
+    display: flex;
+    gap: 5px;
+    -webkit-app-region: no-drag;
+}
+
+.title-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    cursor: pointer;
+    -webkit-app-region: no-drag;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: cursive;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.close-btn {
+    background: #ff4444;
+    color: #813a3a;
+}
+
+.minimize-btn {
+    background: #f4d11f;
+    color: #7c6a2c;
+}
+
+.maximize-btn {
+    background: #44ff88;
+    color: #317a59;
+}
