@@ -45,17 +45,18 @@ export default function HomeScreen() {
     <div className="relative flex flex-col items-center justify-center h-full">
       <img src={bgGif} alt="background" className="absolute inset-0 w-full h-full object-cover -z-10" />
       <audio ref={audioRef} src={musicSrc} autoPlay loop className="hidden" />
-      <div className="relative w-[900px] h-[900px]">
+      <div className="relative w-[700px] h-[700px]">
         <img
           src={logo1}
           alt="Kadir11"
-          className={`absolute w-[900px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-0' : 'opacity-90'}`}
-          style={{ mixBlendMode: 'screen' }}
+          className={`absolute w-[700px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-0' : 'opacity-90'}`}
+          style={{ mixBlendMode: 'screen', top: '130px' }}
         />
         <img
           src={logo2}
           alt="Kadir11"
-          className={`absolute w-[900px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute w-[700px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-100' : 'opacity-0'}`}
+          style={{ top: '130px' }}
         />
       </div>
       <div className="absolute bottom-8 flex flex-col items-center w-full">
