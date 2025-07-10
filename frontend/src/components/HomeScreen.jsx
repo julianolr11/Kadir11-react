@@ -1,11 +1,20 @@
-import React, { useState } from 'react'
-import logo from '../../../Assets/Logo/kadirnobg.png'
+import React, { useEffect, useState } from 'react'
+import logo1 from '../../../Assets/Logo/kadirnobg.png'
+import logo2 from '../../../Assets/Logo/kadir11nme.png'
+import bgGif from '../../../Assets/Logo/gifer.gif'
+import musicSrc from '../../../Assets/Sounds/SagadoNorte.mp3'
 
 export default function HomeScreen() {
   const [showExit, setShowExit] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
   const [language, setLanguage] = useState('pt')
   const [volume, setVolume] = useState(50)
+  const [logo, setLogo] = useState(logo1)
+
+  useEffect(() => {
+    const t = setTimeout(() => setLogo(logo2), 5000)
+    return () => clearTimeout(t)
+  }, [])
 
   const quit = () => {
     if (window.api?.quit) {
@@ -16,8 +25,9 @@ export default function HomeScreen() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full">
-      <h1 className="text-2xl mb-4">Bem-vindo ao Kadir11</h1>
+    <div className="relative flex flex-col items-center justify-center h-full">
+      <img src={bgGif} alt="background" className="absolute inset-0 w-full h-full object-cover -z-10" />
+      <audio src={musicSrc} autoPlay loop className="hidden" />
       <img src={logo} alt="Kadir11" className="w-52" />
       <button className="button">Iniciar</button>
       <button
