@@ -9,11 +9,11 @@ export default function HomeScreen() {
   const [showOptions, setShowOptions] = useState(false)
   const [language, setLanguage] = useState('pt')
   const [volume, setVolume] = useState(50)
-  const [logo, setLogo] = useState(logo1)
+  const [showLogo2, setShowLogo2] = useState(false)
   const audioRef = useRef(null)
 
   useEffect(() => {
-    const t = setTimeout(() => setLogo(logo2), 5000)
+    const t = setTimeout(() => setShowLogo2(true), 5000)
     return () => clearTimeout(t)
   }, [])
 
@@ -35,20 +35,34 @@ export default function HomeScreen() {
     <div className="relative flex flex-col items-center justify-center h-full">
       <img src={bgGif} alt="background" className="absolute inset-0 w-full h-full object-cover -z-10" />
       <audio ref={audioRef} src={musicSrc} autoPlay loop className="hidden" />
-      <img src={logo} alt="Kadir11" className="w-[358px]" />
-      <button className="button">Iniciar</button>
-      <button
-        className="button"
-        onClick={() => setShowOptions(true)}
-      >
-        Opções
-      </button>
-      <button
-        className="button"
-        onClick={() => setShowExit(true)}
-      >
-        Sair
-      </button>
+      <div className="relative w-[650px] h-[650px]">
+        <img
+          src={logo1}
+          alt="Kadir11"
+          className={`absolute w-[650px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-0' : 'opacity-90'}`}
+          style={{ mixBlendMode: 'overlay' }}
+        />
+        <img
+          src={logo2}
+          alt="Kadir11"
+          className={`absolute w-[650px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-100' : 'opacity-0'}`}
+        />
+      </div>
+      <div className="absolute bottom-8 flex flex-col items-center w-full">
+        <button className="button">Iniciar</button>
+        <button
+          className="button"
+          onClick={() => setShowOptions(true)}
+        >
+          Opções
+        </button>
+        <button
+          className="button"
+          onClick={() => setShowExit(true)}
+        >
+          Sair
+        </button>
+      </div>
 
       {showExit && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
