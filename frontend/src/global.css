@@ -1,0 +1,88 @@
+@font-face {
+    font-family: 'PixelOperator';
+    src: url('../Assets/Fonts/PixelOperator.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: default;
+    user-select: none;
+}
+
+input,
+textarea {
+    user-select: text;
+    cursor: text;
+}
+
+img {
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+.button {
+    background-color: #2a323e;
+    border: 2px solid #2a323e;
+    border-radius: 7px;
+    padding: 8px 16px;
+    margin: 5px;
+    font-size: 14px;
+    color: #ffffff;
+    text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    width: 120px;
+    text-align: center;
+}
+
+.small-button {
+    width: 80px;
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+.move-indicator {
+    margin-left: 4px;
+    font-weight: bold;
+}
+.move-indicator.up {
+    color: #00ff00;
+}
+.move-indicator.down {
+    color: #ff4444;
+}
+
+.button:hover {
+    background-color: #3a4250;
+}
+
+.button:active {
+    background-color: #1a222e;
+}
+
+.scroll-container::-webkit-scrollbar {
+    width: 8px;
+    background-color: #101218;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+    background-color: #4a5666;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+    background-color: #5a6676;
+}
+
+.scroll-container::-webkit-scrollbar-track {
+    background-color: #101218;
+}
