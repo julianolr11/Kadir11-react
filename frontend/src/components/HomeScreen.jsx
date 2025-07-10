@@ -16,39 +16,60 @@ export default function HomeScreen() {
   }
 
   return (
-    <div className="home-container">
-      <h1>Bem-vindo ao Kadir11</h1>
-      <img src={logo} alt="Kadir11" style={{ width: '200px' }} />
-      <button className="home-button">Iniciar</button>
-      <button className="home-button" onClick={() => setShowOptions(true)}>Opções</button>
-      <button className="home-button" onClick={() => setShowExit(true)}>Sair</button>
+    <div className="flex flex-col items-center justify-center h-full">
+      <h1 className="text-2xl mb-4">Bem-vindo ao Kadir11</h1>
+      <img src={logo} alt="Kadir11" className="w-52" />
+      <button className="my-2 px-6 py-3 text-lg bg-blue-600 text-white rounded">Iniciar</button>
+      <button
+        className="my-2 px-6 py-3 text-lg bg-gray-200 rounded"
+        onClick={() => setShowOptions(true)}
+      >
+        Opções
+      </button>
+      <button
+        className="my-2 px-6 py-3 text-lg bg-red-500 text-white rounded"
+        onClick={() => setShowExit(true)}
+      >
+        Sair
+      </button>
 
       {showExit && (
-        <div className="modal">
-          <div className="modal-content">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded text-center">
             <p>Deseja mesmo sair do jogo?</p>
-            <button onClick={quit}>Sim</button>
-            <button onClick={() => setShowExit(false)}>Não</button>
+            <button className="mx-2 px-4 py-2 bg-red-500 text-white rounded" onClick={quit}>Sim</button>
+            <button className="mx-2 px-4 py-2 bg-gray-200 rounded" onClick={() => setShowExit(false)}>Não</button>
           </div>
         </div>
       )}
 
       {showOptions && (
-        <div className="modal">
-          <div className="modal-content">
-            <div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-4 rounded text-center">
+            <div className="space-x-4 mb-4">
               <label>
-                <input type="radio" value="pt" checked={language === 'pt'} onChange={() => setLanguage('pt')} />
+                <input
+                  type="radio"
+                  value="pt"
+                  checked={language === 'pt'}
+                  onChange={() => setLanguage('pt')}
+                />
                 Português
               </label>
               <label>
-                <input type="radio" value="en" checked={language === 'en'} onChange={() => setLanguage('en')} />
+                <input
+                  type="radio"
+                  value="en"
+                  checked={language === 'en'}
+                  onChange={() => setLanguage('en')}
+                />
                 Inglês
               </label>
             </div>
-            <div className="volume-control">
+            <div className="flex items-center mb-4">
               <span role="img" aria-label="muted">🔇</span>
               <input
+                className="mx-2"
                 type="range"
                 min="1"
                 max="100"
@@ -57,7 +78,12 @@ export default function HomeScreen() {
               />
               <span role="img" aria-label="sound">🔊</span>
             </div>
-            <button onClick={() => setShowOptions(false)}>Fechar</button>
+            <button
+              className="px-4 py-2 bg-gray-200 rounded"
+              onClick={() => setShowOptions(false)}
+            >
+              Fechar
+            </button>
           </div>
         </div>
       )}
