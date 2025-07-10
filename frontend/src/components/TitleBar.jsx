@@ -1,6 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 export default function TitleBar() {
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    const handleChange = () => setIsFullscreen(!!document.fullscreenElement)
+    document.addEventListener('fullscreenchange', handleChange)
+    return () => document.removeEventListener('fullscreenchange', handleChange)
+  }, [])
+
+  if (isFullscreen) return null
+
   const handleMinimize = () => window.api?.minimize()
   const handleMaximize = () => window.api?.toggleMaximize()
   const handleClose = () => window.api?.close()
