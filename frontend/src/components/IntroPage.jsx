@@ -28,15 +28,15 @@ export default function IntroPage() {
             !confirmed ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
         >
-        <p>Boas vindas, viajante...</p>
+        <p className="mb-4">Boas vindas, viajante...</p>
         <input
           type="text"
           value={name}
           onChange={handleChange}
           maxLength={15}
-          className="bg-gray-800 border border-gray-700 p-2 text-center"
+          className="bg-gray-800 border border-gray-700 p-2 text-center mb-4"
         />
-        <div>
+        <div className="mt-2">
           <button className="button" onClick={handleConfirm}>
             Prosseguir
           </button>
@@ -48,11 +48,11 @@ export default function IntroPage() {
             confirmed ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
         >
-        <p>
+        <p className="mb-4">
           O destino o trouxe até{' '}
           <span className="text-yellow-400">Kadir</span>, um mundo onde as lendas ganham vida...
         </p>
-        <div>
+        <div className="mt-2">
           <button className="button" onClick={handleProceed}>
             Próximo
           </button>
