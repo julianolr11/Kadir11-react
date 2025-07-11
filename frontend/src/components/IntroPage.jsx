@@ -58,6 +58,7 @@ export default function IntroPage() {
           </button>
         </div>
       </div>
+      </div>
     </div>
   )
 }
