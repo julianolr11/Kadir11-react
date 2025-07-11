@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import logo1 from '../../../Assets/Logo/kadirnobg.png'
 import logo2 from '../../../Assets/Logo/kadir11nme.png'
 import bgGif from '../../../Assets/Logo/gifer.gif'
@@ -13,7 +14,24 @@ export default function HomeScreen() {
   const [showLogo2, setShowLogo2] = useState(false)
   const [bgVisible, setBgVisible] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [pet, setPet] = useState(null)
+  const navigate = useNavigate()
   const audioRef = useRef(null)
+
+  const getPref = (key) => {
+    if (window.api?.getPreference) {
+      return window.api.getPreference(key)
+    }
+    return localStorage.getItem(key)
+  }
+
+  const setPref = (key, value) => {
+    if (window.api?.setPreference) {
+      window.api.setPreference(key, value)
+    } else {
+      localStorage.setItem(key, String(value))
+    }
+  }
 
   const toggleFullscreen = (enable) => {
     if (enable) {
@@ -33,35 +51,44 @@ export default function HomeScreen() {
 
   // Load saved preferences on first render
   useEffect(() => {
-    const storedVolume = localStorage.getItem('volume')
-    if (storedVolume !== null) {
+    const storedVolume = getPref('volume')
+    if (storedVolume !== null && storedVolume !== undefined) {
       setVolume(Number(storedVolume))
     }
 
-    const storedLang = localStorage.getItem('language')
+    const storedLang = getPref('language')
     if (storedLang) {
       setLanguage(storedLang)
     }
 
-    const storedFullscreen = localStorage.getItem('isFullscreen') === 'true'
-    if (storedFullscreen) {
+    const storedFullscreen = getPref('isFullscreen')
+    if (storedFullscreen === true || storedFullscreen === 'true') {
       toggleFullscreen(true)
+    }
+
+    const storedPet = getPref('pet')
+    if (storedPet) {
+      try {
+        setPet(typeof storedPet === 'string' ? JSON.parse(storedPet) : storedPet)
+      } catch {
+        setPet(null)
+      }
     }
   }, [])
 
   // Persist volume changes
   useEffect(() => {
-    localStorage.setItem('volume', String(volume))
+    setPref('volume', volume)
   }, [volume])
 
   // Persist language changes
   useEffect(() => {
-    localStorage.setItem('language', language)
+    setPref('language', language)
   }, [language])
 
   // Persist fullscreen changes
   useEffect(() => {
-    localStorage.setItem('isFullscreen', String(isFullscreen))
+    setPref('isFullscreen', isFullscreen)
   }, [isFullscreen])
 
   // Keep state in sync with actual fullscreen status
@@ -111,6 +138,12 @@ export default function HomeScreen() {
     }
   }
 
+  const handleStart = () => {
+    setShowLogo1(false)
+    setShowLogo2(false)
+    navigate('/intro')
+  }
+
   return (
     <div className="relative flex flex-col items-center justify-center h-full">
       <img
@@ -134,7 +167,7 @@ export default function HomeScreen() {
         />
       </div>
       <div className="absolute bottom-8 flex flex-col items-center w-full">
-        <button className="button">Iniciar</button>
+        <button className="button" onClick={handleStart}>Iniciar</button>
         <button
           className="button"
           onClick={() => setShowOptions(true)}
@@ -226,6 +259,7 @@ export default function HomeScreen() {
           </div>
         </div>
       )}
+
     </div>
   )
 }
