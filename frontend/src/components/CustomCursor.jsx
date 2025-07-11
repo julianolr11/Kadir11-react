@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import grabImg from '../../../Assets/Cursors/grab.png'
-import pointerImg from '../../../Assets/Cursors/pointer.png'
+import cursorImg from '../../../Assets/Cursors/cursor.png'
 
 export default function CustomCursor() {
   const [coords, setCoords] = useState({ x: 0, y: 0 })
-  const [imgSrc, setImgSrc] = useState(pointerImg)
+  const [imgSrc, setImgSrc] = useState(cursorImg)
 
   useEffect(() => {
     const handleMove = (e) => {
@@ -15,12 +15,12 @@ export default function CustomCursor() {
         if (cursorStyle.includes('grab')) {
           setImgSrc(grabImg)
         } else if (cursorStyle.includes('pointer')) {
-          setImgSrc(pointerImg)
+          setImgSrc(cursorImg)
         } else {
-          setImgSrc(pointerImg)
+          setImgSrc(cursorImg)
         }
       } else {
-        setImgSrc(pointerImg)
+        setImgSrc(cursorImg)
       }
     }
 
