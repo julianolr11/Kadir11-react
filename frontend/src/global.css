@@ -9,23 +9,19 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: default;
-    user-select: none;
-}
-
-.hide-default-cursor {
     cursor: none !important;
+    user-select: none;
 }
 
 input,
 textarea {
     user-select: text;
-    cursor: text;
+    cursor: none;
 }
 
 input[type="range"],
 input[type="checkbox"] {
-    cursor: url('../../Assets/Cursors/pointer.png'), pointer;
+    cursor: none;
 }
 
 img {
@@ -46,7 +42,7 @@ img {
     font-size: 14px;
     color: #ffffff;
     text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
-    cursor: url('../../Assets/Cursors/pointer.png'), pointer;
+    cursor: none;
     transition: background-color 0.2s ease;
     width: 120px;
     text-align: center;
@@ -59,7 +55,7 @@ img {
 }
 
 .grab {
-    cursor: url('../../Assets/Cursors/grab.png'), grab;
+    cursor: none;
 }
 
 .move-indicator {
@@ -131,7 +127,7 @@ img {
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    cursor: pointer;
+    cursor: none;
     -webkit-app-region: no-drag;
     display: flex;
     align-items: center;
