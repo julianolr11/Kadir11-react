@@ -1,7 +1,9 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
-const isDev = !app.isPackaged;
+const distIndex = path.join(__dirname, 'frontend', 'dist', 'index.html');
+const isDev = !fs.existsSync(distIndex);
 
 let win;
 
