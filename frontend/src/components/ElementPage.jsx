@@ -24,5 +24,9 @@ export default function ElementPage() {
 
   if (!name || !stats) return null
 
-  return <ElementPicker stats={stats} onSelect={handleSelect} />
+  return (
+    <div className="flex items-center justify-center h-full">
+      <ElementPicker stats={stats} onSelect={handleSelect} />
+    </div>
+  )
 }

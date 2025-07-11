@@ -21,12 +21,13 @@ export default function IntroPage() {
   }
 
   return (
-    <div className="text-center space-y-4">
-      <div
-        className={`transition-opacity duration-500 ${
-          !confirmed ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-      >
+    <div className="flex items-center justify-center h-full">
+      <div className="text-center space-y-4">
+        <div
+          className={`transition-opacity duration-500 ${
+            !confirmed ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+        >
         <p>Boas vindas, viajante...</p>
         <input
           type="text"
@@ -42,11 +43,11 @@ export default function IntroPage() {
         </div>
       </div>
 
-      <div
-        className={`transition-opacity duration-500 ${
-          confirmed ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        }`}
-      >
+        <div
+          className={`transition-opacity duration-500 ${
+            confirmed ? 'opacity-100' : 'opacity-0 pointer-events-none'
+          }`}
+        >
         <p>
           O destino o trouxe até{' '}
           <span className="text-yellow-400">Kadir</span>, um mundo onde as lendas ganham vida...
