@@ -74,13 +74,13 @@ export default function HomeScreen() {
         <img
           src={logo1}
           alt="Kadir11"
-          className={`absolute w-[700px] transition-opacity duration-[2000ms] ${showLogo1 ? (showLogo2 ? 'opacity-0' : 'opacity-90') : 'opacity-0'}`}
+          className={`absolute w-[700px] transition-opacity duration-[10000ms] ${showLogo1 ? (showLogo2 ? 'opacity-0' : 'opacity-90') : 'opacity-0'}`}
           style={{ mixBlendMode: 'screen', top: '130px' }}
         />
         <img
           src={logo2}
           alt="Kadir11"
-          className={`absolute w-[700px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute w-[700px] transition-opacity duration-[3000ms] ${showLogo2 ? 'opacity-100' : 'opacity-0'}`}
           style={{ top: '130px' }}
         />
       </div>
