@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import Questionnaire from './Questionnaire'
+import ElementPicker from './ElementPicker'
 
 export default function IntroModal({ onClose }) {
   const [name, setName] = useState('')
   const [confirmed, setConfirmed] = useState(false)
   const [showQuestions, setShowQuestions] = useState(false)
+  const [stats, setStats] = useState(null)
+  const [showPicker, setShowPicker] = useState(false)
 
   const handleChange = (e) => {
     const value = e.target.value.slice(0, 15)
@@ -21,8 +24,13 @@ export default function IntroModal({ onClose }) {
     setShowQuestions(true)
   }
 
-  const handleComplete = () => {
-    onClose(name)
+  const handleComplete = (attrs) => {
+    setStats(attrs)
+    setShowPicker(true)
+  }
+
+  const handleElement = (finalStats) => {
+    onClose({ name, ...finalStats })
   }
 
   return (
@@ -64,7 +72,10 @@ export default function IntroModal({ onClose }) {
         </div>
       </div>
 
-      {showQuestions && <Questionnaire onComplete={handleComplete} />}
+      {showQuestions && !showPicker && (
+        <Questionnaire onComplete={handleComplete} />
+      )}
+      {showPicker && <ElementPicker stats={stats} onSelect={handleElement} />}
     </div>
   )
 }
