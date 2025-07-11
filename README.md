@@ -10,15 +10,11 @@ Boilerplate usando **React**, **Vite** e **Tailwind CSS**.
    npm install
    npm install --prefix frontend
    ```
-3. Inicie o servidor de desenvolvimento:
-   ```bash
-   npm start
-   ```
-4. Para desenvolver o aplicativo desktop simultaneamente:
+3. Inicie o app em modo de desenvolvimento (Vite + Electron):
    ```bash
    npm run dev
    ```
-5. Para gerar a versão de produção:
+4. Para gerar a versão de produção:
    ```bash
    npm run build
    ```
@@ -30,9 +26,9 @@ Boilerplate usando **React**, **Vite** e **Tailwind CSS**.
    npm run dev
    ```
    Isso abre o app em uma janela do Electron usando o servidor do Vite.
-2. Para gerar a versão de produção, rode `npm run build` e então:
+2. Depois de gerar a versão de produção com `npm run build`, execute:
    ```bash
-   npm run electron
+   npm start
    ```
 
 Os assets utilizados pelo React ficam em `Assets/`.
