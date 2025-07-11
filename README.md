@@ -30,6 +30,7 @@ Boilerplate usando **React**, **Vite** e **Tailwind CSS**.
    ```bash
    npm start
    ```
+   O Electron inicia a partir do arquivo `main.js` (e não `electron.js`).
 
 Os assets utilizados pelo React ficam em `Assets/`.
 
