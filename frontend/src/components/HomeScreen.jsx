@@ -15,6 +15,21 @@ export default function HomeScreen() {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const audioRef = useRef(null)
 
+  const getPref = (key) => {
+    if (window.api?.getPreference) {
+      return window.api.getPreference(key)
+    }
+    return localStorage.getItem(key)
+  }
+
+  const setPref = (key, value) => {
+    if (window.api?.setPreference) {
+      window.api.setPreference(key, value)
+    } else {
+      localStorage.setItem(key, String(value))
+    }
+  }
+
   const toggleFullscreen = (enable) => {
     if (enable) {
       document.documentElement
@@ -33,35 +48,35 @@ export default function HomeScreen() {
 
   // Load saved preferences on first render
   useEffect(() => {
-    const storedVolume = localStorage.getItem('volume')
-    if (storedVolume !== null) {
+    const storedVolume = getPref('volume')
+    if (storedVolume !== null && storedVolume !== undefined) {
       setVolume(Number(storedVolume))
     }
 
-    const storedLang = localStorage.getItem('language')
+    const storedLang = getPref('language')
     if (storedLang) {
       setLanguage(storedLang)
     }
 
-    const storedFullscreen = localStorage.getItem('isFullscreen') === 'true'
-    if (storedFullscreen) {
+    const storedFullscreen = getPref('isFullscreen')
+    if (storedFullscreen === true || storedFullscreen === 'true') {
       toggleFullscreen(true)
     }
   }, [])
 
   // Persist volume changes
   useEffect(() => {
-    localStorage.setItem('volume', String(volume))
+    setPref('volume', volume)
   }, [volume])
 
   // Persist language changes
   useEffect(() => {
-    localStorage.setItem('language', language)
+    setPref('language', language)
   }, [language])
 
   // Persist fullscreen changes
   useEffect(() => {
-    localStorage.setItem('isFullscreen', String(isFullscreen))
+    setPref('isFullscreen', isFullscreen)
   }, [isFullscreen])
 
   // Keep state in sync with actual fullscreen status

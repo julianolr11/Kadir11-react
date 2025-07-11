@@ -26,9 +26,13 @@ Boilerplate usando **React**, **Vite** e **Tailwind CSS**.
    ```bash
    npm run electron
    ```
-   Isso abre o app em uma janela do Electron.
+Isso abre o app em uma janela do Electron.
 
 Os assets utilizados pelo React ficam em `Assets/`.
+
+As preferências do usuário (volume, idioma e modo de tela cheia) são
+armazenadas com [electron-store](https://github.com/sindresorhus/electron-store)
+quando o jogo roda como aplicativo desktop.
 
 ### Nota sobre tela cheia
 
