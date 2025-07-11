@@ -44,7 +44,7 @@ export default function Questionnaire({ onComplete }) {
         }`}
       >
         <p className="mb-4">{current.text}</p>
-        <div className="flex flex-col items-center space-y-2">
+        <div className="flex justify-center space-x-2">
           {['A', 'B', 'C'].map((key) => (
             <button
               className="button w-64"

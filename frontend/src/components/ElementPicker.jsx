@@ -27,7 +27,7 @@ export default function ElementPicker({ stats, onSelect }) {
       {elements.map((el) => (
         <div
           key={el.key}
-          className="flex flex-col items-center"
+          className="relative flex flex-col items-center"
           onMouseEnter={() => setHovered(el.key)}
           onMouseLeave={() => setHovered(null)}
         >
@@ -37,7 +37,11 @@ export default function ElementPicker({ stats, onSelect }) {
             className={`w-24 h-24 transition-transform duration-200 float-hover`}
             onClick={() => handleSelect(el.key)}
           />
-          {hovered === el.key && <span className="mt-1">{el.label}</span>}
+          {hovered === el.key && (
+            <span className="absolute top-full mt-1 whitespace-nowrap">
+              {el.label}
+            </span>
+          )}
         </div>
       ))}
     </div>
