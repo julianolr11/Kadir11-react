@@ -17,11 +17,18 @@ export default function HomeScreen() {
 
   const toggleFullscreen = (enable) => {
     if (enable) {
-      document.documentElement.requestFullscreen().catch(() => {})
+      document.documentElement
+        .requestFullscreen()
+        .then(() => setIsFullscreen(true))
+        .catch(() => setIsFullscreen(false))
     } else if (document.fullscreenElement) {
-      document.exitFullscreen()
+      document
+        .exitFullscreen()
+        .then(() => setIsFullscreen(false))
+        .catch(() => {})
+    } else {
+      setIsFullscreen(false)
     }
-    setIsFullscreen(enable)
   }
 
   // Load saved preferences on first render
@@ -29,6 +36,11 @@ export default function HomeScreen() {
     const storedVolume = localStorage.getItem('volume')
     if (storedVolume !== null) {
       setVolume(Number(storedVolume))
+    }
+
+    const storedLang = localStorage.getItem('language')
+    if (storedLang) {
+      setLanguage(storedLang)
     }
 
     const storedFullscreen = localStorage.getItem('isFullscreen') === 'true'
@@ -42,10 +54,24 @@ export default function HomeScreen() {
     localStorage.setItem('volume', String(volume))
   }, [volume])
 
+  // Persist language changes
+  useEffect(() => {
+    localStorage.setItem('language', language)
+  }, [language])
+
   // Persist fullscreen changes
   useEffect(() => {
     localStorage.setItem('isFullscreen', String(isFullscreen))
   }, [isFullscreen])
+
+  // Keep state in sync with actual fullscreen status
+  useEffect(() => {
+    const handleChange = () => {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', handleChange)
+    return () => document.removeEventListener('fullscreenchange', handleChange)
+  }, [])
 
   useEffect(() => {
     const timer = setTimeout(() => setShowLogo1(true), 0)
