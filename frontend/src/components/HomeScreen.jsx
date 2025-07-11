@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
+import IntroModal from './IntroModal'
 import logo1 from '../../../Assets/Logo/kadirnobg.png'
 import logo2 from '../../../Assets/Logo/kadir11nme.png'
 import bgGif from '../../../Assets/Logo/gifer.gif'
@@ -13,6 +14,7 @@ export default function HomeScreen() {
   const [showLogo2, setShowLogo2] = useState(false)
   const [bgVisible, setBgVisible] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
+  const [showIntro, setShowIntro] = useState(false)
   const audioRef = useRef(null)
 
   const getPref = (key) => {
@@ -126,6 +128,12 @@ export default function HomeScreen() {
     }
   }
 
+  const handleStart = () => {
+    setShowLogo1(false)
+    setShowLogo2(false)
+    setShowIntro(true)
+  }
+
   return (
     <div className="relative flex flex-col items-center justify-center h-full">
       <img
@@ -149,7 +157,7 @@ export default function HomeScreen() {
         />
       </div>
       <div className="absolute bottom-8 flex flex-col items-center w-full">
-        <button className="button">Iniciar</button>
+        <button className="button" onClick={handleStart}>Iniciar</button>
         <button
           className="button"
           onClick={() => setShowOptions(true)}
@@ -239,6 +247,15 @@ export default function HomeScreen() {
               Fechar
             </button>
           </div>
+        </div>
+      )}
+
+      {showIntro && (
+        <div
+          className={`fixed inset-0 bg-black flex items-center justify-center transition-opacity duration-1000 ${showIntro ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+          style={{ zIndex: 50 }}
+        >
+          <IntroModal onClose={() => setShowIntro(false)} />
         </div>
       )}
     </div>
