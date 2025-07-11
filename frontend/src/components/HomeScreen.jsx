@@ -24,6 +24,29 @@ export default function HomeScreen() {
     setIsFullscreen(enable)
   }
 
+  // Load saved preferences on first render
+  useEffect(() => {
+    const storedVolume = localStorage.getItem('volume')
+    if (storedVolume !== null) {
+      setVolume(Number(storedVolume))
+    }
+
+    const storedFullscreen = localStorage.getItem('isFullscreen') === 'true'
+    if (storedFullscreen) {
+      toggleFullscreen(true)
+    }
+  }, [])
+
+  // Persist volume changes
+  useEffect(() => {
+    localStorage.setItem('volume', String(volume))
+  }, [volume])
+
+  // Persist fullscreen changes
+  useEffect(() => {
+    localStorage.setItem('isFullscreen', String(isFullscreen))
+  }, [isFullscreen])
+
   useEffect(() => {
     const timer = setTimeout(() => setShowLogo1(true), 0)
     return () => clearTimeout(timer)
