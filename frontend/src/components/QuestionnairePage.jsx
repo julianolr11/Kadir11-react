@@ -17,5 +17,9 @@ export default function QuestionnairePage() {
 
   if (!name) return null
 
-  return <Questionnaire onComplete={handleComplete} />
+  return (
+    <div className="flex items-center justify-center h-full">
+      <Questionnaire onComplete={handleComplete} />
+    </div>
+  )
 }
