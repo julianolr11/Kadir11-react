@@ -30,7 +30,13 @@ export default function IntroModal({ onClose }) {
   }
 
   const handleElement = (finalStats) => {
-    onClose({ name, ...finalStats })
+    const pet = { name, ...finalStats }
+    if (window.api?.setPreference) {
+      window.api.setPreference('pet', pet)
+    } else {
+      localStorage.setItem('pet', JSON.stringify(pet))
+    }
+    onClose(pet)
   }
 
   return (
