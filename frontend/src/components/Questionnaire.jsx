@@ -44,10 +44,14 @@ export default function Questionnaire({ onComplete }) {
         }`}
       >
         <p className="mb-4">{current.text}</p>
-        <div className="flex justify-center space-x-4">
+        <div className="flex flex-col items-center space-y-2">
           {['A', 'B', 'C'].map((key) => (
-            <button className="button" key={key} onClick={() => handleSelect(key)}>
-              {key}
+            <button
+              className="button w-64"
+              key={key}
+              onClick={() => handleSelect(key)}
+            >
+              {key}) {current.options[key].text}
             </button>
           ))}
         </div>
