@@ -129,6 +129,7 @@ img {
     border-radius: 50%;
     cursor: none;
     -webkit-app-region: no-drag;
+    pointer-events: auto;
     display: flex;
     align-items: center;
     justify-content: center;

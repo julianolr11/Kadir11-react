@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import grabImg from '../../../Assets/Cursors/grab.png'
-import cursorImg from '../../../Assets/Cursors/cursor.png'
+import cursorImg from '../../../Assets/Cursors/pointer.png'
 
 export default function CustomCursor() {
   const [coords, setCoords] = useState({ x: 0, y: 0 })
