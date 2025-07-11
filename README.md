@@ -30,3 +30,14 @@ Boilerplate usando **React**, **Vite** e **Tailwind CSS**.
 
 Os assets utilizados pelo React ficam em `Assets/`.
 
+### Nota sobre tela cheia
+
+Alguns navegadores bloqueiam a entrada automática em modo tela cheia caso não
+haja interação do usuário. Se você habilitar a opção "Tela cheia" nas
+configurações e o jogo não abrir expandido, ative o modo manualmente pelo
+menu de opções.
+
+## Licença
+
+Este projeto está licenciado sob os termos da [MIT License](LICENSE).
+
