@@ -15,6 +15,7 @@ export default function HomeScreen() {
   const [bgVisible, setBgVisible] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [showIntro, setShowIntro] = useState(false)
+  const [pet, setPet] = useState(null)
   const audioRef = useRef(null)
 
   const getPref = (key) => {
@@ -63,6 +64,15 @@ export default function HomeScreen() {
     const storedFullscreen = getPref('isFullscreen')
     if (storedFullscreen === true || storedFullscreen === 'true') {
       toggleFullscreen(true)
+    }
+
+    const storedPet = getPref('pet')
+    if (storedPet) {
+      try {
+        setPet(typeof storedPet === 'string' ? JSON.parse(storedPet) : storedPet)
+      } catch {
+        setPet(null)
+      }
     }
   }, [])
 
@@ -132,6 +142,13 @@ export default function HomeScreen() {
     setShowLogo1(false)
     setShowLogo2(false)
     setShowIntro(true)
+  }
+
+  const handleIntroClose = (data) => {
+    setShowIntro(false)
+    if (data) {
+      setPet(data)
+    }
   }
 
   return (
@@ -255,7 +272,7 @@ export default function HomeScreen() {
           className={`fixed inset-0 bg-black flex items-center justify-center transition-opacity duration-1000 ${showIntro ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
           style={{ zIndex: 50 }}
         >
-          <IntroModal onClose={() => setShowIntro(false)} />
+          <IntroModal onClose={handleIntroClose} />
         </div>
       )}
     </div>
