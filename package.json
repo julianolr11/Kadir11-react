@@ -7,10 +7,12 @@
     "build": "npm run build --prefix frontend",
     "preview": "npm run preview --prefix frontend",
     "electron": "electron .",
+    "dev": "concurrently \"npm run dev --prefix frontend\" \"npm run electron\"",
     "postinstall": "npm install --prefix frontend"
   },
   "devDependencies": {
-    "electron": "^29.4.6"
+    "electron": "^29.4.6",
+    "concurrently": "^8.2.0"
   },
   "dependencies": {
     "electron-store": "^8.1.0"
