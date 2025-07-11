@@ -9,8 +9,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    cursor: url('../../Assets/Cursors/pointer.png'), auto;
+    cursor: default;
     user-select: none;
+}
+
+.hide-default-cursor {
+    cursor: none !important;
 }
 
 input,
