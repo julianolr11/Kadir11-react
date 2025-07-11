@@ -1,3 +1,4 @@
+// Entry point for the Electron application
 const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
