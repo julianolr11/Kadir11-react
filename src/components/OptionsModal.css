@@ -1,0 +1,34 @@
+.options-modal__mask {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 40;
+}
+
+.options-modal__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #222;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  z-index: 41;
+  width: 280px;
+}
+
+.options-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.volume-control input[type='range'] {
+  flex-grow: 1;
+}
+
+.options-footer {
+  text-align: right;
+}
