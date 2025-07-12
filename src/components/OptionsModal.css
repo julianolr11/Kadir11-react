@@ -16,11 +16,13 @@
   border-radius: 8px;
   z-index: 41;
   width: 280px;
+  text-align: center;
 }
 
 .options-row {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   margin-bottom: 14px;
 }
@@ -31,4 +33,12 @@
 
 .options-footer {
   text-align: right;
+}
+
+.mute-btn {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #fff;
 }

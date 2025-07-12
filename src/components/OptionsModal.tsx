@@ -30,6 +30,7 @@ const OptionsModal = ({
       <div className='options-modal__mask' onClick={onClose} />
       <div className='options-modal__content'>
         <h2>Opções</h2>
+        <h3>Linguagem</h3>
         <div className='options-row'>
           <label>
             <input
@@ -50,6 +51,7 @@ const OptionsModal = ({
             US
           </label>
         </div>
+        <h3>Fullscreen</h3>
         <div className='options-row'>
           <label>
             <input
@@ -60,8 +62,9 @@ const OptionsModal = ({
             Fullscreen
           </label>
         </div>
+        <h3>Volume</h3>
         <div className='options-row volume-control'>
-          <button onClick={toggleMute}>{preferences.muted ? 'Unmute' : 'Mute'}</button>
+          <button className='mute-btn' onClick={toggleMute}>{preferences.muted ? '🔇' : '🔊'}</button>
           <input
             type='range'
             min='0'
