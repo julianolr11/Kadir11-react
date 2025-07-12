@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import OptionsModal, { Preferences } from './OptionsModal'
+import { t } from '@/locales'
 import './StartScreen.css'
 
 const StartScreen = () => {
@@ -61,7 +62,7 @@ const StartScreen = () => {
   }, [prefs.fullscreen])
 
   useEffect(() => {
-    const timerBefore = setTimeout(() => setShowLogoBefore(true), 2000)
+    const timerBefore = setTimeout(() => setShowLogoBefore(true), 1300)
     const timerAfter = setTimeout(() => {
       setShowLogoBefore(false)
       setShowLogoAfter(true)
@@ -88,16 +89,16 @@ const StartScreen = () => {
         />
       </div>
       <div className='start-buttons'>
-        <button>Iniciar</button>
-        <button onClick={() => setShowOptions(true)}>Opções</button>
-        <button onClick={() => setShowExitConfirm(true)}>Sair</button>
+        <button>{t(prefs.language, 'start')}</button>
+        <button onClick={() => setShowOptions(true)}>{t(prefs.language, 'options')}</button>
+        <button onClick={() => setShowExitConfirm(true)}>{t(prefs.language, 'exit')}</button>
       </div>
       {showExitConfirm && (
         <div className='exit-dropdown'>
-          <p>Deseja sair?</p>
+          <p>{t(prefs.language, 'exitConfirm')}</p>
           <div className='exit-buttons'>
-            <button onClick={() => window.ipcRenderer.invoke('quit-app')}>Sim</button>
-            <button onClick={() => setShowExitConfirm(false)}>Não</button>
+            <button onClick={() => window.ipcRenderer.invoke('quit-app')}>{t(prefs.language, 'exitYes')}</button>
+            <button onClick={() => setShowExitConfirm(false)}>{t(prefs.language, 'exitNo')}</button>
           </div>
         </div>
       )}
