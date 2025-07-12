@@ -19,7 +19,7 @@
 .start-logo {
   position: absolute;
   left: 50%;
-  top: 50%;
+  top: 25%;
   width: 300px;
   transform: translate(-50%, 50%);
   animation: logo-fade-up 1s forwards;
@@ -44,7 +44,7 @@
 @keyframes logo-fade-right {
   from {
     opacity: 0;
-    transform: translate(-150%, -50%);
+    transform: translate(150%, -50%);
   }
   to {
     opacity: 1;
