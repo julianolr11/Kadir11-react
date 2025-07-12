@@ -1,0 +1,54 @@
+.start-screen {
+  position: relative;
+  width: 1536px;
+  height: 1024px;
+  overflow: hidden;
+}
+
+.start-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.start-logo {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  animation: logo-fade 1s forwards;
+  animation-delay: 0.5s;
+}
+
+@keyframes logo-fade {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 100%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.start-buttons {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.start-buttons button {
+  border-radius: 12px;
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 0.8em 1.5em;
+  border: none;
+}
+
