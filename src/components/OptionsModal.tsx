@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom'
+import { t } from '@/locales'
 import './OptionsModal.css'
 
 export interface Preferences {
@@ -29,8 +30,8 @@ const OptionsModal = ({
     <div className='options-modal'>
       <div className='options-modal__mask' onClick={onClose} />
       <div className='options-modal__content'>
-        <h2>Opções</h2>
-        <h3>Linguagem</h3>
+        <h2>{t(preferences.language, 'optionsTitle')}</h2>
+        <h3>{t(preferences.language, 'language')}</h3>
         <div className='options-row'>
           <label>
             <input
@@ -51,7 +52,7 @@ const OptionsModal = ({
             US
           </label>
         </div>
-        <h3>Fullscreen</h3>
+        <h3>{t(preferences.language, 'fullscreen')}</h3>
         <div className='options-row'>
           <label>
             <input
@@ -59,10 +60,10 @@ const OptionsModal = ({
               checked={preferences.fullscreen}
               onChange={e => setPreferences({ fullscreen: e.target.checked })}
             />
-            Fullscreen
+            {t(preferences.language, 'fullscreen')}
           </label>
         </div>
-        <h3>Volume</h3>
+        <h3>{t(preferences.language, 'volume')}</h3>
         <div className='options-row volume-control'>
           <button className='mute-btn' onClick={toggleMute}>{preferences.muted ? '🔇' : '🔊'}</button>
           <input
@@ -77,7 +78,7 @@ const OptionsModal = ({
           />
         </div>
         <div className='options-footer'>
-          <button onClick={onClose}>Fechar</button>
+          <button onClick={onClose}>{t(preferences.language, 'close')}</button>
         </div>
       </div>
     </div>,
