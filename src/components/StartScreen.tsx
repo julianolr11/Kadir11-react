@@ -1,23 +1,34 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './StartScreen.css'
 
 const StartScreen = () => {
   const audioRef = useRef<HTMLAudioElement>(null)
+  const [logoSrc, setLogoSrc] = useState('assets/logo/kadirbefore.png')
+  const [logoClass, setLogoClass] = useState('start-logo')
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    const audioTimer = setTimeout(() => {
       if (audioRef.current) {
         audioRef.current.loop = true
         audioRef.current.play().catch(() => {})
       }
     }, 2000)
-    return () => clearTimeout(timer)
+
+    const logoTimer = setTimeout(() => {
+      setLogoSrc('assets/logo/kadirafter.png')
+      setLogoClass('start-logo logo-after')
+    }, 3000)
+
+    return () => {
+      clearTimeout(audioTimer)
+      clearTimeout(logoTimer)
+    }
   }, [])
 
   return (
     <div className='start-screen'>
       <video className='start-video' src='assets/logo/videointro.mp4' autoPlay loop muted />
-      <img className='start-logo' src='assets/logo/kadirbefore.png' alt='logo' />
+      <img className={logoClass} src={logoSrc} alt='logo' />
       <div className='start-buttons'>
         <button>Iniciar</button>
         <button>Opções</button>

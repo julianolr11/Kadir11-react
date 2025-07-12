@@ -1,7 +1,8 @@
 .start-screen {
-  position: relative;
-  width: 1536px;
-  height: 1024px;
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   overflow: hidden;
 }
 
@@ -18,19 +19,36 @@
 .start-logo {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, 100%);
-  animation: logo-fade 1s forwards;
+  top: 50%;
+  width: 300px;
+  transform: translate(-50%, 50%);
+  animation: logo-fade-up 1s forwards;
   animation-delay: 0.5s;
 }
 
-@keyframes logo-fade {
+.logo-after {
+  animation: logo-fade-right 1s forwards;
+}
+
+@keyframes logo-fade-up {
   from {
     opacity: 0;
-    transform: translate(-50%, 100%);
+    transform: translate(-50%, 50%);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes logo-fade-right {
+  from {
+    opacity: 0;
+    transform: translate(-150%, -50%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
   }
 }
 
