@@ -10,6 +10,7 @@ export default function HomeScreen() {
   const [showOptions, setShowOptions] = useState(false)
   const [language, setLanguage] = useState('pt')
   const [volume, setVolume] = useState(50)
+  const [prevVolume, setPrevVolume] = useState(50)
   const [showLogo1, setShowLogo1] = useState(false)
   const [showLogo2, setShowLogo2] = useState(false)
   const [bgVisible, setBgVisible] = useState(false)
@@ -49,11 +50,22 @@ export default function HomeScreen() {
     }
   }
 
+  const toggleMute = () => {
+    if (volume === 0) {
+      setVolume(prevVolume)
+    } else {
+      setPrevVolume(volume)
+      setVolume(0)
+    }
+  }
+
   // Load saved preferences on first render
   useEffect(() => {
     const storedVolume = getPref('volume')
     if (storedVolume !== null && storedVolume !== undefined) {
-      setVolume(Number(storedVolume))
+      const vol = Number(storedVolume)
+      setVolume(vol)
+      setPrevVolume(vol)
     }
 
     const storedLang = getPref('language')
@@ -156,13 +168,13 @@ export default function HomeScreen() {
         <img
           src={logo1}
           alt="Kadir11"
-          className={`absolute w-[700px] transition-opacity duration-[10000ms] ${showLogo1 ? (showLogo2 ? 'opacity-0' : 'opacity-90 fade-in') : 'opacity-0'}`}
+          className={`absolute w-[700px] transition-opacity duration-1000 ${showLogo1 ? (showLogo2 ? 'opacity-0' : 'opacity-100') : 'opacity-0'}`}
           style={{ mixBlendMode: 'screen', top: '15%' }}
         />
         <img
           src={logo2}
           alt="Kadir11"
-          className={`absolute w-[700px] transition-opacity duration-[3000ms] ${showLogo2 ? 'opacity-100 fade-in' : 'opacity-0'}`}
+          className={`absolute w-[700px] transition-opacity duration-1000 ${showLogo2 ? 'opacity-100' : 'opacity-0'}`}
           style={{ top: '15%' }}
         />
       </div>
@@ -194,7 +206,7 @@ export default function HomeScreen() {
 
       {showOptions && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-gray-800 p-4 rounded text-center w-72">
+          <div className="bg-gray-800 p-4 rounded text-center w-72 text-white">
             <h2 className="text-xl mb-4">Opções</h2>
 
             <div className="mb-4">
@@ -237,7 +249,7 @@ export default function HomeScreen() {
             <div className="mb-4">
               <h3 className="text-sm mb-1">Som do jogo</h3>
               <div className="flex items-center justify-center">
-                <span role="img" aria-label="muted" onClick={() => setVolume(0)}>🔇</span>
+                <span role="img" aria-label="muted" onClick={toggleMute} className="cursor-pointer">🔇</span>
                 <input
                   className="mx-2"
                   type="range"
@@ -246,7 +258,7 @@ export default function HomeScreen() {
                   value={volume}
                   onChange={(e) => setVolume(Number(e.target.value))}
                 />
-                <span role="img" aria-label="sound" onClick={() => setVolume(100)}>🔊</span>
+                <span role="img" aria-label="sound" onClick={() => setVolume(100)} className="cursor-pointer">🔊</span>
               </div>
             </div>
 
