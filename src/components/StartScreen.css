@@ -17,40 +17,25 @@
 }
 
 
+
 .start-logos {
   position: absolute;
   top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: flex;
-  gap: 40px;
 }
 
 .logo-img {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   width: 300px;
   opacity: 0;
-  animation: logo-fade-in 1s forwards;
-  animation-delay: 0.5s;
+  transition: opacity 1s ease;
 }
 
-@keyframes logo-fade-up {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 50%);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, -50%);
-  }
-}
-
-@keyframes logo-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+.logo-img.visible {
+  opacity: 1;
 }
 
 .start-buttons {
@@ -72,10 +57,10 @@
 }
 
 .exit-dropdown {
-  position: absolute;
-  bottom: 110px;
+  position: fixed;
+  top: 50%;
   left: 50%;
-  transform: translate(-50%, 20px);
+  transform: translate(-50%, -50%);
   background-color: rgba(0, 0, 0, 0.8);
   color: #fff;
   padding: 12px;
@@ -94,11 +79,11 @@
 @keyframes dropdown {
   from {
     opacity: 0;
-    transform: translate(-50%, 20px);
+    transform: translate(-50%, -60%);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, 0);
+    transform: translate(-50%, -50%);
   }
 }
 

@@ -6,6 +6,8 @@ const StartScreen = () => {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [showOptions, setShowOptions] = useState(false)
   const [showExitConfirm, setShowExitConfirm] = useState(false)
+  const [showLogoBefore, setShowLogoBefore] = useState(false)
+  const [showLogoAfter, setShowLogoAfter] = useState(false)
   const [prefs, setPrefs] = useState<Preferences>(() => {
     const stored = localStorage.getItem('preferences')
     return stored
@@ -58,12 +60,32 @@ const StartScreen = () => {
     }
   }, [prefs.fullscreen])
 
+  useEffect(() => {
+    const timerBefore = setTimeout(() => setShowLogoBefore(true), 2000)
+    const timerAfter = setTimeout(() => {
+      setShowLogoBefore(false)
+      setShowLogoAfter(true)
+    }, 4000)
+    return () => {
+      clearTimeout(timerBefore)
+      clearTimeout(timerAfter)
+    }
+  }, [])
+
   return (
     <div className='start-screen'>
       <video className='start-video' src='assets/logo/videointro.mp4' autoPlay loop muted />
       <div className='start-logos'>
-        <img className='logo-img' src='assets/logo/kadirbefore.png' alt='logo1' />
-        <img className='logo-img' src='assets/logo/kadir11.png' alt='logo2' />
+        <img
+          className={`logo-img ${showLogoBefore ? 'visible' : ''}`}
+          src='assets/logo/kadirbefore.png'
+          alt='logo1'
+        />
+        <img
+          className={`logo-img ${showLogoAfter ? 'visible' : ''}`}
+          src='assets/logo/kadirafter.png'
+          alt='logo2'
+        />
       </div>
       <div className='start-buttons'>
         <button>Iniciar</button>
