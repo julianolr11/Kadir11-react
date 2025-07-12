@@ -4,9 +4,8 @@ import './StartScreen.css'
 
 const StartScreen = () => {
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [logoSrc, setLogoSrc] = useState('assets/logo/kadirbefore.png')
-  const [logoClass, setLogoClass] = useState('start-logo')
   const [showOptions, setShowOptions] = useState(false)
+  const [showExitConfirm, setShowExitConfirm] = useState(false)
   const [prefs, setPrefs] = useState<Preferences>(() => {
     const stored = localStorage.getItem('preferences')
     return stored
@@ -40,14 +39,8 @@ const StartScreen = () => {
       }
     }, 2000)
 
-    const logoTimer = setTimeout(() => {
-      setLogoSrc('assets/logo/kadirafter.png')
-      setLogoClass('start-logo logo-after')
-    }, 3000)
-
     return () => {
       clearTimeout(audioTimer)
-      clearTimeout(logoTimer)
     }
   }, [])
 
@@ -68,12 +61,24 @@ const StartScreen = () => {
   return (
     <div className='start-screen'>
       <video className='start-video' src='assets/logo/videointro.mp4' autoPlay loop muted />
-      <img className={logoClass} src={logoSrc} alt='logo' />
+      <div className='start-logos'>
+        <img className='logo-img' src='assets/logo/kadirbefore.png' alt='logo1' />
+        <img className='logo-img' src='assets/logo/kadir11.png' alt='logo2' />
+      </div>
       <div className='start-buttons'>
         <button>Iniciar</button>
         <button onClick={() => setShowOptions(true)}>Opções</button>
-        <button>Sair</button>
+        <button onClick={() => setShowExitConfirm(true)}>Sair</button>
       </div>
+      {showExitConfirm && (
+        <div className='exit-dropdown'>
+          <p>Deseja sair?</p>
+          <div className='exit-buttons'>
+            <button onClick={() => window.ipcRenderer.invoke('quit-app')}>Sim</button>
+            <button onClick={() => setShowExitConfirm(false)}>Não</button>
+          </div>
+        </div>
+      )}
       <OptionsModal
         open={showOptions}
         preferences={prefs}

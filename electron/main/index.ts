@@ -121,3 +121,7 @@ ipcMain.handle('open-win', (_, arg) => {
     childWindow.loadFile(indexHtml, { hash: arg })
   }
 })
+
+ipcMain.handle('quit-app', () => {
+  app.quit()
+})

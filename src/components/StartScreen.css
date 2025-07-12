@@ -16,18 +16,21 @@
   z-index: -1;
 }
 
-.start-logo {
+
+.start-logos {
   position: absolute;
-  left: 50%;
   top: 25%;
-  width: 300px;
-  transform: translate(-50%, 50%);
-  animation: logo-fade-up 1s forwards;
-  animation-delay: 0.5s;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 40px;
 }
 
-.logo-after {
+.logo-img {
+  width: 300px;
+  opacity: 0;
   animation: logo-fade-in 1s forwards;
+  animation-delay: 0.5s;
 }
 
 @keyframes logo-fade-up {
@@ -66,5 +69,36 @@
   color: #fff;
   padding: 0.8em 1.5em;
   border: none;
+}
+
+.exit-dropdown {
+  position: absolute;
+  bottom: 110px;
+  left: 50%;
+  transform: translate(-50%, 20px);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  text-align: center;
+  animation: dropdown 0.3s forwards;
+}
+
+.exit-buttons {
+  margin-top: 8px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+@keyframes dropdown {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
