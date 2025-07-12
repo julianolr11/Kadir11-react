@@ -27,7 +27,7 @@
 }
 
 .logo-after {
-  animation: logo-fade-right 1s forwards;
+  animation: logo-fade-in 1s forwards;
 }
 
 @keyframes logo-fade-up {
@@ -41,14 +41,12 @@
   }
 }
 
-@keyframes logo-fade-right {
+@keyframes logo-fade-in {
   from {
     opacity: 0;
-    transform: translate(150%, -50%);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
   }
 }
 
