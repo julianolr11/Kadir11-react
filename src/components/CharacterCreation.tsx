@@ -18,7 +18,7 @@ export interface CharacterSelection {
 
 const defaultSelection: CharacterSelection = {
   sex: 'male',
-  skin: '',
+  skin: 'Assets/Character/body/male/light.png',
   eyes: '',
   torso: '',
   legs: '',
@@ -57,12 +57,10 @@ function OptionRow({ label, options, value, onChange, allowNone = true }: Option
     const i = (index + 1) % all.length
     onChange(all[i])
   }
-  const display = value || '-'
   return (
     <div className='option-row'>
-      <span className='option-label'>{label}</span>
       <button className='arrow-btn' onClick={prev}>◀</button>
-      <span className='option-value'>{display}</span>
+      <span className='option-label'>{label}</span>
       <button className='arrow-btn' onClick={next}>▶</button>
     </div>
   )
@@ -149,7 +147,6 @@ export default function CharacterCreation() {
 
   return (
     <div className='character-creation'>
-      <canvas ref={canvasRef} width={frameWidth} height={frameHeight} />
       <div className='fields'>
         <OptionRow
           label='Sexo'
@@ -224,10 +221,14 @@ export default function CharacterCreation() {
           value={selection.accessory}
           onChange={v => handle('accessory', v)}
         />
+      </div>
+      <div className='preview'>
+        <canvas ref={canvasRef} width={frameWidth} height={frameHeight} />
         <label className='name-row'>
           Nome
           <input value={selection.name} onChange={e => handle('name', e.target.value)} />
         </label>
+        <div className='nickname'>{selection.name}</div>
         <button className='confirm' onClick={confirm}>Confirmar</button>
       </div>
     </div>
