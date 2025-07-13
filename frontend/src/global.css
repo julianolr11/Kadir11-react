@@ -236,3 +236,17 @@ img {
     -webkit-mask-position: center;
     animation: shine 1.5s linear infinite;
 }
+
+.quiz-screen p {
+    width: 500px;
+    font-size: 20px;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 10px;
+    justify-content: center;
+    width: 500px;
+}
