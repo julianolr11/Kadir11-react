@@ -117,6 +117,9 @@
 .intro-text {
   opacity: 0;
   transition: opacity 1s ease;
+  max-width: 800px;
+  width: 90%;
+  text-align: center;
 }
 
 .intro-text.visible {
@@ -126,9 +129,7 @@
 .proceed-btn {
   margin-top: 20px;
   padding: 0.6em 1.2em;
-  background: #1a1a1a;
-  color: #fff;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 8px;
 }
 
