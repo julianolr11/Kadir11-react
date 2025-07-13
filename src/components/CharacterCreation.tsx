@@ -35,9 +35,11 @@ const defaultSelection: CharacterSelection = {
 
 const frameWidth = 64
 const frameHeight = 64
-// Sprite coordinates for the front idle frame
 const sx = 0 * frameWidth
-const sy = 6 * frameHeight
+const frontRow = 6
+const rightRow = 7
+const leftRow = 5
+const backRow = 4
 
 interface OptionRowProps {
   label: string
@@ -72,6 +74,7 @@ export default function CharacterCreation() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [metadata, setMetadata] = useState<any>(null)
   const [selection, setSelection] = useState<CharacterSelection>(defaultSelection)
+  const [frameRow, setFrameRow] = useState(frontRow)
 
   useEffect(() => {
     fetch('Assets/Character/character_metadata_final.json')
@@ -84,6 +87,7 @@ export default function CharacterCreation() {
     const ctx = canvasRef.current?.getContext('2d')
     if (!ctx) return
     ctx.clearRect(0, 0, frameWidth, frameHeight)
+    const sy = frameRow * frameHeight
     const drawLayer = (src?: string) => {
       if (!src) return
       const img = new Image()
@@ -104,7 +108,18 @@ export default function CharacterCreation() {
     }
     drawLayer(selection.hat)
     drawLayer(selection.accessory)
-  }, [selection])
+  }, [selection, frameRow])
+
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') setFrameRow(rightRow)
+      else if (e.key === 'ArrowLeft') setFrameRow(leftRow)
+      else if (e.key === 'ArrowUp') setFrameRow(backRow)
+      else if (e.key === 'ArrowDown') setFrameRow(frontRow)
+    }
+    window.addEventListener('keydown', handleKey)
+    return () => window.removeEventListener('keydown', handleKey)
+  }, [])
 
   const handle = (field: keyof CharacterSelection, value: any) => {
     setSelection(prev => {
@@ -228,12 +243,6 @@ export default function CharacterCreation() {
           value={selection.feet}
           onChange={v => handle('feet', v)}
         />
-        <OptionRow
-          label='Costas'
-          options={list('back')}
-          value={selection.back}
-          onChange={v => handle('back', v)}
-        />
       </div>
       <div className='preview'>
         <OptionRow
@@ -253,6 +262,12 @@ export default function CharacterCreation() {
       </div>
       <div className='fields-right'>
         {/* Ombros e Capa desabilitados por enquanto */}
+        <OptionRow
+          label='Costas'
+          options={list('back')}
+          value={selection.back}
+          onChange={v => handle('back', v)}
+        />
         <OptionRow
           label='Cabelo Estilo'
           options={list('hairStyle')}
