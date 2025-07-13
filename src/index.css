@@ -2,8 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "PixelOperator";
+  src: url("/Assets/Fonts/PixelOperator.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: "PixelOperator", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -34,6 +41,11 @@ body {
   min-width: 320px;
   min-height: 100vh;
 }
+img, canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges; /* fallback */
+}
+
 
 h1 {
   font-size: 3.2em;
