@@ -10,6 +10,7 @@ export interface CharacterSelection {
   feet: string
   shoulders: string
   cape: string
+  back: string
   hair: { style: string; color: string }
   hat: string
   accessory: string
@@ -25,6 +26,7 @@ const defaultSelection: CharacterSelection = {
   feet: '',
   shoulders: '',
   cape: '',
+  back: '',
   hair: { style: '', color: '' },
   hat: '',
   accessory: '',
@@ -94,6 +96,7 @@ export default function CharacterCreation() {
     drawLayer(selection.eyes)
     drawLayer(selection.legs)
     drawLayer(selection.feet)
+    drawLayer(selection.back)
     drawLayer(selection.torso)
     // Ombros e capa desabilitados
     if (selection.hair.style && selection.hair.color) {
@@ -106,10 +109,29 @@ export default function CharacterCreation() {
   const handle = (field: keyof CharacterSelection, value: any) => {
     setSelection(prev => {
       if (field === 'sex') {
+        const newSex = value as 'male' | 'female'
+        if (!metadata) {
+          return {
+            ...prev,
+            sex: newSex,
+            skin: `Assets/Character/body/${newSex}/light.png`,
+          }
+        }
+
+        const pickSameIndex = (key: 'torso' | 'legs' | 'feet') => {
+          const prevList = metadata.clothes[key][prev.sex] ?? []
+          const idx = prevList.indexOf((prev as any)[key])
+          const newList = metadata.clothes[key][newSex] ?? []
+          return idx >= 0 && idx < newList.length ? newList[idx] : ''
+        }
+
         return {
           ...prev,
-          sex: value as 'male' | 'female',
-          skin: `Assets/Character/body/${value}/light.png`,
+          sex: newSex,
+          skin: `Assets/Character/body/${newSex}/light.png`,
+          torso: pickSameIndex('torso'),
+          legs: pickSameIndex('legs'),
+          feet: pickSameIndex('feet'),
         }
       }
       return { ...prev, [field]: value }
@@ -150,6 +172,8 @@ export default function CharacterCreation() {
         return metadata.clothes.shoulders
       case 'cape':
         return metadata.clothes.cape
+      case 'back':
+        return metadata.clothes.back
       case 'hat':
         return metadata.extras.hats.filter(
           (p: string) =>
@@ -203,6 +227,12 @@ export default function CharacterCreation() {
           options={listSex('feet')}
           value={selection.feet}
           onChange={v => handle('feet', v)}
+        />
+        <OptionRow
+          label='Costas'
+          options={list('back')}
+          value={selection.back}
+          onChange={v => handle('back', v)}
         />
       </div>
       <div className='preview'>
