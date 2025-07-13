@@ -1,0 +1,103 @@
+{
+  "skins": [
+    "Assets/Character/body/female/dark.png",
+    "Assets/Character/body/female/light.png",
+    "Assets/Character/body/female/tanned.png",
+    "Assets/Character/body/male/dark.png",
+    "Assets/Character/body/male/light.png",
+    "Assets/Character/body/male/tanned.png"
+  ],
+  "sexes": [
+    "male",
+    "female"
+  ],
+  "eyes": [
+    "Assets/Character/eyes/female/blue.png",
+    "Assets/Character/eyes/female/brown.png",
+    "Assets/Character/eyes/female/green.png",
+    "Assets/Character/eyes/female/purple.png",
+    "Assets/Character/eyes/female/red.png",
+    "Assets/Character/eyes/female/yellow.png",
+    "Assets/Character/eyes/male/blue.png",
+    "Assets/Character/eyes/male/brown.png",
+    "Assets/Character/eyes/male/green.png",
+    "Assets/Character/eyes/male/purple.png",
+    "Assets/Character/eyes/male/red.png",
+    "Assets/Character/eyes/male/yellow.png"
+  ],
+  "hair": {
+    "styles": [
+      "bangs",
+      "bunches",
+      "messy2",
+      "ponytail2",
+      "unkempt"
+    ],
+    "colors": [
+      "brown",
+      "dark-blonde",
+      "gray",
+      "raven"
+    ]
+  },
+  "clothes": {
+    "torso": {
+      "male": [
+        "Assets/Character/torso/male/brown_longsleeve.png",
+        "Assets/Character/torso/male/jacket_male.png",
+        "Assets/Character/torso/male/maroon_longsleeve.png",
+        "Assets/Character/torso/male/teal_longsleeve.png",
+        "Assets/Character/torso/male/white_longsleeve.png"
+      ],
+      "female": [
+        "Assets/Character/torso/female/blue_vest.png",
+        "Assets/Character/torso/female/brown_tunic.png",
+        "Assets/Character/torso/female/dress_w_sash_female.png",
+        "Assets/Character/torso/female/jacket_female.png",
+        "Assets/Character/torso/female/maroon_tunic.png",
+        "Assets/Character/torso/female/overskirt.png",
+        "Assets/Character/torso/female/teal_tunic.png",
+        "Assets/Character/torso/female/underdress.png",
+        "Assets/Character/torso/female/white_tunic.png"
+      ]
+    },
+    "legs": {
+      "male": [
+        "Assets/Character/legs/male/magenta_pants_male.png",
+        "Assets/Character/legs/male/red_pants_male.png",
+        "Assets/Character/legs/male/teal_pants_male.png",
+        "Assets/Character/legs/male/white_pants_male.png"
+      ],
+      "female": [
+        "Assets/Character/legs/female/magenta_pants_female.png",
+        "Assets/Character/legs/female/red_pants_female.png",
+        "Assets/Character/legs/female/teal_pants_female.png",
+        "Assets/Character/legs/female/white_pants_female.png"
+      ]
+    },
+    "feet": {
+      "male": [
+        "Assets/Character/feet/male/black_shoes_male.png",
+        "Assets/Character/feet/male/brown_shoes_male.png",
+        "Assets/Character/feet/male/maroon_shoes_male.png"
+      ],
+      "female": [
+        "Assets/Character/feet/female/black_shoes_female.png",
+        "Assets/Character/feet/female/brown_shoes_female.png",
+        "Assets/Character/feet/female/maroon_shoes_female.png"
+      ]
+    },
+    "shoulders": [],
+    "cape": []
+  },
+  "extras": {
+    "hats": [
+      "Assets/Character/extras/hats/leather_cap_male.png",
+      "Assets/Character/extras/hats/red.png"
+    ],
+    "accessories": [
+      "Assets/Character/extras/acessories/capeclip_blue.png",
+      "Assets/Character/extras/acessories/gold.png"
+    ]
+  }
+}
