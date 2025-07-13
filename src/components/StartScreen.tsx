@@ -94,7 +94,7 @@ const StartScreen = () => {
           />
           {showShine && (
             <div
-              className='logo-img shine-effect'
+              className='shine-effect'
               style={{
                 WebkitMaskImage: "url('assets/logo/kadirafter.png')",
                 maskImage: "url('assets/logo/kadirafter.png')",
