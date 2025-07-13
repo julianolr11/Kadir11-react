@@ -111,13 +111,13 @@ export default function CharacterCreation() {
         selection.eyes,
         selection.legs,
         selection.feet,
-        selection.back,
         selection.torso,
         selection.hair.style && selection.hair.color
           ? `Assets/Character/hair/${selection.hair.style}/${selection.hair.color}.png`
           : undefined,
         selection.hat,
         selection.accessory,
+        selection.back,
       ]
 
       for (const src of layers) {
@@ -292,12 +292,6 @@ export default function CharacterCreation() {
       <div className='fields-right'>
         {/* Ombros e Capa desabilitados por enquanto */}
         <OptionRow
-          label='Costas'
-          options={list('back')}
-          value={selection.back}
-          onChange={v => handle('back', v)}
-        />
-        <OptionRow
           label='Cabelo Estilo'
           options={list('hairStyle')}
           value={selection.hair.style}
@@ -320,6 +314,12 @@ export default function CharacterCreation() {
           options={list('accessory')}
           value={selection.accessory}
           onChange={v => handle('accessory', v)}
+        />
+        <OptionRow
+          label='Costas'
+          options={list('back')}
+          value={selection.back}
+          onChange={v => handle('back', v)}
         />
       </div>
     </div>
