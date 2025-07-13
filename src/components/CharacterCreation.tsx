@@ -92,28 +92,47 @@ export default function CharacterCreation() {
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d')
     if (!ctx) return
-    ctx.clearRect(0, 0, frameWidth, frameHeight)
     const sy = frameRow * frameHeight
-    const drawLayer = (src?: string) => {
-      if (!src) return
-      const img = new Image()
-      img.src = src
-      img.onload = () => {
+
+    const loadImg = (src: string) =>
+      new Promise<HTMLImageElement>(resolve => {
+        const img = new Image()
+        img.src = src
+        if (img.complete) resolve(img)
+        else img.onload = () => resolve(img)
+      })
+
+    let ignore = false
+
+    const draw = async () => {
+      ctx.clearRect(0, 0, frameWidth, frameHeight)
+      const layers: Array<string | undefined> = [
+        selection.skin,
+        selection.eyes,
+        selection.legs,
+        selection.feet,
+        selection.back,
+        selection.torso,
+        selection.hair.style && selection.hair.color
+          ? `Assets/Character/hair/${selection.hair.style}/${selection.hair.color}.png`
+          : undefined,
+        selection.hat,
+        selection.accessory,
+      ]
+
+      for (const src of layers) {
+        if (!src) continue
+        const img = await loadImg(src)
+        if (ignore) return
         ctx.drawImage(img, sx, sy, frameWidth, frameHeight, 0, 0, frameWidth, frameHeight)
       }
     }
-    drawLayer(selection.skin)
-    drawLayer(selection.eyes)
-    drawLayer(selection.legs)
-    drawLayer(selection.feet)
-    drawLayer(selection.back)
-    drawLayer(selection.torso)
-    // Ombros e capa desabilitados
-    if (selection.hair.style && selection.hair.color) {
-      drawLayer(`Assets/Character/hair/${selection.hair.style}/${selection.hair.color}.png`)
+
+    draw()
+
+    return () => {
+      ignore = true
     }
-    drawLayer(selection.hat)
-    drawLayer(selection.accessory)
   }, [selection, frameRow])
 
   useEffect(() => {
