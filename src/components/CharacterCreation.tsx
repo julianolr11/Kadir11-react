@@ -428,11 +428,15 @@ export default function CharacterCreation() {
       life: prev.life + opt.effects.life,
     }))
     if (questionIndex + 1 < questions.length) {
-      setQuestionIndex(i => i + 1)
-    } else {
-      setAttributes(prev => ({ ...prev, life: prev.life * 10 }))
       setFade('out')
       setTimeout(() => {
+        setQuestionIndex(i => i + 1)
+        setFade('in')
+      }, 500)
+    } else {
+      setFade('out')
+      setTimeout(() => {
+        setAttributes(prev => ({ ...prev, life: prev.life * 10 }))
         setPhase('element')
         setFade('in')
       }, 500)
