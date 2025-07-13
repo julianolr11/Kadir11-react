@@ -6,16 +6,17 @@ export default function QuestionnairePage() {
   const navigate = useNavigate()
   const { state } = useLocation()
   const name = state?.name
+  const gender = state?.gender
 
   useEffect(() => {
-    if (!name) navigate('/intro')
-  }, [name, navigate])
+    if (!name || !gender) navigate('/intro')
+  }, [name, gender, navigate])
 
   const handleComplete = (stats) => {
-    navigate('/element', { state: { name, stats } })
+    navigate('/element', { state: { name, gender, stats } })
   }
 
-  if (!name) return null
+  if (!name || !gender) return null
 
   return (
     <div className="flex items-center justify-center h-full">
