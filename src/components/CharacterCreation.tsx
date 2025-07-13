@@ -104,7 +104,16 @@ export default function CharacterCreation() {
   }, [selection])
 
   const handle = (field: keyof CharacterSelection, value: any) => {
-    setSelection(prev => ({ ...prev, [field]: value }))
+    setSelection(prev => {
+      if (field === 'sex') {
+        return {
+          ...prev,
+          sex: value as 'male' | 'female',
+          skin: `Assets/Character/body/${value}/light.png`,
+        }
+      }
+      return { ...prev, [field]: value }
+    })
   }
 
   const handleHair = (field: 'style' | 'color', value: string) => {
@@ -119,7 +128,7 @@ export default function CharacterCreation() {
     if (!metadata) return []
     switch (key) {
       case 'skin':
-        return metadata.skins.filter((p: string) => p.includes(selection.sex))
+        return metadata.skins[selection.sex] ?? []
       case 'eyes':
         return metadata.eyes.filter((p: string) => p.includes(selection.sex))
       case 'hairStyle':
