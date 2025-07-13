@@ -126,6 +126,7 @@
   opacity: 0;
   max-width: 800px;
   min-width: 500px;
+  font-size: 20px;
   transition: opacity 1s ease;
 }
 
@@ -178,6 +179,7 @@
   max-width: 800px;
   min-width: 500px;
   width: 90%;
+  font-size: 20px;
 }
 
 .quiz-screen.fade-out,
@@ -215,7 +217,6 @@
 
 .element-option:hover {
   animation: float 1s ease-in-out infinite;
-  box-shadow: 0 8px 15px rgba(255, 255, 255, 0.3);
 }
 
 .element-option img:hover {
