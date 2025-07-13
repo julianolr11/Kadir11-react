@@ -42,6 +42,187 @@ const leftRow = 5
 const backRow = 4
 const orientationFrames = [frontRow, rightRow, backRow, leftRow]
 
+interface Attributes {
+  attack: number
+  defense: number
+  speed: number
+  magic: number
+  life: number
+}
+
+interface QuizOption {
+  text: string
+  effects: Attributes
+}
+
+interface QuizQuestion {
+  text: string
+  options: QuizOption[]
+}
+
+const allQuestions: QuizQuestion[] = [
+  {
+    text: 'Um inimigo aparece subitamente no seu caminho. O que você faz?',
+    options: [
+      { text: 'Avanço sem hesitar, atacando com tudo.', effects: { attack: 2, defense: 0, speed: 1, magic: 1, life: 1 } },
+      { text: 'Me protejo com um escudo e analiso.', effects: { attack: 0, defense: 2, speed: 1, magic: 1, life: 0 } },
+      { text: 'Dou um salto rápido para o lado e recuo.', effects: { attack: 1, defense: 0, speed: 2, magic: 1, life: 0 } },
+    ],
+  },
+  {
+    text: 'Uma porta mágica tranca o seu caminho. Como você tenta abri-la?',
+    options: [
+      { text: 'Arrebento com força bruta.', effects: { attack: 2, defense: 1, speed: 1, magic: 0, life: 0 } },
+      { text: 'Tento decifrar os símbolos e conjuro um feitiço.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 1 } },
+      { text: 'Tento encontrar um mecanismo escondido ao redor.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 0 } },
+    ],
+  },
+  {
+    text: 'Você encontra uma criatura ferida. O que faz?',
+    options: [
+      { text: 'A ajudo com magia de cura.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'A ignoro e sigo em frente.', effects: { attack: 1, defense: 1, speed: 2, magic: 0, life: 1 } },
+      { text: 'A protejo até que consiga se recuperar.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 0 } },
+    ],
+  },
+  {
+    text: 'Um baú está preso entre armadilhas. Como age?',
+    options: [
+      { text: 'Uso magia para desativar o mecanismo.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Me movimento com rapidez para pegá-lo.', effects: { attack: 1, defense: 0, speed: 2, magic: 1, life: 0 } },
+      { text: 'Destruo o mecanismo com força.', effects: { attack: 2, defense: 1, speed: 1, magic: 0, life: 1 } },
+    ],
+  },
+  {
+    text: 'Um aliado está em perigo. Você:',
+    options: [
+      { text: 'Salta na frente dele, recebendo o golpe.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 0 } },
+      { text: 'Lança um feitiço para distração.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Derruba o inimigo antes que ataque.', effects: { attack: 2, defense: 0, speed: 1, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Durante uma tempestade mágica, você:',
+    options: [
+      { text: 'Cria um campo de proteção.', effects: { attack: 1, defense: 1, speed: 0, magic: 2, life: 1 } },
+      { text: 'Corre para se abrigar.', effects: { attack: 0, defense: 1, speed: 2, magic: 1, life: 0 } },
+      { text: 'Finca os pés no chão e resiste.', effects: { attack: 1, defense: 2, speed: 1, magic: 0, life: 0 } },
+    ],
+  },
+  {
+    text: 'Para vencer um torneio, sua principal estratégia é:',
+    options: [
+      { text: 'Atacar com golpes poderosos.', effects: { attack: 2, defense: 1, speed: 1, magic: 0, life: 0 } },
+      { text: 'Enganar o adversário com ilusões.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Resistir até que o oponente se canse.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Você encontra um livro antigo brilhando. O que faz?',
+    options: [
+      { text: 'Estudo seu conteúdo a fundo.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Levo comigo para o mestre analisar.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 0 } },
+      { text: 'Testo um feitiço imediatamente.', effects: { attack: 1, defense: 0, speed: 2, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Em uma emboscada, sua reação imediata é:',
+    options: [
+      { text: 'Contra-atacar com tudo.', effects: { attack: 2, defense: 1, speed: 1, magic: 0, life: 0 } },
+      { text: 'Me esconder e observar.', effects: { attack: 0, defense: 2, speed: 1, magic: 1, life: 0 } },
+      { text: 'Fugir rapidamente.', effects: { attack: 1, defense: 1, speed: 2, magic: 0, life: 1 } },
+    ],
+  },
+  {
+    text: 'Um espírito oferece um presente em troca de um enigma resolvido. Você:',
+    options: [
+      { text: 'Resolve com lógica mágica.', effects: { attack: 1, defense: 1, speed: 0, magic: 2, life: 0 } },
+      { text: 'Tenta intimidá-lo e pegar à força.', effects: { attack: 2, defense: 0, speed: 1, magic: 1, life: 0 } },
+      { text: 'Distrai o espírito e pega o item.', effects: { attack: 1, defense: 0, speed: 2, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Um monstro veloz está atacando. Sua tática:',
+    options: [
+      { text: 'Golpeá-lo antes que ele reaja.', effects: { attack: 1, defense: 1, speed: 2, magic: 0, life: 0 } },
+      { text: 'Criar uma armadilha mágica.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Segurar firme e resistir.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Você encontra uma fonte de energia estranha. Como reage?',
+    options: [
+      { text: 'A absorvo imediatamente.', effects: { attack: 1, defense: 0, speed: 1, magic: 2, life: 0 } },
+      { text: 'Testo um ataque nela.', effects: { attack: 2, defense: 1, speed: 1, magic: 0, life: 0 } },
+      { text: 'Recuo e analiso de longe.', effects: { attack: 0, defense: 2, speed: 1, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Seu grupo está cansado, mas há pressa. Você:',
+    options: [
+      { text: 'Força todos a continuar correndo.', effects: { attack: 1, defense: 1, speed: 2, magic: 0, life: 1 } },
+      { text: 'Protege o grupo e propõe descanso.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 0 } },
+      { text: 'Usa magia para restaurar parte das energias.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+    ],
+  },
+  {
+    text: 'Ao ver um inimigo forte, você:',
+    options: [
+      { text: 'Desafia de frente com coragem.', effects: { attack: 2, defense: 1, speed: 1, magic: 0, life: 0 } },
+      { text: 'Se afasta e estuda os padrões de ataque.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 1 } },
+      { text: 'Chama reforços e se prepara.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 0 } },
+    ],
+  },
+  {
+    text: 'Você precisa atravessar uma ponte instável:',
+    options: [
+      { text: 'Corre rapidamente antes que desabe.', effects: { attack: 1, defense: 0, speed: 2, magic: 1, life: 0 } },
+      { text: 'Fortalece a estrutura com magia.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Atrai alguém para testar primeiro.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Seu pet está com medo. O que você faz?',
+    options: [
+      { text: 'Grito para ele reagir.', effects: { attack: 2, defense: 1, speed: 1, magic: 0, life: 0 } },
+      { text: 'O acolho com um encantamento de calma.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Fico ao lado dele, firme.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Um desafio de reflexos é lançado. Você:',
+    options: [
+      { text: 'Se move mais rápido que o oponente.', effects: { attack: 1, defense: 1, speed: 2, magic: 0, life: 1 } },
+      { text: 'Usa feitiços para prever movimentos.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Se protege e observa antes de agir.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 0 } },
+    ],
+  },
+  {
+    text: 'Um pergaminho antigo pede um guardião. Você:',
+    options: [
+      { text: 'Se oferece para guardá-lo.', effects: { attack: 1, defense: 2, speed: 0, magic: 1, life: 0 } },
+      { text: 'O estuda para aprender seus segredos.', effects: { attack: 1, defense: 1, speed: 0, magic: 2, life: 0 } },
+      { text: 'O vende por moedas.', effects: { attack: 1, defense: 0, speed: 2, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Um oponente muito mais forte te desafia. Você:',
+    options: [
+      { text: 'Aceita a luta com bravura.', effects: { attack: 2, defense: 1, speed: 1, magic: 0, life: 0 } },
+      { text: 'Usa um feitiço para equilibrar a luta.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Engana e escapa.', effects: { attack: 1, defense: 0, speed: 2, magic: 1, life: 1 } },
+    ],
+  },
+  {
+    text: 'Um labirinto mágico se abre. Qual seu plano?',
+    options: [
+      { text: 'Corro direto, confiante.', effects: { attack: 1, defense: 0, speed: 2, magic: 1, life: 0 } },
+      { text: 'Sinto a energia e sigo pelos caminhos menos óbvios.', effects: { attack: 0, defense: 1, speed: 1, magic: 2, life: 0 } },
+      { text: 'Deixo marcas e avanço com cautela.', effects: { attack: 1, defense: 2, speed: 1, magic: 0, life: 1 } },
+    ],
+  },
+]
+
 interface OptionRowProps {
   label: string
   options: string[]
@@ -78,10 +259,13 @@ export default function CharacterCreation() {
   const [frameRow, setFrameRow] = useState(frontRow)
   const [orientation, setOrientation] = useState(0)
   const [errorMsg, setErrorMsg] = useState('')
-  const [phase, setPhase] = useState<'create' | 'intro'>('create')
+  const [phase, setPhase] = useState<'create' | 'intro' | 'quiz' | 'element'>('create')
   const [fade, setFade] = useState<'in' | 'out'>('in')
   const [showIntroText, setShowIntroText] = useState(false)
   const [showProceed, setShowProceed] = useState(false)
+  const [attributes, setAttributes] = useState<Attributes>({ attack: 0, defense: 0, speed: 0, magic: 0, life: 0 })
+  const [questions, setQuestions] = useState<QuizQuestion[]>([])
+  const [questionIndex, setQuestionIndex] = useState(0)
 
   useEffect(() => {
     fetch('Assets/Character/character_metadata_final.json')
@@ -221,6 +405,38 @@ export default function CharacterCreation() {
       setPhase('intro')
       setFade('in')
     }, 500)
+  }
+
+  const startQuiz = () => {
+    const shuffled = [...allQuestions].sort(() => Math.random() - 0.5)
+    setQuestions(shuffled.slice(0, 5))
+    setQuestionIndex(0)
+    setAttributes({ attack: 0, defense: 0, speed: 0, magic: 0, life: 0 })
+    setFade('out')
+    setTimeout(() => {
+      setPhase('quiz')
+      setFade('in')
+    }, 500)
+  }
+
+  const answer = (opt: QuizOption) => {
+    setAttributes(prev => ({
+      attack: prev.attack + opt.effects.attack,
+      defense: prev.defense + opt.effects.defense,
+      speed: prev.speed + opt.effects.speed,
+      magic: prev.magic + opt.effects.magic,
+      life: prev.life + opt.effects.life,
+    }))
+    if (questionIndex + 1 < questions.length) {
+      setQuestionIndex(i => i + 1)
+    } else {
+      setAttributes(prev => ({ ...prev, life: prev.life * 10 }))
+      setFade('out')
+      setTimeout(() => {
+        setPhase('element')
+        setFade('in')
+      }, 500)
+    }
   }
 
   useEffect(() => {
@@ -373,8 +589,44 @@ export default function CharacterCreation() {
             Como toda grande jornada, um companheiro leal é essencial. Mas antes, preciso entender quem você é, para encontrar aquele que mais combina com você.
           </p>
           {showProceed && (
-            <button className={`proceed-btn ${showProceed ? 'visible' : ''}`}>Prosseguir</button>
+            <button
+              className={`proceed-btn ${showProceed ? 'visible' : ''}`}
+              onClick={startQuiz}
+            >
+              Prosseguir
+            </button>
           )}
+        </div>
+      )}
+      {phase === 'quiz' && questions[questionIndex] && (
+        <div className={`quiz-screen ${fade === 'out' ? 'fade-out' : ''}`}>
+          <p>{questions[questionIndex].text}</p>
+          <div className='options'>
+            {questions[questionIndex].options.map((o, i) => (
+              <button key={i} onClick={() => answer(o)}>
+                {o.text}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+      {phase === 'element' && (
+        <div className={`element-screen ${fade === 'in' ? 'visible' : ''}`}>
+          <p>Por fim, escolha um elemento para te guiar</p>
+          <div className='element-options'>
+            {[
+              { name: 'Fire', src: 'Assets/Elements/fire.png' },
+              { name: 'Air', src: 'Assets/Elements/air.png' },
+              { name: 'Pure', src: 'Assets/Elements/pure.png' },
+              { name: 'Earth', src: 'Assets/Elements/earth.png' },
+              { name: 'Water', src: 'Assets/Elements/water.png' },
+            ].map(el => (
+              <div key={el.name} className='element-option'>
+                <img src={el.src} alt={el.name} />
+                <span>{el.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
