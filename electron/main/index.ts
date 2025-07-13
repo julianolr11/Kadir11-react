@@ -1,4 +1,5 @@
 import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import Store from 'electron-store'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
 import path from 'node:path'
@@ -124,4 +125,10 @@ ipcMain.handle('open-win', (_, arg) => {
 
 ipcMain.handle('quit-app', () => {
   app.quit()
+})
+
+const store = new Store()
+
+ipcMain.handle('save-character', (_event, data) => {
+  store.set('selectedCharacter', data)
 })

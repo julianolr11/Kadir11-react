@@ -101,3 +101,44 @@
   }
 }
 
+
+.intro-screen {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.intro-text {
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.intro-text.visible {
+  opacity: 1;
+}
+
+.proceed-btn {
+  margin-top: 20px;
+  padding: 0.6em 1.2em;
+  background: #1a1a1a;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+}
+
+.creator-container {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.creator-container.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
