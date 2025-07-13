@@ -36,6 +36,37 @@ const frameHeight = 64
 const sx = 1 * frameWidth
 const sy = 3 * frameHeight
 
+interface OptionRowProps {
+  label: string
+  options: string[]
+  value: string
+  onChange: (v: string) => void
+  allowNone?: boolean
+}
+
+function OptionRow({ label, options, value, onChange, allowNone = true }: OptionRowProps) {
+  const all = allowNone ? [''].concat(options) : options
+  let index = all.indexOf(value)
+  if (index === -1) index = 0
+  const prev = () => {
+    const i = (index - 1 + all.length) % all.length
+    onChange(all[i])
+  }
+  const next = () => {
+    const i = (index + 1) % all.length
+    onChange(all[i])
+  }
+  const display = value || '-'
+  return (
+    <div className='option-row'>
+      <span className='option-label'>{label}</span>
+      <button className='arrow-btn' onClick={prev}>◀</button>
+      <span className='option-value'>{display}</span>
+      <button className='arrow-btn' onClick={next}>▶</button>
+    </div>
+  )
+}
+
 export default function CharacterCreation() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [metadata, setMetadata] = useState<any>(null)
@@ -92,113 +123,80 @@ export default function CharacterCreation() {
     <div className='character-creation'>
       <canvas ref={canvasRef} width={frameWidth} height={frameHeight} />
       <div className='fields'>
-        <label>
-          Sexo
-          <select value={selection.sex} onChange={e => handle('sex', e.target.value as 'male' | 'female')}>
-            <option value='male'>male</option>
-            <option value='female'>female</option>
-          </select>
-        </label>
-        <label>
-          Pele
-          <select value={selection.skin} onChange={e => handle('skin', e.target.value)}>
-            <option value=''>-</option>
-            {list('skin').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Olhos
-          <select value={selection.eyes} onChange={e => handle('eyes', e.target.value)}>
-            <option value=''>-</option>
-            {list('eyes').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Torso
-          <select value={selection.torso} onChange={e => handle('torso', e.target.value)}>
-            <option value=''>-</option>
-            {listSex('torso').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Pernas
-          <select value={selection.legs} onChange={e => handle('legs', e.target.value)}>
-            <option value=''>-</option>
-            {listSex('legs').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Pés
-          <select value={selection.feet} onChange={e => handle('feet', e.target.value)}>
-            <option value=''>-</option>
-            {listSex('feet').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Ombros
-          <select value={selection.shoulders} onChange={e => handle('shoulders', e.target.value)}>
-            <option value=''>-</option>
-            {list('shoulders').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Capa
-          <select value={selection.cape} onChange={e => handle('cape', e.target.value)}>
-            <option value=''>-</option>
-            {list('cape').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Cabelo Estilo
-          <select value={selection.hair.style} onChange={e => handleHair('style', e.target.value)}>
-            <option value=''>-</option>
-            {list('hairStyle').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Cabelo Cor
-          <select value={selection.hair.color} onChange={e => handleHair('color', e.target.value)}>
-            <option value=''>-</option>
-            {list('hairColor').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Chapéu
-          <select value={selection.hat} onChange={e => handle('hat', e.target.value)}>
-            <option value=''>-</option>
-            {list('hat').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
-          Acessório
-          <select value={selection.accessory} onChange={e => handle('accessory', e.target.value)}>
-            <option value=''>-</option>
-            {list('accessory').map((o: string) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
-        </label>
-        <label>
+        <OptionRow
+          label='Sexo'
+          options={['male', 'female']}
+          value={selection.sex}
+          onChange={v => handle('sex', v as 'male' | 'female')}
+          allowNone={false}
+        />
+        <OptionRow
+          label='Pele'
+          options={list('skin')}
+          value={selection.skin}
+          onChange={v => handle('skin', v)}
+        />
+        <OptionRow
+          label='Olhos'
+          options={list('eyes')}
+          value={selection.eyes}
+          onChange={v => handle('eyes', v)}
+        />
+        <OptionRow
+          label='Torso'
+          options={listSex('torso')}
+          value={selection.torso}
+          onChange={v => handle('torso', v)}
+        />
+        <OptionRow
+          label='Pernas'
+          options={listSex('legs')}
+          value={selection.legs}
+          onChange={v => handle('legs', v)}
+        />
+        <OptionRow
+          label='Pés'
+          options={listSex('feet')}
+          value={selection.feet}
+          onChange={v => handle('feet', v)}
+        />
+        <OptionRow
+          label='Ombros'
+          options={list('shoulders')}
+          value={selection.shoulders}
+          onChange={v => handle('shoulders', v)}
+        />
+        <OptionRow
+          label='Capa'
+          options={list('cape')}
+          value={selection.cape}
+          onChange={v => handle('cape', v)}
+        />
+        <OptionRow
+          label='Cabelo Estilo'
+          options={list('hairStyle')}
+          value={selection.hair.style}
+          onChange={v => handleHair('style', v)}
+        />
+        <OptionRow
+          label='Cabelo Cor'
+          options={list('hairColor')}
+          value={selection.hair.color}
+          onChange={v => handleHair('color', v)}
+        />
+        <OptionRow
+          label='Chapéu'
+          options={list('hat')}
+          value={selection.hat}
+          onChange={v => handle('hat', v)}
+        />
+        <OptionRow
+          label='Acessório'
+          options={list('accessory')}
+          value={selection.accessory}
+          onChange={v => handle('accessory', v)}
+        />
+        <label className='name-row'>
           Nome
           <input value={selection.name} onChange={e => handle('name', e.target.value)} />
         </label>

@@ -8,6 +8,9 @@
 .character-creation canvas {
   border: 1px solid #fff;
   margin-bottom: 12px;
+  width: 128px;
+  height: 128px;
+  image-rendering: pixelated;
 }
 
 .character-creation .fields {
@@ -30,6 +33,37 @@
   color: #fff;
   border: 1px solid #555;
   border-radius: 4px;
+}
+
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #fff;
+}
+
+.option-label {
+  width: 100px;
+  text-align: right;
+}
+
+.arrow-btn {
+  padding: 4px 8px;
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+}
+
+.option-value {
+  min-width: 80px;
+  text-align: center;
+}
+
+.name-row {
+  display: flex;
+  flex-direction: column;
 }
 
 .character-creation .confirm {
