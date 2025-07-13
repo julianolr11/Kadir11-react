@@ -9,6 +9,7 @@ const StartScreen = () => {
   const [showExitConfirm, setShowExitConfirm] = useState(false)
   const [showLogoBefore, setShowLogoBefore] = useState(false)
   const [showLogoAfter, setShowLogoAfter] = useState(false)
+  const [showShine, setShowShine] = useState(false)
   const [prefs, setPrefs] = useState<Preferences>(() => {
     const stored = localStorage.getItem('preferences')
     return stored
@@ -73,20 +74,32 @@ const StartScreen = () => {
     }
   }, [])
 
+  useEffect(() => {
+    if (showLogoAfter) {
+      const timer = setTimeout(() => setShowShine(true), 1000)
+      return () => clearTimeout(timer)
+    }
+  }, [showLogoAfter])
+
   return (
     <div className='start-screen'>
       <video className='start-video' src='assets/logo/videointro.mp4' autoPlay loop muted />
       <div className='start-logos'>
-        <img
-          className={`logo-img ${showLogoBefore ? 'visible' : ''}`}
-          src='assets/logo/kadirbefore.png'
-          alt='logo1'
-        />
-        <img
-          className={`logo-img ${showLogoAfter ? 'visible' : ''}`}
-          src='assets/logo/kadirafter.png'
-          alt='logo2'
-        />
+        <div className='logo-container'>
+          <img
+            className={`logo-img ${showLogoBefore ? 'visible' : ''}`}
+            src='assets/logo/kadirbefore.png'
+            alt='logo1'
+          />
+        </div>
+        <div className='logo-container'>
+          <img
+            className={`logo-img ${showLogoAfter ? 'visible' : ''}`}
+            src='assets/logo/kadirafter.png'
+            alt='logo2'
+          />
+          {showShine && <div className='shine-effect' />}
+        </div>
       </div>
       <div className='start-buttons'>
         <button>{t(prefs.language, 'start')}</button>
