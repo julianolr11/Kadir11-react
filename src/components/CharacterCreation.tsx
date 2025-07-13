@@ -77,6 +77,9 @@ export default function CharacterCreation() {
   const [selection, setSelection] = useState<CharacterSelection>(defaultSelection)
   const [frameRow, setFrameRow] = useState(frontRow)
   const [orientation, setOrientation] = useState(0)
+  const [errorMsg, setErrorMsg] = useState('')
+  const [phase, setPhase] = useState<'create' | 'intro'>('create')
+  const [fade, setFade] = useState<'in' | 'out'>('in')
 
   useEffect(() => {
     fetch('Assets/Character/character_metadata_final.json')
@@ -193,8 +196,29 @@ export default function CharacterCreation() {
     })
   }
 
+  const handleNameChange = (value: string) => {
+    let v = value.slice(0, 15)
+    const sanitized = v.replace(/[^A-Za-z0-9._]/g, '')
+    if (sanitized !== v) {
+      setErrorMsg('Use apenas letras, números, ponto e underline')
+    } else {
+      setErrorMsg('')
+    }
+    handle('name', sanitized)
+  }
+
   const confirm = () => {
+    const valid = /^[A-Za-z0-9._]{1,15}$/.test(selection.name)
+    if (!valid) {
+      setErrorMsg('Nome inválido')
+      return
+    }
     window.ipcRenderer.invoke('save-character', selection)
+    setFade('out')
+    setTimeout(() => {
+      setPhase('intro')
+      setFade('in')
+    }, 500)
   }
 
   const list = (key: string) => {
@@ -235,93 +259,106 @@ export default function CharacterCreation() {
   }
 
   return (
-    <div className='character-creation'>
-      <div className='fields-left'>
-        <OptionRow
-          label='Pele'
-          options={list('skin')}
-          value={selection.skin}
-          onChange={v => handle('skin', v)}
-          allowNone={false}
-        />
-        <OptionRow
-          label='Olhos'
-          options={list('eyes')}
-          value={selection.eyes}
-          onChange={v => handle('eyes', v)}
-        />
-        <OptionRow
-          label='Torso'
-          options={listSex('torso')}
-          value={selection.torso}
-          onChange={v => handle('torso', v)}
-        />
-        <OptionRow
-          label='Pernas'
-          options={listSex('legs')}
-          value={selection.legs}
-          onChange={v => handle('legs', v)}
-        />
-        <OptionRow
-          label='Pés'
-          options={listSex('feet')}
-          value={selection.feet}
-          onChange={v => handle('feet', v)}
-        />
-      </div>
-      <div className='preview'>
-        <OptionRow
-          label={selection.sex === 'male' ? '♂' : '♀'}
-          options={['male', 'female']}
-          value={selection.sex}
-          onChange={v => handle('sex', v as 'male' | 'female')}
-          allowNone={false}
-        />
-        <canvas ref={canvasRef} width={frameWidth} height={frameHeight} />
-        <div className='rotation-controls'>
-          <button className='arrow-btn' onClick={() => setOrientation(o => (o + orientationFrames.length - 1) % orientationFrames.length)}>◀</button>
-          <button className='arrow-btn' onClick={() => setOrientation(o => (o + 1) % orientationFrames.length)}>▶</button>
+    <div className='character-creation-wrapper'>
+      {phase === 'create' && (
+        <div className={`character-creation ${fade === 'out' ? 'fade-out' : ''}`}>
+          <div className='fields-left'>
+            <OptionRow
+              label='Pele'
+              options={list('skin')}
+              value={selection.skin}
+              onChange={v => handle('skin', v)}
+              allowNone={false}
+            />
+            <OptionRow
+              label='Olhos'
+              options={list('eyes')}
+              value={selection.eyes}
+              onChange={v => handle('eyes', v)}
+            />
+            <OptionRow
+              label='Torso'
+              options={listSex('torso')}
+              value={selection.torso}
+              onChange={v => handle('torso', v)}
+            />
+            <OptionRow
+              label='Pernas'
+              options={listSex('legs')}
+              value={selection.legs}
+              onChange={v => handle('legs', v)}
+            />
+            <OptionRow
+              label='Pés'
+              options={listSex('feet')}
+              value={selection.feet}
+              onChange={v => handle('feet', v)}
+            />
+          </div>
+          <div className='preview'>
+            <OptionRow
+              label={selection.sex === 'male' ? '♂' : '♀'}
+              options={['male', 'female']}
+              value={selection.sex}
+              onChange={v => handle('sex', v as 'male' | 'female')}
+              allowNone={false}
+            />
+            <canvas ref={canvasRef} width={frameWidth} height={frameHeight} />
+            <div className='rotation-controls'>
+              <button className='arrow-btn' onClick={() => setOrientation(o => (o + orientationFrames.length - 1) % orientationFrames.length)}>◀</button>
+              <button className='arrow-btn' onClick={() => setOrientation(o => (o + 1) % orientationFrames.length)}>▶</button>
+            </div>
+            <label className='name-row'>
+              Nome
+          <input value={selection.name} onChange={e => handleNameChange(e.target.value)} />
+            </label>
+            <div className='error-message'>{errorMsg}</div>
+            <div className='nickname'>{selection.name}</div>
+            <button className='confirm' onClick={confirm}>Prosseguir</button>
+          </div>
+          <div className='fields-right'>
+            {/* Ombros e Capa desabilitados por enquanto */}
+            <OptionRow
+              label='Cabelo Estilo'
+              options={list('hairStyle')}
+              value={selection.hair.style}
+              onChange={v => handleHair('style', v)}
+            />
+            <OptionRow
+              label='Cabelo Cor'
+              options={list('hairColor')}
+              value={selection.hair.color}
+              onChange={v => handleHair('color', v)}
+            />
+            <OptionRow
+              label='Chapéu'
+              options={list('hat')}
+              value={selection.hat}
+              onChange={v => handle('hat', v)}
+            />
+            <OptionRow
+              label='Acessório'
+              options={list('accessory')}
+              value={selection.accessory}
+              onChange={v => handle('accessory', v)}
+            />
+            <OptionRow
+              label='Costas'
+              options={list('back')}
+              value={selection.back}
+              onChange={v => handle('back', v)}
+            />
+          </div>
         </div>
-        <label className='name-row'>
-          Nome
-          <input value={selection.name} onChange={e => handle('name', e.target.value)} />
-        </label>
-        <div className='nickname'>{selection.name}</div>
-        <button className='confirm' onClick={confirm}>Confirmar</button>
-      </div>
-      <div className='fields-right'>
-        {/* Ombros e Capa desabilitados por enquanto */}
-        <OptionRow
-          label='Cabelo Estilo'
-          options={list('hairStyle')}
-          value={selection.hair.style}
-          onChange={v => handleHair('style', v)}
-        />
-        <OptionRow
-          label='Cabelo Cor'
-          options={list('hairColor')}
-          value={selection.hair.color}
-          onChange={v => handleHair('color', v)}
-        />
-        <OptionRow
-          label='Chapéu'
-          options={list('hat')}
-          value={selection.hat}
-          onChange={v => handle('hat', v)}
-        />
-        <OptionRow
-          label='Acessório'
-          options={list('accessory')}
-          value={selection.accessory}
-          onChange={v => handle('accessory', v)}
-        />
-        <OptionRow
-          label='Costas'
-          options={list('back')}
-          value={selection.back}
-          onChange={v => handle('back', v)}
-        />
-      </div>
+      )}
+      {phase === 'intro' && (
+        <div className={`next-screen ${fade === 'in' ? 'visible' : ''}`}>
+          <p>
+            Como toda grande jornada, um companheiro leal é essencial. Mas antes, preciso entender quem você é, para encontrar aquele que mais combina com você.
+          </p>
+          <button className='proceed-btn'>Prosseguir</button>
+        </div>
+      )}
     </div>
   )
 }

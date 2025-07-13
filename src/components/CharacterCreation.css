@@ -91,3 +91,39 @@
   margin-top: 12px;
   padding: 6px 12px;
 }
+
+/* Wrapper to control fade transitions */
+.character-creation-wrapper {
+  position: relative;
+  transition: opacity 0.5s ease;
+}
+
+.character-creation.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.next-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #000;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  gap: 20px;
+}
+
+.next-screen.visible {
+  opacity: 1;
+}
+
+.error-message {
+  color: red;
+  height: 18px;
+  margin-top: 4px;
+}
