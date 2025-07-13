@@ -174,6 +174,7 @@ export default function CharacterCreation() {
           options={list('skin')}
           value={selection.skin}
           onChange={v => handle('skin', v)}
+          allowNone={false}
         />
         <OptionRow
           label='Olhos'
