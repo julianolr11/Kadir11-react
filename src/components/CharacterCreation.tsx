@@ -117,7 +117,18 @@ export default function CharacterCreation() {
   }
 
   const handleHair = (field: 'style' | 'color', value: string) => {
-    setSelection(prev => ({ ...prev, hair: { ...prev.hair, [field]: value } }))
+    setSelection(prev => {
+      let hair = { ...prev.hair, [field]: value }
+      if (field === 'color') {
+        if (!value) {
+          hair.style = ''
+        } else if (!prev.hair.style) {
+          const first = list('hairStyle')[0] ?? ''
+          hair.style = first
+        }
+      }
+      return { ...prev, hair }
+    })
   }
 
   const confirm = () => {
@@ -161,14 +172,7 @@ export default function CharacterCreation() {
 
   return (
     <div className='character-creation'>
-      <div className='fields'>
-        <OptionRow
-          label='Sexo'
-          options={['male', 'female']}
-          value={selection.sex}
-          onChange={v => handle('sex', v as 'male' | 'female')}
-          allowNone={false}
-        />
+      <div className='fields-left'>
         <OptionRow
           label='Pele'
           options={list('skin')}
@@ -200,6 +204,24 @@ export default function CharacterCreation() {
           value={selection.feet}
           onChange={v => handle('feet', v)}
         />
+      </div>
+      <div className='preview'>
+        <OptionRow
+          label={selection.sex === 'male' ? '♂' : '♀'}
+          options={['male', 'female']}
+          value={selection.sex}
+          onChange={v => handle('sex', v as 'male' | 'female')}
+          allowNone={false}
+        />
+        <canvas ref={canvasRef} width={frameWidth} height={frameHeight} />
+        <label className='name-row'>
+          Nome
+          <input value={selection.name} onChange={e => handle('name', e.target.value)} />
+        </label>
+        <div className='nickname'>{selection.name}</div>
+        <button className='confirm' onClick={confirm}>Confirmar</button>
+      </div>
+      <div className='fields-right'>
         {/* Ombros e Capa desabilitados por enquanto */}
         <OptionRow
           label='Cabelo Estilo'
@@ -225,15 +247,6 @@ export default function CharacterCreation() {
           value={selection.accessory}
           onChange={v => handle('accessory', v)}
         />
-      </div>
-      <div className='preview'>
-        <canvas ref={canvasRef} width={frameWidth} height={frameHeight} />
-        <label className='name-row'>
-          Nome
-          <input value={selection.name} onChange={e => handle('name', e.target.value)} />
-        </label>
-        <div className='nickname'>{selection.name}</div>
-        <button className='confirm' onClick={confirm}>Confirmar</button>
       </div>
     </div>
   )
