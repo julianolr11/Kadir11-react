@@ -165,11 +165,9 @@ export default function HomeScreen() {
       />
       <audio ref={audioRef} src={musicSrc} loop className="hidden" />
       <div className="relative w-[700px] h-[700px]">
-        <img
-          src={logo1}
-          alt="Kadir11"
-          className={`absolute w-[700px] transition-opacity duration-1000 ${showLogo1 ? (showLogo2 ? 'opacity-0' : 'opacity-100') : 'opacity-0'}`}
-          style={{ mixBlendMode: 'screen', top: '15%' }}
+        <div
+          className={`absolute w-[700px] h-[700px] logo-shine transition-opacity duration-1000 ${showLogo1 ? (showLogo2 ? 'opacity-0' : 'opacity-100') : 'opacity-0'}`}
+          style={{ top: '15%', maskImage: `url(${logo1})`, WebkitMaskImage: `url(${logo1})` }}
         />
         <img
           src={logo2}
