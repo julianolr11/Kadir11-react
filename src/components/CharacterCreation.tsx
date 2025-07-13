@@ -33,8 +33,9 @@ const defaultSelection: CharacterSelection = {
 
 const frameWidth = 64
 const frameHeight = 64
-const sx = 1 * frameWidth
-const sy = 3 * frameHeight
+// Sprite coordinates for the front idle frame
+const sx = 0 * frameWidth
+const sy = 6 * frameHeight
 
 interface OptionRowProps {
   label: string
@@ -98,8 +99,9 @@ export default function CharacterCreation() {
     drawLayer(selection.torso)
     drawLayer(selection.shoulders)
     drawLayer(selection.cape)
-    drawLayer(selection.hair.style)
-    drawLayer(selection.hair.color)
+    if (selection.hair.style && selection.hair.color) {
+      drawLayer(`Assets/Character/hair/${selection.hair.style}/${selection.hair.color}.png`)
+    }
     drawLayer(selection.hat)
     drawLayer(selection.accessory)
   }, [selection])
@@ -116,8 +118,34 @@ export default function CharacterCreation() {
     window.ipcRenderer.invoke('save-character', selection)
   }
 
-  const list = (key: string) => metadata?.[key] ?? []
-  const listSex = (key: string) => metadata?.[key]?.[selection.sex] ?? []
+  const list = (key: string) => {
+    if (!metadata) return []
+    switch (key) {
+      case 'skin':
+        return metadata.skins.filter((p: string) => p.includes(selection.sex))
+      case 'eyes':
+        return metadata.eyes.filter((p: string) => p.includes(selection.sex))
+      case 'hairStyle':
+        return metadata.hair.styles
+      case 'hairColor':
+        return metadata.hair.colors
+      case 'shoulders':
+        return metadata.clothes.shoulders
+      case 'cape':
+        return metadata.clothes.cape
+      case 'hat':
+        return metadata.extras.hats
+      case 'accessory':
+        return metadata.extras.accessories
+      default:
+        return []
+    }
+  }
+
+  const listSex = (key: string) => {
+    if (!metadata) return []
+    return metadata.clothes[key]?.[selection.sex] ?? []
+  }
 
   return (
     <div className='character-creation'>
