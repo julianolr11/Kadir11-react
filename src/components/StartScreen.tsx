@@ -98,6 +98,10 @@ const StartScreen = () => {
               style={{
                 WebkitMaskImage: "url('assets/logo/kadirafter.png')",
                 maskImage: "url('assets/logo/kadirafter.png')",
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                WebkitMaskPosition: 'center',
+                maskPosition: 'center',
               }}
             />
           )}
