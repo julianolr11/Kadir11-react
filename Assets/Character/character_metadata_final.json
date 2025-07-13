@@ -1,12 +1,16 @@
 {
-  "skins": [
-    "Assets/Character/body/female/dark.png",
-    "Assets/Character/body/female/light.png",
-    "Assets/Character/body/female/tanned.png",
-    "Assets/Character/body/male/dark.png",
-    "Assets/Character/body/male/light.png",
-    "Assets/Character/body/male/tanned.png"
-  ],
+  "skins": {
+    "male": [
+      "Assets/Character/body/male/dark.png",
+      "Assets/Character/body/male/light.png",
+      "Assets/Character/body/male/tanned.png"
+    ],
+    "female": [
+      "Assets/Character/body/female/dark.png",
+      "Assets/Character/body/female/light.png",
+      "Assets/Character/body/female/tanned.png"
+    ]
+  },
   "sexes": [
     "male",
     "female"
