@@ -31,3 +31,7 @@ yarn.lock
 /test-results/
 /playwright-report/
 /playwright/.cache/
+
+# Ignore character sprites
+Assets/Character/**
+!Assets/Character/character_metadata_final.json

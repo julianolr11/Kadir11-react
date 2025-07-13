@@ -1,7 +1,7 @@
-import StartScreen from './components/StartScreen'
+import CharacterCreation from './components/CharacterCreation'
 
 function App() {
-  return <StartScreen />
+  return <CharacterCreation />
 }
 
 export default App

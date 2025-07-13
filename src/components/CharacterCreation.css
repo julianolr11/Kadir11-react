@@ -1,0 +1,25 @@
+.character-creation {
+  color: #fff;
+  background: #000;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: sans-serif;
+}
+.intro-line {
+  opacity: 0;
+  transition: opacity 1s;
+  margin: 10px 0;
+}
+.intro-line.visible {
+  opacity: 1;
+}
+.creation-menu {
+  margin-top: 20px;
+}
+.creation-menu label {
+  display: block;
+  margin-bottom: 10px;
+}
+.preview {
+  margin-top: 20px;
+}

@@ -1,0 +1,39 @@
+{
+  "sex": ["male", "female"],
+  "skin": {
+    "male": ["Assets/Character/body/male/light.png"],
+    "female": ["Assets/Character/body/female/light.png"]
+  },
+  "eyes": {
+    "male": ["Assets/Character/body/male/eyes/blue.png"],
+    "female": ["Assets/Character/body/female/eyes/green.png"]
+  },
+  "torso": {
+    "male": ["Assets/Character/torso/male/armor.png"],
+    "female": ["Assets/Character/torso/female/robe.png"]
+  },
+  "legs": {
+    "male": ["Assets/Character/legs/male/pants.png"],
+    "female": ["Assets/Character/legs/female/skirt.png"]
+  },
+  "feet": {
+    "male": ["Assets/Character/feet/male/boots.png"],
+    "female": ["Assets/Character/feet/female/boots.png"]
+  },
+  "shoulders": ["Assets/Character/shoulders/default.png"],
+  "cape": ["Assets/Character/cape/default.png"],
+  "hairStyles": ["bangs", "pony"],
+  "hairColors": ["brown", "blonde"],
+  "hair": {
+    "bangs": {
+      "brown": "Assets/Character/hair/bangs/brown.png",
+      "blonde": "Assets/Character/hair/bangs/blonde.png"
+    },
+    "pony": {
+      "brown": "Assets/Character/hair/pony/brown.png",
+      "blonde": "Assets/Character/hair/pony/blonde.png"
+    }
+  },
+  "hat": ["Assets/Character/hat/default.png"],
+  "accessory": ["Assets/Character/accessory/earrings.png"]
+}
