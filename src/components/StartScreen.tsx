@@ -79,7 +79,7 @@ const StartScreen = () => {
   }, [prefs.fullscreen])
 
   useEffect(() => {
-    const beforeTimer = setTimeout(() => setShowLogoBefore(true), 2000)
+    const beforeTimer = setTimeout(() => setShowLogoBefore(true), 3000)
     const afterTimer = setTimeout(() => {
       setShowLogoBefore(false)
       setShowLogoAfter(true)
