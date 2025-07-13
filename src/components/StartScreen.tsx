@@ -19,6 +19,7 @@ const StartScreen = () => {
   const lastVolumeRef = useRef(prefs.volume)
 
   const [phase, setPhase] = useState<'menu' | 'intro' | 'create'>('menu')
+  const [showIntro, setShowIntro] = useState(false)
   const [messageIndex, setMessageIndex] = useState(0)
   const messages = [
     'Boas vindas, viajante...',
@@ -86,10 +87,18 @@ const StartScreen = () => {
     }, 4000)
 
     return () => {
-      clearTimeout(beforeTimer)
-      clearTimeout(afterTimer)
-    }
+    clearTimeout(beforeTimer)
+    clearTimeout(afterTimer)
+  }
   }, [])
+
+  useEffect(() => {
+    if (phase === 'intro') {
+      const timer = setTimeout(() => setShowIntro(true), 10)
+      return () => clearTimeout(timer)
+    }
+    setShowIntro(false)
+  }, [phase])
 
   return (
     <div className='start-screen'>
@@ -118,7 +127,7 @@ const StartScreen = () => {
         </div>
       )}
       {phase === 'intro' && (
-        <div className='intro-screen'>
+        <div className={`intro-screen ${showIntro ? 'visible' : ''}`}>
           {messages.map((m, i) => (
             <p key={i} className={`intro-text ${messageIndex > i ? 'visible' : ''}`}>{m}</p>
           ))}
