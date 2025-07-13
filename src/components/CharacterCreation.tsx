@@ -95,8 +95,7 @@ export default function CharacterCreation() {
     drawLayer(selection.legs)
     drawLayer(selection.feet)
     drawLayer(selection.torso)
-    drawLayer(selection.shoulders)
-    drawLayer(selection.cape)
+    // Ombros e capa desabilitados
     if (selection.hair.style && selection.hair.color) {
       drawLayer(`Assets/Character/hair/${selection.hair.style}/${selection.hair.color}.png`)
     }
@@ -132,9 +131,15 @@ export default function CharacterCreation() {
       case 'cape':
         return metadata.clothes.cape
       case 'hat':
-        return metadata.extras.hats
+        return metadata.extras.hats.filter(
+          (p: string) =>
+            p.includes(selection.sex) || (!p.includes('male') && !p.includes('female'))
+        )
       case 'accessory':
-        return metadata.extras.accessories
+        return metadata.extras.accessories.filter(
+          (p: string) =>
+            p.includes(selection.sex) || (!p.includes('male') && !p.includes('female'))
+        )
       default:
         return []
     }
@@ -185,18 +190,7 @@ export default function CharacterCreation() {
           value={selection.feet}
           onChange={v => handle('feet', v)}
         />
-        <OptionRow
-          label='Ombros'
-          options={list('shoulders')}
-          value={selection.shoulders}
-          onChange={v => handle('shoulders', v)}
-        />
-        <OptionRow
-          label='Capa'
-          options={list('cape')}
-          value={selection.cape}
-          onChange={v => handle('cape', v)}
-        />
+        {/* Ombros e Capa desabilitados por enquanto */}
         <OptionRow
           label='Cabelo Estilo'
           options={list('hairStyle')}
