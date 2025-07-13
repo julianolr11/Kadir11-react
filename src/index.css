@@ -40,6 +40,10 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  cursor: none;
+}
+body * {
+  cursor: none !important;
 }
 img, canvas {
   image-rendering: pixelated;
