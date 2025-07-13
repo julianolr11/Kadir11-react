@@ -7,7 +7,6 @@ const StartScreen = () => {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [showOptions, setShowOptions] = useState(false)
   const [showExitConfirm, setShowExitConfirm] = useState(false)
-  const [showLogoBefore, setShowLogoBefore] = useState(false)
   const [showLogoAfter, setShowLogoAfter] = useState(false)
   const [showShine, setShowShine] = useState(false)
   const [prefs, setPrefs] = useState<Preferences>(() => {
@@ -63,15 +62,8 @@ const StartScreen = () => {
   }, [prefs.fullscreen])
 
   useEffect(() => {
-    const timerBefore = setTimeout(() => setShowLogoBefore(true), 1300)
-    const timerAfter = setTimeout(() => {
-      setShowLogoBefore(false)
-      setShowLogoAfter(true)
-    }, 4000)
-    return () => {
-      clearTimeout(timerBefore)
-      clearTimeout(timerAfter)
-    }
+    const timer = setTimeout(() => setShowLogoAfter(true), 4000)
+    return () => clearTimeout(timer)
   }, [])
 
   useEffect(() => {
@@ -87,18 +79,19 @@ const StartScreen = () => {
       <div className='start-logos'>
         <div className='logo-container'>
           <img
-            className={`logo-img ${showLogoBefore ? 'visible' : ''}`}
-            src='assets/logo/kadirbefore.png'
-            alt='logo1'
-          />
-        </div>
-        <div className='logo-container'>
-          <img
             className={`logo-img ${showLogoAfter ? 'visible' : ''}`}
             src='assets/logo/kadirafter.png'
             alt='logo2'
           />
-          {showShine && <div className='shine-effect' />}
+          {showShine && (
+            <div
+              className='logo-img logo-shine'
+              style={{
+                WebkitMaskImage: "url('assets/logo/kadirafter.png')",
+                maskImage: "url('assets/logo/kadirafter.png')",
+              }}
+            />
+          )}
         </div>
       </div>
       <div className='start-buttons'>
