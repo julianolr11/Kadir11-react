@@ -12,6 +12,8 @@
   width: 128px;
   height: 128px;
   image-rendering: pixelated;
+  background: linear-gradient(to bottom right, #333, #555);
+  border-radius: 8px;
 }
 
 .character-creation .fields-left,

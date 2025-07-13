@@ -92,7 +92,10 @@
       ]
     },
     "shoulders": [],
-    "cape": []
+    "cape": [],
+    "back": [
+      "Assets/Character/back/cape_red.png"
+    ]
   },
   "extras": {
     "hats": [
