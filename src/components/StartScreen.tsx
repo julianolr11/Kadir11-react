@@ -10,7 +10,6 @@ const StartScreen = () => {
   const [showExitConfirm, setShowExitConfirm] = useState(false)
   const [showLogoBefore, setShowLogoBefore] = useState(false)
   const [showLogoAfter, setShowLogoAfter] = useState(false)
-  const [showShine, setShowShine] = useState(false)
   const [prefs, setPrefs] = useState<Preferences>(() => {
     const stored = localStorage.getItem('preferences')
     return stored
@@ -85,12 +84,10 @@ const StartScreen = () => {
       setShowLogoBefore(false)
       setShowLogoAfter(true)
     }, 4000)
-    const shineTimer = setTimeout(() => setShowShine(true), 6000)
 
     return () => {
       clearTimeout(beforeTimer)
       clearTimeout(afterTimer)
-      clearTimeout(shineTimer)
     }
   }, [])
 
@@ -109,19 +106,6 @@ const StartScreen = () => {
             src='assets/logo/kadirafter.png'
             alt='logo2'
           />
-          {showShine && (
-            <div
-              className='shine-effect'
-              style={{
-                WebkitMaskImage: "url('assets/logo/kadirafter.png')",
-                maskImage: "url('assets/logo/kadirafter.png')",
-                WebkitMaskRepeat: 'no-repeat',
-                maskRepeat: 'no-repeat',
-                WebkitMaskPosition: 'center',
-                maskPosition: 'center',
-              }}
-            />
-          )}
         </div>
       </div>
       {phase === 'menu' && (
