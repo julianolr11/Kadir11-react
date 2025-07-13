@@ -80,6 +80,8 @@ export default function CharacterCreation() {
   const [errorMsg, setErrorMsg] = useState('')
   const [phase, setPhase] = useState<'create' | 'intro'>('create')
   const [fade, setFade] = useState<'in' | 'out'>('in')
+  const [showIntroText, setShowIntroText] = useState(false)
+  const [showProceed, setShowProceed] = useState(false)
 
   useEffect(() => {
     fetch('Assets/Character/character_metadata_final.json')
@@ -221,6 +223,20 @@ export default function CharacterCreation() {
     }, 500)
   }
 
+  useEffect(() => {
+    if (phase === 'intro') {
+      const textTimer = setTimeout(() => setShowIntroText(true), 500)
+      const btnTimer = setTimeout(() => setShowProceed(true), 1500)
+      return () => {
+        clearTimeout(textTimer)
+        clearTimeout(btnTimer)
+      }
+    } else {
+      setShowIntroText(false)
+      setShowProceed(false)
+    }
+  }, [phase])
+
   const list = (key: string) => {
     if (!metadata) return []
     switch (key) {
@@ -353,10 +369,12 @@ export default function CharacterCreation() {
       )}
       {phase === 'intro' && (
         <div className={`next-screen ${fade === 'in' ? 'visible' : ''}`}>
-          <p>
+          <p className={`next-text ${showIntroText ? 'visible' : ''}`}>
             Como toda grande jornada, um companheiro leal é essencial. Mas antes, preciso entender quem você é, para encontrar aquele que mais combina com você.
           </p>
-          <button className='proceed-btn'>Prosseguir</button>
+          {showProceed && (
+            <button className={`proceed-btn ${showProceed ? 'visible' : ''}`}>Prosseguir</button>
+          )}
         </div>
       )}
     </div>
