@@ -76,6 +76,12 @@
   margin-bottom: 8px;
 }
 
+.rotation-controls {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
 .name-row {
   display: flex;
   flex-direction: column;

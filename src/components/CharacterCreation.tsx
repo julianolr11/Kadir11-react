@@ -40,6 +40,7 @@ const frontRow = 6
 const rightRow = 7
 const leftRow = 5
 const backRow = 4
+const orientationFrames = [frontRow, rightRow, backRow, leftRow]
 
 interface OptionRowProps {
   label: string
@@ -75,6 +76,7 @@ export default function CharacterCreation() {
   const [metadata, setMetadata] = useState<any>(null)
   const [selection, setSelection] = useState<CharacterSelection>(defaultSelection)
   const [frameRow, setFrameRow] = useState(frontRow)
+  const [orientation, setOrientation] = useState(0)
 
   useEffect(() => {
     fetch('Assets/Character/character_metadata_final.json')
@@ -82,6 +84,10 @@ export default function CharacterCreation() {
       .then(setMetadata)
       .catch(err => console.error(err))
   }, [])
+
+  useEffect(() => {
+    setFrameRow(orientationFrames[orientation])
+  }, [orientation])
 
   useEffect(() => {
     const ctx = canvasRef.current?.getContext('2d')
@@ -112,10 +118,10 @@ export default function CharacterCreation() {
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowRight') setFrameRow(rightRow)
-      else if (e.key === 'ArrowLeft') setFrameRow(leftRow)
-      else if (e.key === 'ArrowUp') setFrameRow(backRow)
-      else if (e.key === 'ArrowDown') setFrameRow(frontRow)
+      if (e.key === 'ArrowRight') setOrientation(o => (o + 1) % orientationFrames.length)
+      else if (e.key === 'ArrowLeft') setOrientation(o => (o + orientationFrames.length - 1) % orientationFrames.length)
+      else if (e.key === 'ArrowUp') setOrientation(2)
+      else if (e.key === 'ArrowDown') setOrientation(0)
     }
     window.addEventListener('keydown', handleKey)
     return () => window.removeEventListener('keydown', handleKey)
@@ -253,6 +259,10 @@ export default function CharacterCreation() {
           allowNone={false}
         />
         <canvas ref={canvasRef} width={frameWidth} height={frameHeight} />
+        <div className='rotation-controls'>
+          <button className='arrow-btn' onClick={() => setOrientation(o => (o + orientationFrames.length - 1) % orientationFrames.length)}>◀</button>
+          <button className='arrow-btn' onClick={() => setOrientation(o => (o + 1) % orientationFrames.length)}>▶</button>
+        </div>
         <label className='name-row'>
           Nome
           <input value={selection.name} onChange={e => handle('name', e.target.value)} />
