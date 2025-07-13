@@ -149,6 +149,14 @@
   opacity: 1;
 }
 
+.next-screen .proceed-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0;
+}
+
 .error-message {
   color: red;
   height: 18px;
@@ -190,15 +198,16 @@
 
 .options {
   display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
+  flex-direction: row;
   gap: 10px;
   justify-content: center;
   align-items: center;
+  width: 600px;
 }
 
 .options button {
-  width: 600px;
+  flex: 1;
+  width: auto;
 }
 
 .element-options {

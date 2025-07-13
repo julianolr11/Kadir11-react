@@ -140,6 +140,14 @@
   border-radius: 8px;
 }
 
+.intro-screen .proceed-btn {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0;
+}
+
 .creator-container {
   position: fixed;
   inset: 0;
