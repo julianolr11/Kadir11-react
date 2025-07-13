@@ -6,14 +6,15 @@ export default function ElementPage() {
   const navigate = useNavigate()
   const { state } = useLocation()
   const name = state?.name
+  const gender = state?.gender
   const stats = state?.stats
 
   useEffect(() => {
-    if (!name || !stats) navigate('/intro')
-  }, [name, stats, navigate])
+    if (!name || !gender || !stats) navigate('/intro')
+  }, [name, gender, stats, navigate])
 
   const handleSelect = (finalStats) => {
-    const pet = { name, ...finalStats }
+    const pet = { name, gender, ...finalStats }
     if (window.api?.setPreference) {
       window.api.setPreference('pet', pet)
     } else {
@@ -22,7 +23,7 @@ export default function ElementPage() {
     navigate('/')
   }
 
-  if (!name || !stats) return null
+  if (!name || !gender || !stats) return null
 
   return (
     <div className="flex items-center justify-center h-full">
