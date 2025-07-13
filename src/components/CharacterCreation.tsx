@@ -549,7 +549,6 @@ export default function CharacterCreation() {
           <input value={selection.name} onChange={e => handleNameChange(e.target.value)} />
             </label>
             <div className='error-message'>{errorMsg}</div>
-            <div className='nickname'>{selection.name}</div>
             <button className='confirm' onClick={confirm}>Prosseguir</button>
           </div>
           <div className='fields-right'>

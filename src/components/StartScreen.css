@@ -142,7 +142,7 @@
 
 .intro-screen .proceed-btn {
   position: absolute;
-  bottom: 40px;
+  bottom: 250px;
   left: 50%;
   transform: translateX(-50%);
   margin-top: 0;
