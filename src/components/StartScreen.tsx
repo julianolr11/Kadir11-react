@@ -123,7 +123,12 @@ const StartScreen = () => {
             <p key={i} className={`intro-text ${messageIndex > i ? 'visible' : ''}`}>{m}</p>
           ))}
           {messageIndex >= messages.length && (
-            <button className='proceed-btn' onClick={() => setPhase('create')}>Prosseguir</button>
+            <button
+              className='proceed-btn visible'
+              onClick={() => setPhase('create')}
+            >
+              Prosseguir
+            </button>
           )}
         </div>
       )}
