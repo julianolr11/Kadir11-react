@@ -173,6 +173,7 @@
 
 .quiz-screen p {
   width: 500px;
+  font-size: 20px;
 }
 
 .element-screen p {
@@ -189,10 +190,15 @@
 
 .options {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: nowrap;
   gap: 10px;
   justify-content: center;
+  align-items: center;
+}
+
+.options button {
+  width: 600px;
 }
 
 .element-options {
