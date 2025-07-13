@@ -1,0 +1,38 @@
+.character-creation {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.character-creation canvas {
+  border: 1px solid #fff;
+  margin-bottom: 12px;
+}
+
+.character-creation .fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.character-creation label {
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+}
+
+.character-creation select,
+.character-creation input {
+  padding: 4px;
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+}
+
+.character-creation .confirm {
+  margin-top: 12px;
+  padding: 6px 12px;
+}

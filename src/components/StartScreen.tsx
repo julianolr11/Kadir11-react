@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import OptionsModal, { Preferences } from './OptionsModal'
+import CharacterCreation from './CharacterCreation'
 import { t } from '@/locales'
 import './StartScreen.css'
 
@@ -17,6 +18,15 @@ const StartScreen = () => {
       : { language: 'PT-BR', fullscreen: false, volume: 1, muted: false }
   })
   const lastVolumeRef = useRef(prefs.volume)
+
+  const [phase, setPhase] = useState<'menu' | 'intro' | 'create'>('menu')
+  const [messageIndex, setMessageIndex] = useState(0)
+  const messages = [
+    'Boas vindas, viajante...',
+    'Parece estar cansado, mas não desanime.',
+    'Kadir está aqui.',
+    'Vamos conhecer um pouco mais sobre você.',
+  ]
 
   const updatePrefs = (update: Partial<Preferences>) => {
     setPrefs(prev => {
@@ -47,6 +57,13 @@ const StartScreen = () => {
       clearTimeout(audioTimer)
     }
   }, [])
+
+  useEffect(() => {
+    if (phase !== 'intro') return
+    if (messageIndex >= messages.length) return
+    const timer = setTimeout(() => setMessageIndex(i => i + 1), 2000)
+    return () => clearTimeout(timer)
+  }, [phase, messageIndex])
 
   useEffect(() => {
     if (audioRef.current) {
@@ -107,10 +124,27 @@ const StartScreen = () => {
           )}
         </div>
       </div>
-      <div className='start-buttons'>
-        <button>{t(prefs.language, 'start')}</button>
-        <button onClick={() => setShowOptions(true)}>{t(prefs.language, 'options')}</button>
-        <button onClick={() => setShowExitConfirm(true)}>{t(prefs.language, 'exit')}</button>
+      {phase === 'menu' && (
+        <div className='start-buttons'>
+          <button onClick={() => { setPhase('intro'); setMessageIndex(0) }}>
+            {t(prefs.language, 'start')}
+          </button>
+          <button onClick={() => setShowOptions(true)}>{t(prefs.language, 'options')}</button>
+          <button onClick={() => setShowExitConfirm(true)}>{t(prefs.language, 'exit')}</button>
+        </div>
+      )}
+      {phase === 'intro' && (
+        <div className='intro-screen'>
+          {messages.map((m, i) => (
+            <p key={i} className={`intro-text ${messageIndex > i ? 'visible' : ''}`}>{m}</p>
+          ))}
+          {messageIndex >= messages.length && (
+            <button className='proceed-btn' onClick={() => setPhase('create')}>Prosseguir</button>
+          )}
+        </div>
+      )}
+      <div className={`creator-container ${phase === 'create' ? 'visible' : ''}`}> 
+        {phase === 'create' && <CharacterCreation />}
       </div>
       {showExitConfirm && (
         <div className='exit-dropdown'>

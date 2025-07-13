@@ -20,6 +20,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "electron-store": "^8.1.0",
     "electron-updater": "^6.3.9"
   },
   "devDependencies": {
