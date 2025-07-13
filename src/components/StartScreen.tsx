@@ -20,6 +20,8 @@ const StartScreen = () => {
 
   const [phase, setPhase] = useState<'menu' | 'intro' | 'create'>('menu')
   const [showIntro, setShowIntro] = useState(false)
+  const [introVisible, setIntroVisible] = useState(false)
+  const [showProceed, setShowProceed] = useState(false)
   const [messageIndex, setMessageIndex] = useState(0)
   const messages = [
     'Boas vindas, viajante...',
@@ -87,18 +89,29 @@ const StartScreen = () => {
     }, 4000)
 
     return () => {
-    clearTimeout(beforeTimer)
-    clearTimeout(afterTimer)
-  }
+      clearTimeout(beforeTimer)
+      clearTimeout(afterTimer)
+    }
   }, [])
 
   useEffect(() => {
     if (phase === 'intro') {
+      setIntroVisible(true)
       const timer = setTimeout(() => setShowIntro(true), 10)
       return () => clearTimeout(timer)
     }
     setShowIntro(false)
+    const timer = setTimeout(() => setIntroVisible(false), 2000)
+    return () => clearTimeout(timer)
   }, [phase])
+
+  useEffect(() => {
+    if (messageIndex >= messages.length) {
+      const timer = setTimeout(() => setShowProceed(true), 1000)
+      return () => clearTimeout(timer)
+    }
+    setShowProceed(false)
+  }, [messageIndex])
 
   return (
     <div className='start-screen'>
@@ -126,12 +139,12 @@ const StartScreen = () => {
           <button onClick={() => setShowExitConfirm(true)}>{t(prefs.language, 'exit')}</button>
         </div>
       )}
-      {phase === 'intro' && (
+      {introVisible && (
         <div className={`intro-screen ${showIntro ? 'visible' : ''}`}>
           {messages.map((m, i) => (
             <p key={i} className={`intro-text ${messageIndex > i ? 'visible' : ''}`}>{m}</p>
           ))}
-          {messageIndex >= messages.length && (
+          {showProceed && (
             <button
               className='proceed-btn visible'
               onClick={() => setPhase('create')}
