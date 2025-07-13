@@ -1,8 +1,9 @@
 .character-creation {
   margin-top: 20px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
 }
 
 .character-creation canvas {
@@ -15,9 +16,9 @@
 
 .character-creation .fields {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
 }
 
 .character-creation label {
@@ -44,8 +45,8 @@
 }
 
 .option-label {
-  width: 100px;
-  text-align: right;
+  min-width: 80px;
+  text-align: center;
 }
 
 .arrow-btn {
@@ -56,9 +57,16 @@
   border-radius: 4px;
 }
 
-.option-value {
-  min-width: 80px;
+.nickname {
+  margin-top: 8px;
   text-align: center;
+  color: #fff;
+}
+
+.preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .name-row {
