@@ -7,6 +7,7 @@ const StartScreen = () => {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [showOptions, setShowOptions] = useState(false)
   const [showExitConfirm, setShowExitConfirm] = useState(false)
+  const [showLogoBefore, setShowLogoBefore] = useState(false)
   const [showLogoAfter, setShowLogoAfter] = useState(false)
   const [showShine, setShowShine] = useState(false)
   const [prefs, setPrefs] = useState<Preferences>(() => {
@@ -62,22 +63,30 @@ const StartScreen = () => {
   }, [prefs.fullscreen])
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowLogoAfter(true), 4000)
-    return () => clearTimeout(timer)
-  }, [])
+    const beforeTimer = setTimeout(() => setShowLogoBefore(true), 2000)
+    const afterTimer = setTimeout(() => {
+      setShowLogoBefore(false)
+      setShowLogoAfter(true)
+    }, 4000)
+    const shineTimer = setTimeout(() => setShowShine(true), 6000)
 
-  useEffect(() => {
-    if (showLogoAfter) {
-      const timer = setTimeout(() => setShowShine(true), 1000)
-      return () => clearTimeout(timer)
+    return () => {
+      clearTimeout(beforeTimer)
+      clearTimeout(afterTimer)
+      clearTimeout(shineTimer)
     }
-  }, [showLogoAfter])
+  }, [])
 
   return (
     <div className='start-screen'>
       <video className='start-video' src='assets/logo/videointro.mp4' autoPlay loop muted />
       <div className='start-logos'>
         <div className='logo-container'>
+          <img
+            className={`logo-img ${showLogoBefore ? 'visible' : ''}`}
+            src='assets/logo/kadirbefore.png'
+            alt='logo1'
+          />
           <img
             className={`logo-img ${showLogoAfter ? 'visible' : ''}`}
             src='assets/logo/kadirafter.png'
