@@ -1,4 +1,5 @@
 import { app, BrowserWindow, shell, ipcMain } from 'electron'
+import fs from 'node:fs'
 import Store from 'electron-store'
 import { createRequire } from 'node:module'
 import { fileURLToPath } from 'node:url'
@@ -139,4 +140,50 @@ const store = new Store()
 
 ipcMain.handle('save-character', (_event, data) => {
   store.set('selectedCharacter', data)
+})
+
+ipcMain.handle('get-pet-assets', (_event, especie: string, elemento: string) => {
+  const base = path.join(process.env.APP_ROOT, 'Assets', 'Mons')
+  const specieDir = path.join(base, especie)
+
+  const pickPetDir = (dir: string): string | undefined => {
+    if (!fs.existsSync(dir)) return undefined
+    const candidates = fs
+      .readdirSync(dir, { withFileTypes: true })
+      .filter(d => d.isDirectory())
+      .map(d => d.name)
+    if (!candidates.length) return undefined
+    const chosen = candidates[Math.floor(Math.random() * candidates.length)]
+    const gif = path.join(dir, chosen, 'front.gif')
+    if (fs.existsSync(gif)) return path.relative(process.env.APP_ROOT, gif).replace(/\\/g, '/')
+    const png = path.join(dir, chosen, 'front.png')
+    if (fs.existsSync(png)) return path.relative(process.env.APP_ROOT, png).replace(/\\/g, '/')
+    return undefined
+  }
+
+  let assetPet = pickPetDir(path.join(specieDir, elemento))
+
+  if (!assetPet) {
+    const subdirs = fs
+      .readdirSync(specieDir, { withFileTypes: true })
+      .filter(d => d.isDirectory())
+      .map(d => d.name)
+    for (const sub of subdirs) {
+      const candidate = pickPetDir(path.join(specieDir, sub))
+      if (candidate) {
+        assetPet = candidate
+        break
+      }
+    }
+  }
+
+  const evoMp4 = path.join(base, 'evolution.mp4')
+  const evoGif = path.join(base, 'evolution.gif')
+  const animacaoEvolucao = fs.existsSync(evoMp4)
+    ? path.relative(process.env.APP_ROOT, evoMp4).replace(/\\/g, '/')
+    : fs.existsSync(evoGif)
+      ? path.relative(process.env.APP_ROOT, evoGif).replace(/\\/g, '/')
+      : ''
+
+  return { animacaoEvolucao, assetPet }
 })

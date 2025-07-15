@@ -23,6 +23,10 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
   // ...
 })
 
+contextBridge.exposeInMainWorld('getPetAssets', (especie: string, elemento: string) => {
+  return ipcRenderer.invoke('get-pet-assets', especie, elemento)
+})
+
 // --------- Preload scripts loading ---------
 function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
   return new Promise(resolve => {
