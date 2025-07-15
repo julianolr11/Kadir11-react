@@ -250,3 +250,36 @@
     transform: translateY(-5px);
   }
 }
+
+.pet-screen {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+
+.pet-screen.fade-out {
+  opacity: 0;
+}
+
+.pet-screen img {
+  width: 128px;
+  height: 128px;
+  image-rendering: pixelated;
+}
+
+.pet-name-input {
+  padding: 4px;
+  background-color: #1a1a1a;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 4px;
+}
