@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import determinarPetFinal from '../utils/pet'
 import './CharacterCreation.css'
 
 export interface CharacterSelection {
@@ -259,13 +260,16 @@ export default function CharacterCreation() {
   const [frameRow, setFrameRow] = useState(frontRow)
   const [orientation, setOrientation] = useState(0)
   const [errorMsg, setErrorMsg] = useState('')
-  const [phase, setPhase] = useState<'create' | 'intro' | 'quiz' | 'element'>('create')
+  const [phase, setPhase] = useState<'create' | 'intro' | 'quiz' | 'element' | 'pet'>('create')
   const [fade, setFade] = useState<'in' | 'out'>('in')
   const [showIntroText, setShowIntroText] = useState(false)
   const [showProceed, setShowProceed] = useState(false)
   const [attributes, setAttributes] = useState<Attributes>({ attack: 0, defense: 0, speed: 0, magic: 0, life: 0 })
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const [questionIndex, setQuestionIndex] = useState(0)
+  const [petInfo, setPetInfo] = useState<ReturnType<typeof determinarPetFinal> | null>(null)
+  const [showNameInput, setShowNameInput] = useState(false)
+  const [petName, setPetName] = useState('')
 
   useEffect(() => {
     fetch('Assets/Character/character_metadata_final.json')
@@ -441,6 +445,16 @@ export default function CharacterCreation() {
         setFade('in')
       }, 500)
     }
+  }
+
+  const chooseElement = (el: string) => {
+    const pet = determinarPetFinal(attributes, el)
+    setPetInfo(pet)
+    setFade('out')
+    setTimeout(() => {
+      setPhase('pet')
+      setFade('in')
+    }, 500)
   }
 
   useEffect(() => {
@@ -624,12 +638,28 @@ export default function CharacterCreation() {
               { name: 'Earth', src: 'Assets/Elements/earth.png' },
               { name: 'Water', src: 'Assets/Elements/water.png' },
             ].map(el => (
-              <div key={el.name} className='element-option'>
+              <div key={el.name} className='element-option' onClick={() => chooseElement(el.name)}>
                 <img src={el.src} alt={el.name} />
                 <span>{el.name}</span>
               </div>
             ))}
           </div>
+        </div>
+      )}
+      {phase === 'pet' && petInfo && (
+        <div className={`pet-screen ${fade === 'in' ? 'visible' : ''}`}>
+          <img src={petInfo.assetPet} alt={petInfo.especie} />
+          <p>Parabéns você adquiriu um {petInfo.especie}!</p>
+          {!showNameInput ? (
+            <button onClick={() => setShowNameInput(true)}>Deseja dar um nome a ele?</button>
+          ) : (
+            <input
+              className='pet-name-input'
+              value={petName}
+              onChange={e => setPetName(e.target.value)}
+              placeholder='Digite o nome'
+            />
+          )}
         </div>
       )}
     </div>
