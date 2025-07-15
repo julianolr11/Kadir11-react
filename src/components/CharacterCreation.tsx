@@ -267,7 +267,7 @@ export default function CharacterCreation() {
   const [attributes, setAttributes] = useState<Attributes>({ attack: 0, defense: 0, speed: 0, magic: 0, life: 0 })
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const [questionIndex, setQuestionIndex] = useState(0)
-  const [petInfo, setPetInfo] = useState<ReturnType<typeof determinarPetFinal> | null>(null)
+  const [petInfo, setPetInfo] = useState<Awaited<ReturnType<typeof determinarPetFinal>> | null>(null)
   const [showNameInput, setShowNameInput] = useState(false)
   const [petName, setPetName] = useState('')
 
@@ -447,8 +447,8 @@ export default function CharacterCreation() {
     }
   }
 
-  const chooseElement = (el: string) => {
-    const pet = determinarPetFinal(attributes, el)
+  const chooseElement = async (el: string) => {
+    const pet = await determinarPetFinal(attributes, el)
     setPetInfo(pet)
     setFade('out')
     setTimeout(() => {
