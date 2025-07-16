@@ -251,6 +251,7 @@
   }
 }
 
+
 .pet-screen {
   position: absolute;
   inset: 0;
@@ -262,8 +263,12 @@
   justify-content: center;
   text-align: center;
   gap: 20px;
-  opacity: 1;
+  opacity: 0;
   transition: opacity 0.5s ease;
+}
+
+.pet-screen.visible {
+  opacity: 1;
 }
 
 .pet-screen.fade-out {
@@ -277,8 +282,8 @@
 }
 
 .pet-screen video {
-  width: 128px;
-  height: 128px;
+  width: 500px;
+  height: 500px;
 }
 
 .pet-image.jump {
