@@ -658,7 +658,7 @@ export default function CharacterCreation() {
         </div>
       )}
       {phase === 'evolution' && petInfo && (
-        <div className={`pet-screen ${fade === 'in' ? 'visible' : ''}`}>
+        <div className={`pet-screen ${fade === 'in' ? 'visible' : 'fade-out'}`}>
           {petInfo.animacaoEvolucao.endsWith('.mp4') ? (
             <video
               src={petInfo.animacaoEvolucao}
@@ -674,7 +674,7 @@ export default function CharacterCreation() {
         </div>
       )}
       {phase === 'pet' && petInfo && (
-        <div className={`pet-screen ${fade === 'in' ? 'visible' : ''}`}>
+        <div className={`pet-screen ${fade === 'in' ? 'visible' : 'fade-out'}`}>
           <img
             src={petInfo.assetPet}
             alt={petInfo.especie}
