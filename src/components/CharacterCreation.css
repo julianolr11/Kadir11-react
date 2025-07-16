@@ -276,8 +276,8 @@
 }
 
 .pet-screen img {
-  width: 128px;
-  height: 128px;
+  width: 250px;
+  height: 250px;
   image-rendering: pixelated;
 }
 
