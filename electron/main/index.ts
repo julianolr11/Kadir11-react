@@ -144,7 +144,12 @@ ipcMain.handle('save-character', (_event, data) => {
 
 ipcMain.handle('get-pet-assets', (_event, especie: string, elemento: string) => {
   const base = path.join(process.env.APP_ROOT, 'Assets', 'Mons')
-  const specieDir = path.join(base, especie)
+  const sanitize = (name: string) =>
+    name
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, '')
+  const specieDir = path.join(base, sanitize(especie))
 
   const pickPetDir = (dir: string): string | undefined => {
     if (!fs.existsSync(dir)) return undefined
