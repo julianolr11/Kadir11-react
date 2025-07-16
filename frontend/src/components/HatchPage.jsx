@@ -18,7 +18,7 @@ export default function HatchPage() {
   }, [navigate])
 
   return (
-    <div className="flex items-center justify-center h-full">
+    <div className="character-creation-wrapper flex items-center justify-center h-full">
       {!showPet ? (
         <img src={evolution} alt="Hatching" className="w-64 h-64" />
       ) : (
