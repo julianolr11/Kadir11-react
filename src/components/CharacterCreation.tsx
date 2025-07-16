@@ -260,7 +260,7 @@ export default function CharacterCreation() {
   const [frameRow, setFrameRow] = useState(frontRow)
   const [orientation, setOrientation] = useState(0)
   const [errorMsg, setErrorMsg] = useState('')
-  const [phase, setPhase] = useState<'create' | 'intro' | 'quiz' | 'element' | 'pet'>('create')
+  const [phase, setPhase] = useState<'create' | 'intro' | 'quiz' | 'element' | 'evolution' | 'pet'>('create')
   const [fade, setFade] = useState<'in' | 'out'>('in')
   const [showIntroText, setShowIntroText] = useState(false)
   const [showProceed, setShowProceed] = useState(false)
@@ -270,6 +270,7 @@ export default function CharacterCreation() {
   const [petInfo, setPetInfo] = useState<Awaited<ReturnType<typeof determinarPetFinal>> | null>(null)
   const [showNameInput, setShowNameInput] = useState(false)
   const [petName, setPetName] = useState('')
+  const [petJump, setPetJump] = useState(false)
 
   useEffect(() => {
     fetch('Assets/Character/character_metadata_final.json')
@@ -452,7 +453,7 @@ export default function CharacterCreation() {
     setPetInfo(pet)
     setFade('out')
     setTimeout(() => {
-      setPhase('pet')
+      setPhase('evolution')
       setFade('in')
     }, 500)
   }
@@ -506,6 +507,16 @@ export default function CharacterCreation() {
   const listSex = (key: string) => {
     if (!metadata) return []
     return metadata.clothes[key]?.[selection.sex] ?? []
+  }
+
+  const finishEvolution = () => {
+    setFade('out')
+    setTimeout(() => {
+      setPhase('pet')
+      setFade('in')
+      setPetJump(true)
+      setTimeout(() => setPetJump(false), 500)
+    }, 500)
   }
 
   return (
@@ -646,9 +657,29 @@ export default function CharacterCreation() {
           </div>
         </div>
       )}
+      {phase === 'evolution' && petInfo && (
+        <div className={`pet-screen ${fade === 'in' ? 'visible' : ''}`}>
+          {petInfo.animacaoEvolucao.endsWith('.mp4') ? (
+            <video
+              src={petInfo.animacaoEvolucao}
+              autoPlay
+              onEnded={finishEvolution}
+            />
+          ) : (
+            <img
+              src={petInfo.animacaoEvolucao}
+              onLoad={() => setTimeout(finishEvolution, 3000)}
+            />
+          )}
+        </div>
+      )}
       {phase === 'pet' && petInfo && (
         <div className={`pet-screen ${fade === 'in' ? 'visible' : ''}`}>
-          <img src={petInfo.assetPet} alt={petInfo.especie} />
+          <img
+            src={petInfo.assetPet}
+            alt={petInfo.especie}
+            className={`pet-image ${petJump ? 'jump' : ''}`}
+          />
           <p>Parabéns você adquiriu um {petInfo.especie}!</p>
           {!showNameInput ? (
             <button onClick={() => setShowNameInput(true)}>Deseja dar um nome a ele?</button>

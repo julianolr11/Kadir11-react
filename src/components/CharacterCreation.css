@@ -276,6 +276,24 @@
   image-rendering: pixelated;
 }
 
+.pet-screen video {
+  width: 128px;
+  height: 128px;
+}
+
+.pet-image.jump {
+  animation: jump 0.5s ease;
+}
+
+@keyframes jump {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
 .pet-name-input {
   padding: 4px;
   background-color: #1a1a1a;
