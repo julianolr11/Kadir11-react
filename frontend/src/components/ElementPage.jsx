@@ -20,7 +20,7 @@ export default function ElementPage() {
     } else {
       localStorage.setItem('pet', JSON.stringify(pet))
     }
-    navigate('/')
+    navigate('/hatch', { state: { pet } })
   }
 
   if (!name || !gender || !stats) return null
