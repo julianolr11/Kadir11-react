@@ -10,7 +10,7 @@ export default function HatchPage() {
 
   useEffect(() => {
     const timer1 = setTimeout(() => setShowPet(true), 2000)
-    const timer2 = setTimeout(() => navigate('/', { replace: true }), 3500)
+    const timer2 = setTimeout(() => navigate('/map', { replace: true }), 3500)
     return () => {
       clearTimeout(timer1)
       clearTimeout(timer2)
