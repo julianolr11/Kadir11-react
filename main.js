@@ -6,6 +6,10 @@ const fs = require('fs');
 const distIndex = path.join(__dirname, 'frontend', 'dist', 'index.html');
 const isDev = !fs.existsSync(distIndex);
 
+// Resolve the preload script using an absolute path so it works in
+// both development and packaged builds
+const preloadPath = path.join(app.getAppPath(), 'preload.js');
+
 let win;
 
 function createWindow() {
@@ -18,7 +22,7 @@ function createWindow() {
     frame: false,
     webPreferences: {
       contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js')
+      preload: preloadPath
     }
   });
 
