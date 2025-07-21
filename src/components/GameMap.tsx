@@ -43,7 +43,12 @@ const loadImage = (src: string) =>
     img.onload = () => resolve(img)
   })
 
-const GameMap = () => {
+interface Props {
+  playerSrc: string
+  petSrc: string
+}
+
+const GameMap = ({ playerSrc, petSrc }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const collisionPolygons = useRef<Point[][]>([])
   const playerPos = useRef<Point>({ x: 0, y: 0 })
@@ -85,6 +90,9 @@ const GameMap = () => {
           loadImage(new URL(`../../tileset/${ts.image}`, import.meta.url).href)
         )
       )
+
+      const playerImg = await loadImage(playerSrc)
+      const petImg = await loadImage(petSrc)
 
 
       const drawLayer = (layer: TileLayer) => {
@@ -233,10 +241,20 @@ const GameMap = () => {
         map.layers.forEach(layer => {
           if (layer.type === 'tilelayer') drawLayer(layer as TileLayer)
         })
-        ctx.fillStyle = 'blue'
-        ctx.fillRect(petPos.current.x, petPos.current.y, map.tilewidth, map.tileheight)
-        ctx.fillStyle = 'red'
-        ctx.fillRect(playerPos.current.x, playerPos.current.y, map.tilewidth, map.tileheight)
+        ctx.drawImage(
+          petImg,
+          petPos.current.x,
+          petPos.current.y,
+          map.tilewidth,
+          map.tileheight
+        )
+        ctx.drawImage(
+          playerImg,
+          playerPos.current.x,
+          playerPos.current.y,
+          map.tilewidth,
+          map.tileheight
+        )
       }
 
       const movePlayer = (key: string) => {
@@ -303,7 +321,7 @@ const GameMap = () => {
     return () => {
       if (cleanup) cleanup()
     }
-  }, [])
+  }, [playerSrc, petSrc])
 
   return <canvas ref={canvasRef} style={{ imageRendering: 'pixelated' }} />
 }
