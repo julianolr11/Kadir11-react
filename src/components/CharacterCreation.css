@@ -306,3 +306,12 @@
   border: 1px solid #555;
   border-radius: 4px;
 }
+
+.start-map-btn {
+  margin-top: 8px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background-color: #1a1a1a;
+  color: #fff;
+  border: none;
+}

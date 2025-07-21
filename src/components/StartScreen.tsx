@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import OptionsModal, { Preferences } from './OptionsModal'
-import CharacterCreation from './CharacterCreation'
+import CharacterCreation, { CharacterCreationResult } from './CharacterCreation'
+import GameMap from './GameMap'
 import { t } from '@/locales'
 import './StartScreen.css'
 
@@ -18,7 +19,9 @@ const StartScreen = () => {
   })
   const lastVolumeRef = useRef(prefs.volume)
 
-  const [phase, setPhase] = useState<'menu' | 'intro' | 'create'>('menu')
+  const [phase, setPhase] = useState<'menu' | 'intro' | 'create' | 'game'>('menu')
+  const [playerImage, setPlayerImage] = useState<string | null>(null)
+  const [petImage, setPetImage] = useState<string | null>(null)
   const [showIntro, setShowIntro] = useState(false)
   const [introVisible, setIntroVisible] = useState(false)
   const [showProceed, setShowProceed] = useState(false)
@@ -154,8 +157,21 @@ const StartScreen = () => {
           )}
         </div>
       )}
-      <div className={`creator-container ${phase === 'create' ? 'visible' : ''}`}> 
-        {phase === 'create' && <CharacterCreation />}
+      <div className={`creator-container ${phase === 'create' ? 'visible' : ''}`}>
+        {phase === 'create' && (
+          <CharacterCreation
+            onComplete={({ playerImage, petImage }: CharacterCreationResult) => {
+              setPlayerImage(playerImage)
+              setPetImage(petImage)
+              setPhase('game')
+            }}
+          />
+        )}
+      </div>
+      <div className={`game-container ${phase === 'game' ? 'visible' : ''}`}>
+        {phase === 'game' && playerImage && petImage && (
+          <GameMap playerSrc={playerImage} petSrc={petImage} />
+        )}
       </div>
       {showExitConfirm && (
         <div className='exit-dropdown'>

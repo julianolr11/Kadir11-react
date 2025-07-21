@@ -253,7 +253,16 @@ function OptionRow({ label, options, value, onChange, allowNone = true }: Option
   )
 }
 
-export default function CharacterCreation() {
+export interface CharacterCreationResult {
+  playerImage: string
+  petImage: string
+}
+
+export default function CharacterCreation({
+  onComplete,
+}: {
+  onComplete?: (result: CharacterCreationResult) => void
+}) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [metadata, setMetadata] = useState<any>(null)
   const [selection, setSelection] = useState<CharacterSelection>(defaultSelection)
@@ -682,7 +691,9 @@ export default function CharacterCreation() {
           />
           <p>Parabéns você adquiriu um {petInfo.especie}!</p>
           {!showNameInput ? (
-            <button onClick={() => setShowNameInput(true)}>Deseja dar um nome a ele?</button>
+            <button onClick={() => setShowNameInput(true)}>
+              Deseja dar um nome a ele?
+            </button>
           ) : (
             <input
               className='pet-name-input'
@@ -691,6 +702,17 @@ export default function CharacterCreation() {
               placeholder='Digite o nome'
             />
           )}
+          <button
+            className='start-map-btn'
+            onClick={() => {
+              const canvas = canvasRef.current
+              if (!canvas || !petInfo) return
+              const playerImage = canvas.toDataURL()
+              onComplete?.({ playerImage, petImage: petInfo.assetPet })
+            }}
+          >
+            Começar aventura
+          </button>
         </div>
       )}
     </div>

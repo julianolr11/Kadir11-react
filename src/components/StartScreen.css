@@ -167,3 +167,17 @@
   transform: translateY(0);
   pointer-events: auto;
 }
+
+.game-container {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  transition: opacity 2s ease;
+  pointer-events: none;
+}
+
+.game-container.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
