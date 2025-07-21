@@ -42,7 +42,10 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 let win: BrowserWindow | null = null
-const preload = path.join(__dirname, '../preload.js')
+// Use the project root for the preload script instead of `dist-electron`
+// to avoid issues with missing files when running the application in
+// development.
+const preload = path.join(process.env.APP_ROOT!, 'preload.js')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
 async function createWindow() {
