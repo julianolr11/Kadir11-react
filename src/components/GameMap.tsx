@@ -47,6 +47,7 @@ const GameMap = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const collisionPolygons = useRef<Point[][]>([])
   const playerPos = useRef<Point>({ x: 0, y: 0 })
+  const petPos = useRef<Point>({ x: 0, y: 0 })
   const holdTimeouts = useRef<Record<string, NodeJS.Timeout | null>>({})
   const holdIntervals = useRef<Record<string, NodeJS.Timeout | null>>({})
   const pathQueue = useRef<Point[]>([])
@@ -113,7 +114,15 @@ const GameMap = () => {
         }
       })
 
-      playerPos.current = { x: map.tilewidth, y: map.tileheight }
+      const startTile = { x: 10, y: 24 }
+      playerPos.current = {
+        x: startTile.x * map.tilewidth,
+        y: startTile.y * map.tileheight,
+      }
+      petPos.current = {
+        x: startTile.x * map.tilewidth,
+        y: (startTile.y + 1) * map.tileheight,
+      }
 
       const clearPath = () => {
         if (pathInterval.current) {
@@ -196,7 +205,9 @@ const GameMap = () => {
             pointInPolygon(center, poly)
           )
           if (!blocked) {
+            const prev = { ...playerPos.current }
             playerPos.current = next
+            petPos.current = prev
             drawScene()
           }
           if (pathQueue.current.length === 0) {
@@ -222,6 +233,8 @@ const GameMap = () => {
         map.layers.forEach(layer => {
           if (layer.type === 'tilelayer') drawLayer(layer as TileLayer)
         })
+        ctx.fillStyle = 'blue'
+        ctx.fillRect(petPos.current.x, petPos.current.y, map.tilewidth, map.tileheight)
         ctx.fillStyle = 'red'
         ctx.fillRect(playerPos.current.x, playerPos.current.y, map.tilewidth, map.tileheight)
       }
@@ -239,7 +252,9 @@ const GameMap = () => {
         const center = { x: next.x + tilewidth / 2, y: next.y + tileheight / 2 }
         const blocked = collisionPolygons.current.some(poly => pointInPolygon(center, poly))
         if (!blocked) {
+          const prev = { ...playerPos.current }
           playerPos.current = next
+          petPos.current = prev
           drawScene()
         }
       }
