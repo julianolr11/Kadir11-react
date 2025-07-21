@@ -42,7 +42,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 let win: BrowserWindow | null = null
-const preload = path.join(__dirname, '../preload/index.mjs')
+const preload = path.join(__dirname, 'preload.js')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
 async function createWindow() {
@@ -56,12 +56,8 @@ async function createWindow() {
     autoHideMenuBar: true,
     webPreferences: {
       preload,
-      // Warning: Enable nodeIntegration and disable contextIsolation is not secure in production
-      // nodeIntegration: true,
-
-      // Consider using contextBridge.exposeInMainWorld
-      // Read more on https://www.electronjs.org/docs/latest/tutorial/context-isolation
-      // contextIsolation: false,
+      contextIsolation: true,
+      nodeIntegration: false,
     },
   })
 

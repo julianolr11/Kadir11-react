@@ -1,4 +1,6 @@
 import { ipcRenderer, contextBridge } from 'electron'
+import fs from 'node:fs'
+import path from 'node:path'
 
 // --------- Expose some API to the Renderer process ---------
 contextBridge.exposeInMainWorld('ipcRenderer', {
@@ -25,6 +27,21 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
 
 contextBridge.exposeInMainWorld('getPetAssets', (especie: string, elemento: string) => {
   return ipcRenderer.invoke('get-pet-assets', especie, elemento)
+})
+
+function loadMap(mapName: string) {
+  try {
+    const filePath = path.join(process.env.APP_ROOT!, 'tileset', `${mapName}.tmj`)
+    const content = fs.readFileSync(filePath, 'utf8')
+    return JSON.parse(content)
+  } catch (error) {
+    console.error('Failed to load map:', mapName, error)
+    return null
+  }
+}
+
+contextBridge.exposeInMainWorld('tmjAPI', {
+  loadMap,
 })
 
 // --------- Preload scripts loading ---------
