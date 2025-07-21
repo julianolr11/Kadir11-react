@@ -88,8 +88,8 @@ const GameMap = ({ playerSrc, petSrc }: Props) => {
     let cleanup: (() => void) | undefined
 
     ;(async () => {
-      const mapUrl = new URL('../../tileset/mapainicio.tmj', import.meta.url).href
-      const map: MapData = await fetch(mapUrl).then(res => res.json())
+      const map: MapData | null = await window.tmjAPI.loadMap('mapainicio')
+      if (!map) return
 
       const canvas = canvasRef.current
       if (!canvas) return
