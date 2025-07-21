@@ -49,6 +49,8 @@ const GameMap = () => {
   const playerPos = useRef<Point>({ x: 0, y: 0 })
   const holdTimeouts = useRef<Record<string, NodeJS.Timeout | null>>({})
   const holdIntervals = useRef<Record<string, NodeJS.Timeout | null>>({})
+  const pathQueue = useRef<Point[]>([])
+  const pathInterval = useRef<NodeJS.Timeout | null>(null)
 
   const pointInPolygon = (pt: Point, poly: Point[]) => {
     let inside = false
@@ -113,6 +115,108 @@ const GameMap = () => {
 
       playerPos.current = { x: map.tilewidth, y: map.tileheight }
 
+      const clearPath = () => {
+        if (pathInterval.current) {
+          clearInterval(pathInterval.current)
+          pathInterval.current = null
+        }
+        pathQueue.current = []
+      }
+
+      const findPath = (start: Point, goal: Point) => {
+        const startTile = {
+          x: Math.floor(start.x / map.tilewidth),
+          y: Math.floor(start.y / map.tileheight),
+        }
+        const goalTile = {
+          x: Math.floor(goal.x / map.tilewidth),
+          y: Math.floor(goal.y / map.tileheight),
+        }
+        const key = (p: { x: number; y: number }) => `${p.x},${p.y}`
+        const queue: Array<{ x: number; y: number }> = [startTile]
+        const came = new Map<string, { x: number; y: number } | null>()
+        came.set(key(startTile), null)
+        const visited = new Set<string>([key(startTile)])
+        while (queue.length) {
+          const current = queue.shift() as { x: number; y: number }
+          if (current.x === goalTile.x && current.y === goalTile.y) break
+          for (const [dx, dy] of [
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+          ]) {
+            const nx = current.x + dx
+            const ny = current.y + dy
+            if (nx < 0 || ny < 0 || nx >= map.width || ny >= map.height) continue
+            const pos = { x: nx * map.tilewidth, y: ny * map.tileheight }
+            const center = {
+              x: pos.x + map.tilewidth / 2,
+              y: pos.y + map.tileheight / 2,
+            }
+            if (
+              collisionPolygons.current.some(poly => pointInPolygon(center, poly))
+            )
+              continue
+            const k = key({ x: nx, y: ny })
+            if (!visited.has(k)) {
+              visited.add(k)
+              came.set(k, current)
+              queue.push({ x: nx, y: ny })
+            }
+          }
+        }
+
+        if (!came.has(key(goalTile))) return [] as Point[]
+        const rev: Array<{ x: number; y: number }> = []
+        for (let p: { x: number; y: number } | null = goalTile; p; ) {
+          rev.push(p)
+          p = came.get(key(p)) || null
+        }
+        rev.reverse()
+        rev.shift()
+        return rev.map(t => ({ x: t.x * map.tilewidth, y: t.y * map.tileheight }))
+      }
+
+      const startPath = (tiles: Point[]) => {
+        clearPath()
+        if (!tiles.length) return
+        pathQueue.current = [...tiles]
+        const step = () => {
+          const next = pathQueue.current.shift()
+          if (!next) {
+            clearPath()
+            return
+          }
+          const center = {
+            x: next.x + map.tilewidth / 2,
+            y: next.y + map.tileheight / 2,
+          }
+          const blocked = collisionPolygons.current.some(poly =>
+            pointInPolygon(center, poly)
+          )
+          if (!blocked) {
+            playerPos.current = next
+            drawScene()
+          }
+          if (pathQueue.current.length === 0) {
+            clearPath()
+            return
+          }
+        }
+        step()
+        pathInterval.current = setInterval(step, 1000)
+      }
+
+      const handleClick = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect()
+        const x = e.clientX - rect.left
+        const y = e.clientY - rect.top
+        const target = { x, y }
+        const path = findPath(playerPos.current, target)
+        startPath(path)
+      }
+
       const drawScene = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         map.layers.forEach(layer => {
@@ -143,6 +247,7 @@ const GameMap = () => {
       const handleKeyDown = (e: KeyboardEvent) => {
         if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return
         e.preventDefault()
+        clearPath()
         if (holdTimeouts.current[e.key]) return
         movePlayer(e.key)
         holdTimeouts.current[e.key] = setTimeout(() => {
@@ -166,14 +271,17 @@ const GameMap = () => {
 
       window.addEventListener('keydown', handleKeyDown)
       window.addEventListener('keyup', handleKeyUp)
+      canvas.addEventListener('click', handleClick)
 
       drawScene()
 
       cleanup = () => {
         window.removeEventListener('keydown', handleKeyDown)
         window.removeEventListener('keyup', handleKeyUp)
+        canvas.removeEventListener('click', handleClick)
         Object.values(holdTimeouts.current).forEach(t => t && clearTimeout(t))
         Object.values(holdIntervals.current).forEach(i => i && clearInterval(i))
+        clearPath()
       }
     })()
 
