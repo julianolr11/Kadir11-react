@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import './GameMap.css'
 
 interface Point { x: number; y: number }
 
@@ -50,6 +51,7 @@ interface Props {
 
 const GameMap = ({ playerSrc, petSrc }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
   const collisionPolygons = useRef<Point[][]>([])
   const playerPos = useRef<Point>({ x: 0, y: 0 })
   const petPos = useRef<Point>({ x: 0, y: 0 })
@@ -57,6 +59,17 @@ const GameMap = ({ playerSrc, petSrc }: Props) => {
   const holdIntervals = useRef<Record<string, NodeJS.Timeout | null>>({})
   const pathQueue = useRef<Point[]>([])
   const pathInterval = useRef<NodeJS.Timeout | null>(null)
+
+  const updateCamera = (map: MapData) => {
+    const container = containerRef.current
+    const canvas = canvasRef.current
+    if (!container || !canvas) return
+    const viewW = container.clientWidth
+    const viewH = container.clientHeight
+    const left = -playerPos.current.x + viewW / 2 - map.tilewidth / 2
+    const top = -playerPos.current.y + viewH / 2 - map.tileheight / 2
+    canvas.style.transform = `translate(${left}px, ${top}px)`
+  }
 
   const pointInPolygon = (pt: Point, poly: Point[]) => {
     let inside = false
@@ -217,6 +230,7 @@ const GameMap = ({ playerSrc, petSrc }: Props) => {
             playerPos.current = next
             petPos.current = prev
             drawScene()
+            updateCamera(map)
           }
           if (pathQueue.current.length === 0) {
             clearPath()
@@ -255,7 +269,10 @@ const GameMap = ({ playerSrc, petSrc }: Props) => {
           map.tilewidth,
           map.tileheight
         )
+        updateCamera(map)
       }
+
+      const handleResize = () => updateCamera(map)
 
       const movePlayer = (key: string) => {
         const { tilewidth, tileheight } = map
@@ -274,6 +291,7 @@ const GameMap = ({ playerSrc, petSrc }: Props) => {
           playerPos.current = next
           petPos.current = prev
           drawScene()
+          updateCamera(map)
         }
       }
 
@@ -305,13 +323,16 @@ const GameMap = ({ playerSrc, petSrc }: Props) => {
       window.addEventListener('keydown', handleKeyDown)
       window.addEventListener('keyup', handleKeyUp)
       canvas.addEventListener('click', handleClick)
+      window.addEventListener('resize', handleResize)
 
       drawScene()
+      updateCamera(map)
 
       cleanup = () => {
         window.removeEventListener('keydown', handleKeyDown)
         window.removeEventListener('keyup', handleKeyUp)
         canvas.removeEventListener('click', handleClick)
+        window.removeEventListener('resize', handleResize)
         Object.values(holdTimeouts.current).forEach(t => t && clearTimeout(t))
         Object.values(holdIntervals.current).forEach(i => i && clearInterval(i))
         clearPath()
@@ -323,7 +344,18 @@ const GameMap = ({ playerSrc, petSrc }: Props) => {
     }
   }, [playerSrc, petSrc])
 
-  return <canvas ref={canvasRef} style={{ imageRendering: 'pixelated' }} />
+  return (
+    <div
+      ref={containerRef}
+      className='game-map-wrapper'
+      style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}
+    >
+      <canvas
+        ref={canvasRef}
+        style={{ imageRendering: 'pixelated', position: 'absolute', left: 0, top: 0 }}
+      />
+    </div>
+  )
 }
 
 export default GameMap
