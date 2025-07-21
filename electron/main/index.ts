@@ -42,7 +42,7 @@ if (!app.requestSingleInstanceLock()) {
 }
 
 let win: BrowserWindow | null = null
-const preload = path.join(__dirname, '../preload.js')
+const preload = path.join(process.env.APP_ROOT!, 'preload.js')
 const indexHtml = path.join(RENDERER_DIST, 'index.html')
 
 async function createWindow() {
