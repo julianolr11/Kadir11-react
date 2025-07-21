@@ -280,6 +280,7 @@ export default function CharacterCreation({
   const [showNameInput, setShowNameInput] = useState(false)
   const [petName, setPetName] = useState('')
   const [petJump, setPetJump] = useState(false)
+  const [playerImage, setPlayerImage] = useState('')
 
   useEffect(() => {
     fetch('Assets/Character/character_metadata_final.json')
@@ -412,6 +413,14 @@ export default function CharacterCreation({
     if (!valid) {
       setErrorMsg('Nome inválido')
       return
+    }
+    const canvas = canvasRef.current
+    if (canvas) {
+      try {
+        setPlayerImage(canvas.toDataURL())
+      } catch {
+        /* ignore toDataURL errors */
+      }
     }
     window.ipcRenderer.invoke('save-character', selection)
     setFade('out')
@@ -705,9 +714,7 @@ export default function CharacterCreation({
           <button
             className='start-map-btn'
             onClick={() => {
-              const canvas = canvasRef.current
-              if (!canvas || !petInfo) return
-              const playerImage = canvas.toDataURL()
+              if (!petInfo || !playerImage) return
               onComplete?.({ playerImage, petImage: petInfo.assetPet })
             }}
           >
