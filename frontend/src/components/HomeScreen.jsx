@@ -153,7 +153,11 @@ export default function HomeScreen() {
   const handleStart = () => {
     setShowLogo1(false)
     setShowLogo2(false)
-    navigate('/intro')
+    if (pet) {
+      navigate('/load')
+    } else {
+      navigate('/intro')
+    }
   }
 
   return (

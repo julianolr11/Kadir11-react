@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import evolution from '../../../Assets/Mons/evolution.gif'
 import criaturaSombria from '../../../Assets/Mons/CriaturaSombria/criaturasombria.png'
 
 export default function HatchPage() {
   const navigate = useNavigate()
-  const { state } = useLocation()
   const [showPet, setShowPet] = useState(false)
 
   useEffect(() => {
@@ -18,7 +17,7 @@ export default function HatchPage() {
   }, [navigate])
 
   return (
-    <div className="character-creation-wrapper flex items-center justify-center h-full">
+    <div className="flex items-center justify-center h-full">
       {!showPet ? (
         <img src={evolution} alt="Hatching" className="w-64 h-64" />
       ) : (
