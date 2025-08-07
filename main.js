@@ -6,6 +6,9 @@ const fs = require('fs');
 const distIndex = path.join(__dirname, 'frontend', 'dist', 'index.html');
 const isDev = !fs.existsSync(distIndex);
 
+// Set application icon for taskbar and window
+const iconPath = path.join(__dirname, 'Assets', 'Logo', 'kadir11.png');
+
 let win;
 
 function createWindow() {
@@ -16,6 +19,7 @@ function createWindow() {
     minHeight: 600,
     backgroundColor: '#000000',
     frame: false,
+    icon: iconPath,
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
